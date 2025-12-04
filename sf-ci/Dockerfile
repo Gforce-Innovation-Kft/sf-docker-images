@@ -55,21 +55,13 @@ ENV CI=true
 # Switch back to dialog
 ENV DEBIAN_FRONTEND=dialog
 
-# Verify installations and create versions file
+# Verify installations
 RUN echo "Node version: $(node --version)" \
     && echo "NPM version: $(npm --version)" \
     && echo "Java version: $(java -version 2>&1 | head -n 1)" \
     && echo "SF CLI version: $(sf version)" \
     && echo "jq version: $(jq --version)" \
-    && echo "xmlstarlet version: $(xmlstarlet --version)" \
-    && echo "nodejs=$(node --version | sed 's/v//')\" > /home/ci/versions.txt \
-    && echo "npm=$(npm --version)" >> /home/ci/versions.txt \
-    && echo "java=$(java -version 2>&1 | head -n 1 | awk -F '\"' '{print $2}')" >> /home/ci/versions.txt \
-    && echo "salesforce-cli=$(sf version --json 2>/dev/null | grep -o '\"version\":\"[^\"]*' | head -1 | cut -d'\"' -f4 || echo 'latest')" >> /home/ci/versions.txt \
-    && echo "git=$(git --version | awk '{print $3}')" >> /home/ci/versions.txt \
-    && echo "jq=$(jq --version | sed 's/jq-//')" >> /home/ci/versions.txt \
-    && echo "xmlstarlet=$(xmlstarlet --version | head -n 1 | awk '{print $2}')" >> /home/ci/versions.txt \
-    && cat /home/ci/versions.txt
+    && echo "xmlstarlet version: $(xmlstarlet --version)"
 
 WORKDIR /workspace
 
