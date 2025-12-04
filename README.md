@@ -39,6 +39,7 @@ docker pull gforceinnovation/sf-ci:latest
 
 ### Building Images Locally
 
+**Build for your local platform only (faster):**
 ```bash
 # Build sf-devcontainer
 docker build -t sf-devcontainer:local ./sf-devcontainer
@@ -46,6 +47,35 @@ docker build -t sf-devcontainer:local ./sf-devcontainer
 # Build sf-ci
 docker build -t sf-ci:local ./sf-ci
 ```
+
+**Build for multiple platforms (Mac ARM64 + Intel/AMD64):**
+
+First, create a builder that supports multi-platform builds:
+```bash
+docker buildx create --name multiplatform --use
+docker buildx inspect --bootstrap
+```
+
+Then build and push to Docker Hub:
+```bash
+# Build and push sf-devcontainer for multiple platforms
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --tag gforceinnovation/sf-devcontainer:1.0.1 \
+  --tag gforceinnovation/sf-devcontainer:latest \
+  --push \
+  ./sf-devcontainer
+
+# Build and push sf-ci for multiple platforms
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --tag gforceinnovation/sf-ci:1.0.1 \
+  --tag gforceinnovation/sf-ci:latest \
+  --push \
+  ./sf-ci
+```
+
+**Note:** Multi-platform builds require pushing to a registry. You cannot load multi-platform images directly to your local Docker daemon.
 
 ### Running Tests
 
