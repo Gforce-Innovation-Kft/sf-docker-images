@@ -1,0 +1,167 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  DOCKERHUB_USERNAME: gforceinnovation
+
+jobs:
+  test:
+    name: Test Docker Images
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Make test scripts executable
+        run: chmod +x tests/*.sh
+      
+      - name: Run all tests
+        run: ./tests/run-all-tests.sh
+
+  build-and-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    needs: test
+    
+    strategy:
+      matrix:
+        image:
+          - name: sf-devcontainer
+            context: ./sf-devcontainer
+          - name: sf-ci
+            context: ./sf-ci
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value=latest,enable={{is_default_branch}}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.image.context }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:buildcache
+          cache-to: type=registry,ref=${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:buildcache,mode=max
+      
+      - name: Update Docker Hub description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}
+          readme-filepath: ${{ matrix.image.context }}/README.md
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      
+      - name: Get previous tag
+        id: previous_tag
+        run: |
+          PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
+          echo "PREVIOUS_TAG=${PREVIOUS_TAG}" >> $GITHUB_OUTPUT
+      
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          PREVIOUS_TAG="${{ steps.previous_tag.outputs.PREVIOUS_TAG }}"
+          
+          echo "# Release ${VERSION}" > release_notes.md
+          echo "" >> release_notes.md
+          echo "## Docker Images" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "The following Docker images have been published to Docker Hub:" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "- \`gforceinnovation/sf-devcontainer:${VERSION}\`" >> release_notes.md
+          echo "- \`gforceinnovation/sf-devcontainer:latest\`" >> release_notes.md
+          echo "- \`gforceinnovation/sf-ci:${VERSION}\`" >> release_notes.md
+          echo "- \`gforceinnovation/sf-ci:latest\`" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "## Usage" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "### Pull the images" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "\`\`\`bash" >> release_notes.md
+          echo "docker pull gforceinnovation/sf-devcontainer:${VERSION}" >> release_notes.md
+          echo "docker pull gforceinnovation/sf-ci:${VERSION}" >> release_notes.md
+          echo "\`\`\`" >> release_notes.md
+          echo "" >> release_notes.md
+          
+          if [ -n "$PREVIOUS_TAG" ]; then
+            echo "## Changes since ${PREVIOUS_TAG}" >> release_notes.md
+            echo "" >> release_notes.md
+            git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%an)" --no-merges >> release_notes.md
+            echo "" >> release_notes.md
+          fi
+          
+          echo "" >> release_notes.md
+          echo "## What's Included" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "### sf-devcontainer" >> release_notes.md
+          echo "- Node.js 20.x LTS" >> release_notes.md
+          echo "- Java 17 (OpenJDK)" >> release_notes.md
+          echo "- Salesforce CLI with plugins (code-analyzer, sfdx-git-delta, sfdx-browserforce-plugin)" >> release_notes.md
+          echo "- Oh My Zsh with Powerlevel10k theme" >> release_notes.md
+          echo "- Development tools and utilities" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "### sf-ci" >> release_notes.md
+          echo "- Node.js 20.x LTS" >> release_notes.md
+          echo "- Java 17 (OpenJDK)" >> release_notes.md
+          echo "- Salesforce CLI with sfdx-git-delta plugin" >> release_notes.md
+          echo "- CI utilities (jq, xmlstarlet)" >> release_notes.md
+          echo "- Optimized for CI/CD pipelines" >> release_notes.md
+          
+          cat release_notes.md
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
