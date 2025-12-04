@@ -39,7 +39,7 @@ jobs:
       
       - name: Run tests for ${{ matrix.image.name }}
         run: |
-          pytest tests/test_${{ matrix.image.name }}.py -v --junitxml=test-results-${{ matrix.image.name }}.xml
+          pytest tests/test_$(echo "${{ matrix.image.name }}" | tr '-' '_').py -v --junitxml=test-results-${{ matrix.image.name }}.xml
       
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v2
