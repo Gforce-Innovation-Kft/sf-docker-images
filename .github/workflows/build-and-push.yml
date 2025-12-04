@@ -55,25 +55,6 @@ jobs:
           cache-from: type=registry,ref=${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:buildcache
           cache-to: type=registry,ref=${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:buildcache,mode=max
       
-      - name: Extract versions from image
-        run: |
-          # Pull the latest image
-          docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:latest
-          
-          # Create a temporary container to copy the versions file
-          CONTAINER_ID=$(docker create ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:latest)
-          docker cp ${CONTAINER_ID}:/tmp/versions.txt versions-${{ matrix.image.name }}.txt
-          docker rm ${CONTAINER_ID}
-          
-          echo "=== Versions for ${{ matrix.image.name }} ==="
-          cat versions-${{ matrix.image.name }}.txt
-      
-      - name: Upload versions artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: versions-${{ matrix.image.name }}
-          path: versions-${{ matrix.image.name }}.txt
-      
       - name: Update Docker Hub description
         uses: peter-evans/dockerhub-description@v3
         with:
@@ -95,19 +76,6 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Download all version artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-      
-      - name: Display versions
-        run: |
-          echo "=== sf-devcontainer versions ==="
-          cat artifacts/versions-sf-devcontainer/versions-sf-devcontainer.txt
-          echo ""
-          echo "=== sf-ci versions ==="
-          cat artifacts/versions-sf-ci/versions-sf-ci.txt
-      
       - name: Get version from tag
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
@@ -119,7 +87,6 @@ jobs:
           echo "PREVIOUS_TAG=${PREVIOUS_TAG}" >> $GITHUB_OUTPUT
       
       - name: Generate release notes
-        id: release_notes
         run: |
           VERSION="${{ steps.version.outputs.VERSION }}"
           PREVIOUS_TAG="${{ steps.previous_tag.outputs.PREVIOUS_TAG }}"
@@ -128,71 +95,23 @@ jobs:
           echo "" >> release_notes.md
           echo "## Docker Images" >> release_notes.md
           echo "" >> release_notes.md
-          echo "The following Docker images have been published to Docker Hub:" >> release_notes.md
-          echo "" >> release_notes.md
           echo "- \`gforceinnovation/sf-devcontainer:${VERSION}\`" >> release_notes.md
-          echo "- \`gforceinnovation/sf-devcontainer:latest\`" >> release_notes.md
-          if [ -n "$PREVIOUS_TAG" ]; then
-            echo "## Changes since ${PREVIOUS_TAG}" >> release_notes.md
-            echo "" >> release_notes.md
-            git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%an)" --no-merges >> release_notes.md || echo "- Initial release" >> release_notes.md
-            echo "" >> release_notes.md
-            echo "" >> release_notes.md
-          fi
-          
-          echo "## Installed Versions" >> release_notes.md
+          echo "- \`gforceinnovation/sf-ci:${VERSION}\`" >> release_notes.md
           echo "" >> release_notes.md
-          
-          # sf-devcontainer versions
-          echo "### sf-devcontainer" >> release_notes.md
+          echo "## Usage" >> release_notes.md
           echo "" >> release_notes.md
-          echo "| Tool | Version |" >> release_notes.md
-          echo "|------|---------|" >> release_notes.md
-          while IFS='=' read -r key value; do
-            echo "| $key | $value |" >> release_notes.md
-          done < artifacts/versions-sf-devcontainer/versions-sf-devcontainer.txt
-          echo "" >> release_notes.md
-          
-          # sf-ci versions
-          echo "### sf-ci" >> release_notes.md
-          echo "" >> release_notes.md
-          echo "| Tool | Version |" >> release_notes.md
-          echo "|------|---------|" >> release_notes.md
-          while IFS='=' read -r key value; do
-            echo "| $key | $value |" >> release_notes.md
-          done < artifacts/versions-sf-ci/versions-sf-ci.txt
-          echo "" >> release_notes.md
-          
-          echo "## Features" >> release_notes.mdainer:${VERSION}" >> release_notes.md
+          echo "\`\`\`bash" >> release_notes.md
+          echo "docker pull gforceinnovation/sf-devcontainer:${VERSION}" >> release_notes.md
           echo "docker pull gforceinnovation/sf-ci:${VERSION}" >> release_notes.md
           echo "\`\`\`" >> release_notes.md
           echo "" >> release_notes.md
           
           if [ -n "$PREVIOUS_TAG" ]; then
-            echo "## Changes since ${PREVIOUS_TAG}" >> release_notes.md
+            echo "## Changes" >> release_notes.md
             echo "" >> release_notes.md
-            git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%an)" --no-merges >> release_notes.md
+            git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s" --no-merges >> release_notes.md || echo "- Initial release" >> release_notes.md
             echo "" >> release_notes.md
           fi
-          
-          echo "" >> release_notes.md
-          echo "## What's Included" >> release_notes.md
-          echo "" >> release_notes.md
-          echo "### sf-devcontainer" >> release_notes.md
-          echo "- Node.js 20.x LTS" >> release_notes.md
-          echo "- Java 17 (OpenJDK)" >> release_notes.md
-          echo "- Salesforce CLI with plugins (code-analyzer, sfdx-git-delta, sfdx-browserforce-plugin)" >> release_notes.md
-          echo "- Oh My Zsh with Powerlevel10k theme" >> release_notes.md
-          echo "- Development tools and utilities" >> release_notes.md
-          echo "" >> release_notes.md
-          echo "### sf-ci" >> release_notes.md
-          echo "- Node.js 20.x LTS" >> release_notes.md
-          echo "- Java 17 (OpenJDK)" >> release_notes.md
-          echo "- Salesforce CLI with sfdx-git-delta plugin" >> release_notes.md
-          echo "- CI utilities (jq, xmlstarlet)" >> release_notes.md
-          echo "- Optimized for CI/CD pipelines" >> release_notes.md
-          
-          cat release_notes.md
       
       - name: Create Release
         uses: softprops/action-gh-release@v1
