@@ -17,6 +17,10 @@ jobs:
   test:
     name: Test Docker Images
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+      contents: read
     
     strategy:
       matrix:
