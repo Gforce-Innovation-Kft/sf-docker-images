@@ -36,13 +36,56 @@ jobs:
         with:
           fail-on-severity: moderate
 
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    strategy:
+      matrix:
+        image:
+          - name: sf-devcontainer
+            context: ./sf-devcontainer
+          - name: sf-ci
+            context: ./sf-ci
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.image.context }}
+          load: true
+          tags: ${{ matrix.image.name }}:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: Export Docker image
+        run: |
+          docker save ${{ matrix.image.name }}:test | gzip > ${{ matrix.image.name }}.tar.gz
+      
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.image.name }}-image
+          path: ${{ matrix.image.name }}.tar.gz
+          retention-days: 1
+
   test:
     name: Test Docker Images
     runs-on: ubuntu-latest
+    needs: build
     permissions:
       contents: read
       checks: write
       pull-requests: write
+      security-events: write
     
     strategy:
       matrix:
@@ -53,6 +96,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.image.name }}-image
+      
+      - name: Load Docker image
+        run: |
+          docker load < ${{ matrix.image.name }}.tar.gz
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -73,16 +125,47 @@ jobs:
         with:
           files: test-results-${{ matrix.image.name }}.xml
           check_name: Test Results - ${{ matrix.image.name }}
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ matrix.image.name }}:test
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+      
+      - name: Check image size
+        run: |
+          SIZE=$(docker image inspect ${{ matrix.image.name }}:test --format='{{.Size}}')
+          SIZE_MB=$((SIZE / 1024 / 1024))
+          echo "Image size: ${SIZE_MB}MB"
+          
+          # Set size limits
+          if [ "${{ matrix.image.name }}" = "sf-devcontainer" ]; then
+            MAX_SIZE=2048  # 2GB for devcontainer
+          else
+            MAX_SIZE=1024  # 1GB for CI image
+          fi
+          
+          if [ $SIZE_MB -gt $MAX_SIZE ]; then
+            echo "::error::Image size ${SIZE_MB}MB exceeds maximum ${MAX_SIZE}MB"
+            exit 1
+          fi
+          echo "::notice::Image size ${SIZE_MB}MB is within limit (${MAX_SIZE}MB)"
 
-  build-and-push:
-    name: Build and Push Docker Images
+  push:
+    name: Tag and Push Docker Images
     runs-on: ubuntu-latest
     needs: test
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: read
       packages: write
-      security-events: write
     
     strategy:
       matrix:
@@ -95,6 +178,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.image.name }}-image
+      
+      - name: Load Docker image
+        run: |
+          docker load < ${{ matrix.image.name }}.tar.gz
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -116,7 +208,7 @@ jobs:
             type=semver,pattern={{major}}
             type=raw,value=latest,enable={{is_default_branch}}
       
-      - name: Build and push Docker image
+      - name: Re-tag and push for multi-platform
         uses: docker/build-push-action@v5
         with:
           context: ${{ matrix.image.context }}
@@ -124,41 +216,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:buildcache
-          cache-to: type=registry,ref=${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:buildcache,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           sbom: true
           provenance: true
-      
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:${{ steps.meta.outputs.version }}
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-      
-      - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
-      
-      - name: Check image size
-        run: |
-          docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:${{ steps.meta.outputs.version }}
-          SIZE=$(docker image inspect ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}:${{ steps.meta.outputs.version }} --format='{{.Size}}')
-          SIZE_MB=$((SIZE / 1024 / 1024))
-          echo "Image size: ${SIZE_MB}MB"
-          
-          # Set size limits
-          if [ "${{ matrix.image.name }}" = "sf-devcontainer" ]; then
-            MAX_SIZE=2048  # 2GB for devcontainer
-          else
-            MAX_SIZE=1024  # 1GB for CI image
-          fi
-          
-          if [ $SIZE_MB -gt $MAX_SIZE ]; then
-            echo "::error::Image size ${SIZE_MB}MB exceeds maximum ${MAX_SIZE}MB"
-            exit 1
-          fi
-          echo "::notice::Image size ${SIZE_MB}MB is within limit (${MAX_SIZE}MB)"
       
