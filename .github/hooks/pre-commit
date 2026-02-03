@@ -1,0 +1,47 @@
+#!/bin/bash
+# Pre-commit hook to lint YAML files
+
+echo "Running YAML linter..."
+
+# Check if yamllint is installed
+if ! command -v yamllint &> /dev/null; then
+    echo "⚠️  yamllint is not installed. Installing..."
+    if command -v pip3 &> /dev/null; then
+        pip3 install yamllint
+    elif command -v pip &> /dev/null; then
+        pip install yamllint
+    else
+        echo "❌ Error: pip is not installed. Please install yamllint manually:"
+        echo "   pip install yamllint"
+        exit 1
+    fi
+fi
+
+# Get all staged YAML files
+YAML_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ya?ml)$')
+
+if [ -z "$YAML_FILES" ]; then
+    echo "✓ No YAML files to lint"
+    exit 0
+fi
+
+# Lint each file
+FAILED=0
+for file in $YAML_FILES; do
+    if [ -f "$file" ]; then
+        echo "Linting: $file"
+        if ! yamllint "$file"; then
+            FAILED=1
+        fi
+    fi
+done
+
+if [ $FAILED -eq 1 ]; then
+    echo ""
+    echo "❌ YAML linting failed. Please fix the errors above."
+    echo "   To skip this check, use: git commit --no-verify"
+    exit 1
+fi
+
+echo "✓ All YAML files passed linting"
+exit 0
