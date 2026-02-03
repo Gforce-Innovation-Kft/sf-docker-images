@@ -1,9 +1,16 @@
 FROM ubuntu:22.04
 
+# Metadata labels
+LABEL maintainer="GForce Innovation"
+LABEL org.opencontainers.image.title="Salesforce CI"
+LABEL org.opencontainers.image.description="Lightweight Salesforce CI/CD image with SF CLI, Node.js, and Java"
+LABEL org.opencontainers.image.source="https://github.com/gforceinnovation/sf-docker-images"
+LABEL org.opencontainers.image.base.name="ubuntu:22.04"
+
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install essential packages only
+# Install all system packages, Node.js, Java, and SF CLI in optimized layers
 RUN apt-get update \
     && apt-get -y install --no-install-recommends \
     ca-certificates \
@@ -19,18 +26,12 @@ RUN apt-get update \
     zip \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js 20.x
+# Install Node.js 20.x, Java, and Salesforce CLI in consolidated layers
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Java (OpenJDK 17)
-RUN apt-get update \
-    && apt-get install -y openjdk-17-jdk \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Salesforce CLI
-RUN npm install -g @salesforce/cli
+    && apt-get install -y --no-install-recommends nodejs openjdk-17-jdk \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install -g @salesforce/cli@2.* \
+    && npm cache clean --force
 
 # Create ci user (non-root for security)
 RUN useradd -m -s /bin/bash -u 1000 ci
@@ -62,6 +63,10 @@ RUN echo "Node version: $(node --version)" \
     && echo "SF CLI version: $(sf version)" \
     && echo "jq version: $(jq --version)" \
     && echo "xmlstarlet version: $(xmlstarlet --version)"
+
+# Health check to ensure SF CLI is working
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD sf version --json || exit 1
 
 WORKDIR /workspace
 

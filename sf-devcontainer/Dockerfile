@@ -1,9 +1,16 @@
 FROM ubuntu:22.04
 
+# Metadata labels
+LABEL maintainer="GForce Innovation"
+LABEL org.opencontainers.image.title="Salesforce DevContainer"
+LABEL org.opencontainers.image.description="Full-featured Salesforce development environment with SF CLI, Node.js, Java, and Zsh"
+LABEL org.opencontainers.image.source="https://github.com/gforceinnovation/sf-docker-images"
+LABEL org.opencontainers.image.base.name="ubuntu:22.04"
+
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Configure apt and install packages
+# Configure apt and install packages in a single layer with cleanup
 RUN apt-get update \
     && apt-get -y install --no-install-recommends \
     apt-utils \
@@ -34,6 +41,8 @@ RUN apt-get update \
     zsh \
     fonts-powerline \
     locales \
+    sudo \
+    && rm -rf /var/lib/apt/lists/* \
     2>&1
 
 # Set locale
@@ -42,19 +51,15 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
-# Install Node.js 20.x
+# Install Node.js 20.x, Java, and Salesforce CLI in consolidated layers
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
-
-# Install Java (OpenJDK 17)
-RUN apt-get install -y openjdk-17-jdk
-
-# Install Salesforce CLI
-RUN npm install -g @salesforce/cli
+    && apt-get install -y --no-install-recommends nodejs openjdk-17-jdk \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install -g @salesforce/cli@2.* \
+    && npm cache clean --force
 
 # Create vscode user with sudo privileges
 RUN useradd -m -s /bin/zsh -u 1000 vscode \
-    && apt-get install -y sudo \
     && echo vscode ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/vscode \
     && chmod 0440 /etc/sudoers.d/vscode
 
@@ -111,6 +116,10 @@ RUN echo "Node version: $(node --version)" \
     && echo "SF CLI version: $(sf version)" \
     && echo "jq version: $(jq --version)" \
     && echo "xmlstarlet version: $(xmlstarlet --version)"
+
+# Health check to ensure SF CLI is working
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD sf version --json || exit 1
 
 WORKDIR /workspace
 
