@@ -3,16 +3,20 @@
 
 echo "Running YAML linter..."
 
-# Check if yamllint is installed
-if ! command -v yamllint &> /dev/null; then
+# Determine how to invoke yamllint (binary on PATH or python module)
+YAMLLINT_CMD=""
+if command -v yamllint &> /dev/null; then
+    YAMLLINT_CMD="yamllint"
+elif python3 -m yamllint --version &> /dev/null; then
+    YAMLLINT_CMD="python3 -m yamllint"
+else
     echo "⚠️  yamllint is not installed. Installing..."
-    if command -v pip3 &> /dev/null; then
-        pip3 install yamllint
-    elif command -v pip &> /dev/null; then
-        pip install yamllint
+    pip3 install --break-system-packages yamllint 2>/dev/null || pip3 install yamllint 2>/dev/null
+    if python3 -m yamllint --version &> /dev/null; then
+        YAMLLINT_CMD="python3 -m yamllint"
     else
-        echo "❌ Error: pip is not installed. Please install yamllint manually:"
-        echo "   pip install yamllint"
+        echo "❌ Error: Failed to install yamllint. Please install manually:"
+        echo "   pip3 install yamllint"
         exit 1
     fi
 fi
@@ -30,7 +34,7 @@ FAILED=0
 for file in $YAML_FILES; do
     if [ -f "$file" ]; then
         echo "Linting: $file"
-        if ! yamllint "$file"; then
+        if ! $YAMLLINT_CMD "$file"; then
             FAILED=1
         fi
     fi

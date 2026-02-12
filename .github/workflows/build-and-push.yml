@@ -23,6 +23,23 @@ env:
   DOCKERHUB_USERNAME: gforceinnovation
 
 jobs:
+  lint:
+    name: Lint Dockerfiles
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Lint sf-ci Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: sf-ci/Dockerfile
+
+      - name: Lint sf-devcontainer Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: sf-devcontainer/Dockerfile
+
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
@@ -65,6 +82,12 @@ jobs:
           tags: ${{ matrix.image.name }}:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Report image size
+        run: |
+          SIZE=$(docker image inspect ${{ matrix.image.name }}:test --format='{{.Size}}')
+          echo "## ${{ matrix.image.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Image size: $(numfmt --to=iec-i --suffix=B $SIZE)" >> $GITHUB_STEP_SUMMARY
 
       - name: Export Docker image
         run: |
@@ -128,7 +151,7 @@ jobs:
           check_name: Test Results - ${{ matrix.image.name }}
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: ${{ matrix.image.name }}:test
           format: 'sarif'
@@ -188,7 +211,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=latest,enable=true
 
       - name: Re-tag and push for multi-platform
         uses: docker/build-push-action@v5

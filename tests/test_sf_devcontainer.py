@@ -12,14 +12,21 @@ from pathlib import Path
 @pytest.fixture(scope="module")
 def host():
     """Build the Docker image, start a container, and return a testinfra host"""
-    # Build the image
-    print("\nBuilding sf-devcontainer image...")
+    # Build the image only if not already present (CI pre-builds it)
     repo_root = Path(__file__).parent.parent
-    subprocess.run(
-        ["docker", "build", "-t", "sf-devcontainer:test", "./sf-devcontainer"],
-        check=True,
-        cwd=repo_root
+    result = subprocess.run(
+        ["docker", "image", "inspect", "sf-devcontainer:test"],
+        capture_output=True
     )
+    if result.returncode != 0:
+        print("\nBuilding sf-devcontainer image...")
+        subprocess.run(
+            ["docker", "build", "-t", "sf-devcontainer:test", "./sf-devcontainer"],
+            check=True,
+            cwd=repo_root
+        )
+    else:
+        print("\nUsing existing sf-devcontainer:test image")
     
     # Start a container
     container_name = "sf-devcontainer-test"
@@ -171,7 +178,8 @@ def test_environment_variables(host):
     env_vars = {
         "SFDX_CONTAINER_MODE": "true",
         "SFDX_DISABLE_DNS_CHECK": "true",
-        "SF_AUTOUPDATE_DISABLE": "true"
+        "SF_AUTOUPDATE_DISABLE": "true",
+        "SF_DISABLE_TELEMETRY": "true"
     }
     for var, expected_value in env_vars.items():
         result = host.run(f"echo ${var}")

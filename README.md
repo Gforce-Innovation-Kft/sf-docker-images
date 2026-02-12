@@ -80,11 +80,14 @@ docker buildx build \
 ### Running Tests
 
 ```bash
-# Test sf-devcontainer
-./tests/test-sf-devcontainer.sh
+pip install -r tests/requirements.txt
 
-# Test sf-ci
-./tests/test-sf-ci.sh
+# Run all tests
+pytest tests/ -v
+
+# Run tests for a single image
+pytest tests/test_sf_ci.py -v
+pytest tests/test_sf_devcontainer.py -v
 ```
 
 ## CI/CD

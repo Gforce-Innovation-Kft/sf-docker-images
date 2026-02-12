@@ -12,14 +12,21 @@ from pathlib import Path
 @pytest.fixture(scope="module")
 def host():
     """Build the Docker image, start a container, and return a testinfra host"""
-    # Build the image
-    print("\nBuilding sf-ci image...")
+    # Build the image only if not already present (CI pre-builds it)
     repo_root = Path(__file__).parent.parent
-    subprocess.run(
-        ["docker", "build", "-t", "sf-ci:test", "./sf-ci"],
-        check=True,
-        cwd=repo_root
+    result = subprocess.run(
+        ["docker", "image", "inspect", "sf-ci:test"],
+        capture_output=True
     )
+    if result.returncode != 0:
+        print("\nBuilding sf-ci image...")
+        subprocess.run(
+            ["docker", "build", "-t", "sf-ci:test", "./sf-ci"],
+            check=True,
+            cwd=repo_root
+        )
+    else:
+        print("\nUsing existing sf-ci:test image")
     
     # Start a container
     container_name = "sf-ci-test"

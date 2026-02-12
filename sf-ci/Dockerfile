@@ -26,9 +26,12 @@ RUN apt-get update \
     zip \
     && rm -rf /var/lib/apt/lists/*
 
+# Catch pipe failures (e.g. curl | bash)
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install Node.js 20.x, Java, and Salesforce CLI in consolidated layers
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y --no-install-recommends nodejs openjdk-17-jdk \
+    && apt-get install -y --no-install-recommends nodejs openjdk-17-jre-headless \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g @salesforce/cli@2.* \
     && npm cache clean --force
