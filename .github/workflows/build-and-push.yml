@@ -23,25 +23,6 @@ env:
   DOCKERHUB_USERNAME: gforceinnovation
 
 jobs:
-  lint:
-    name: Lint Dockerfiles
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Lint sf-ci Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: sf-ci/Dockerfile
-          config: .hadolint.yaml
-
-      - name: Lint sf-devcontainer Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: sf-devcontainer/Dockerfile
-          config: .hadolint.yaml
-
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest

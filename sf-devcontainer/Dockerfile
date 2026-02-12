@@ -82,12 +82,12 @@ RUN echo y | sf plugins install code-analyzer && \
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # Install Powerlevel10k theme
-RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 
 # Install Zsh plugins
-RUN git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions \
-    && git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting \
-    && git clone --depth=1 https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-completions
+RUN git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" \
+    && git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" \
+    && git clone --depth=1 https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-completions"
 
 # Copy Zsh configuration files
 COPY .zshrc /home/vscode/.zshrc
@@ -110,16 +110,16 @@ ENV SF_DISABLE_TELEMETRY=true
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=dialog
 
-# Set the default shell to zsh
-SHELL ["/bin/zsh", "-c"]
-
-# Verify installations
+# Verify installations (keep bash SHELL here so ShellCheck can lint the pipes)
 RUN echo "Node version: $(node --version)" \
     && echo "NPM version: $(npm --version)" \
     && echo "Java version: $(java -version 2>&1 | head -n 1)" \
     && echo "SF CLI version: $(sf version)" \
     && echo "jq version: $(jq --version)" \
     && echo "xmlstarlet version: $(xmlstarlet --version)"
+
+# Set the default shell to zsh for runtime
+SHELL ["/bin/zsh", "-c"]
 
 # Health check to ensure SF CLI is working
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
