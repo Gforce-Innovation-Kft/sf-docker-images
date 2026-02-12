@@ -1,0 +1,6 @@
+---
+ignored:
+  # Pinning apt package versions on ubuntu is impractical:
+  # repos don't retain old versions, security updates change them frequently,
+  # and the base image tag (ubuntu:22.04) already pins the OS.
+  - DL3008

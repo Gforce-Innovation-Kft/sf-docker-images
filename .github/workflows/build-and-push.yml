@@ -34,11 +34,13 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: sf-ci/Dockerfile
+          config: .hadolint.yaml
 
       - name: Lint sf-devcontainer Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: sf-devcontainer/Dockerfile
+          config: .hadolint.yaml
 
   dependency-review:
     name: Dependency Review
