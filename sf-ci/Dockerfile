@@ -39,6 +39,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # Create ci user (non-root for security)
 RUN useradd -m -s /bin/bash -u 1000 ci
 
+# Pin data dirs to fixed paths so plugins survive GitHub Actions HOME override
+ENV XDG_DATA_HOME=/opt/sf-data
+ENV XDG_CONFIG_HOME=/opt/sf-config
+RUN mkdir -p /opt/sf-data /opt/sf-config && chown ci:ci /opt/sf-data /opt/sf-config
+
 # Switch to ci user
 USER ci
 WORKDIR /home/ci
@@ -47,7 +52,7 @@ WORKDIR /home/ci
 RUN echo y | sf plugins install sfdx-git-delta
 
 # Create directories for Salesforce CLI
-RUN mkdir -p /home/ci/.sfdx /home/ci/.sf /home/ci/.config
+RUN mkdir -p /home/ci/.sfdx /home/ci/.sf
 
 # Set environment variables for CI
 ENV SFDX_CONTAINER_MODE=true
