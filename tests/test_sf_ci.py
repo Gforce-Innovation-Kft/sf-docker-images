@@ -21,7 +21,7 @@ def host():
     if result.returncode != 0:
         print("\nBuilding sf-ci image...")
         subprocess.run(
-            ["docker", "build", "-t", "sf-ci:test", "./sf-ci"],
+            ["docker", "build", "--no-cache", "-t", "sf-ci:test", "./sf-ci"],
             check=True,
             cwd=repo_root
         )

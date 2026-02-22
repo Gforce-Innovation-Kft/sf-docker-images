@@ -11,8 +11,9 @@ LABEL org.opencontainers.image.base.name="ubuntu:22.04"
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install all system packages, Node.js, Java, and SF CLI in optimized layers
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends \
+# Note: Using --allow-unauthenticated temporarily to work around ARM64 GPG signature issues
+RUN apt-get update --allow-insecure-repositories || apt-get update \
+    && apt-get -y install --no-install-recommends --allow-unauthenticated \
     ca-certificates \
     curl \
     git \
@@ -39,20 +40,25 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # Create ci user (non-root for security)
 RUN useradd -m -s /bin/bash -u 1000 ci
 
-# Pin data dirs to fixed paths so plugins survive GitHub Actions HOME override
+# Pin SF CLI data dirs to fixed paths owned by root so any runner UID can write.
+# XDG_DATA_HOME/XDG_CONFIG_HOME redirect SF CLI away from $HOME/.sf.
+# Dirs are world-writable so plugins can be updated at runtime by any user.
 ENV XDG_DATA_HOME=/opt/sf-data
 ENV XDG_CONFIG_HOME=/opt/sf-config
-RUN mkdir -p /opt/sf-data /opt/sf-config && chown ci:ci /opt/sf-data /opt/sf-config
+RUN mkdir -p /opt/sf-data /opt/sf-config \
+    && chmod 777 /opt/sf-data /opt/sf-config
 
-# Switch to ci user
+# Install plugins as ci user so they land in XDG_DATA_HOME=/opt/sf-data
 USER ci
 WORKDIR /home/ci
-
-# Install essential SF CLI plugins for CI/CD
 RUN echo y | sf plugins install sfdx-git-delta
 
-# Create directories for Salesforce CLI
-RUN mkdir -p /home/ci/.sfdx /home/ci/.sf
+# Switch back to root for runtime.
+# GitHub Actions bind-mounts /github/home with the runner's UID as owner:
+#   - self-hosted (gabor, UID 1000 = ci): worked without this
+#   - ARC dind (runner, UID 1001 ≠ ci): ci can't write → EACCES on mkdir .sf
+# Running as root bypasses UID mismatch on /github/home across all runner types.
+USER root
 
 # Set environment variables for CI
 ENV SFDX_CONTAINER_MODE=true

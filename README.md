@@ -7,6 +7,7 @@ A collection of Docker images optimized for Salesforce development and CI/CD wor
 ### sf-devcontainer
 
 A full-featured development container for Salesforce development with:
+
 - Node.js 20.x
 - Java 17 (OpenJDK)
 - Salesforce CLI with plugins
@@ -16,6 +17,7 @@ A full-featured development container for Salesforce development with:
 **Docker Hub:** `gforceinnovation/sf-devcontainer`
 
 **Usage:**
+
 ```bash
 docker pull gforceinnovation/sf-devcontainer:latest
 ```
@@ -23,6 +25,7 @@ docker pull gforceinnovation/sf-devcontainer:latest
 ### sf-ci
 
 A lightweight CI/CD optimized image for Salesforce automation with:
+
 - Node.js 20.x
 - Java 17 (OpenJDK)
 - Salesforce CLI with essential plugins
@@ -31,6 +34,7 @@ A lightweight CI/CD optimized image for Salesforce automation with:
 **Docker Hub:** `gforceinnovation/sf-ci`
 
 **Usage:**
+
 ```bash
 docker pull gforceinnovation/sf-ci:latest
 ```
@@ -40,6 +44,7 @@ docker pull gforceinnovation/sf-ci:latest
 ### Building Images Locally
 
 **Build for your local platform only (faster):**
+
 ```bash
 # Build sf-devcontainer
 docker build -t sf-devcontainer:local ./sf-devcontainer
@@ -51,12 +56,14 @@ docker build -t sf-ci:local ./sf-ci
 **Build for multiple platforms (Mac ARM64 + Intel/AMD64):**
 
 First, create a builder that supports multi-platform builds:
+
 ```bash
 docker buildx create --name multiplatform --use
 docker buildx inspect --bootstrap
 ```
 
 Then build and push to Docker Hub:
+
 ```bash
 # Build and push sf-devcontainer for multiple platforms
 docker buildx build \
@@ -69,10 +76,10 @@ docker buildx build \
 # Build and push sf-ci for multiple platforms
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  --tag gforceinnovation/sf-ci:1.0.1 \
+  --tag gforceinnovation/sf-ci:1.5.0 \
   --tag gforceinnovation/sf-ci:latest \
   --push \
-  ./sf-ci
+  ./sf-ci-ci
 ```
 
 **Note:** Multi-platform builds require pushing to a registry. You cannot load multi-platform images directly to your local Docker daemon.
@@ -100,6 +107,7 @@ git push origin v1.0.0
 ```
 
 This will:
+
 1. Build both Docker images
 2. Push to Docker Hub with version tag and `latest`
 3. Generate release notes automatically
