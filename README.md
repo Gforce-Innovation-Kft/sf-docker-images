@@ -39,6 +39,24 @@ A lightweight CI/CD optimized image for Salesforce automation with:
 docker pull gforceinnovation/sf-ci:latest
 ```
 
+### sf-bulk
+
+An ultra-lightweight Alpine-based image for bulk Salesforce org operations with:
+
+- Node.js 20.x (Alpine base — no Java, ~300MB)
+- Salesforce CLI with `sfdx-git-delta` plugin
+- Essentials only: bash, curl, git, jq, unzip
+- XDG dirs pinned to `/opt/sf-*` for any-UID runner compatibility
+- Runs as root at runtime (works with ARC dind runners)
+
+**Docker Hub:** `gforceinnovation/sf-bulk`
+
+**Usage:**
+
+```bash
+docker pull gforceinnovation/sf-bulk:latest
+```
+
 ## Development
 
 ### Building Images Locally
@@ -51,6 +69,9 @@ docker build -t sf-devcontainer:local ./sf-devcontainer
 
 # Build sf-ci
 docker build -t sf-ci:local ./sf-ci
+
+# Build sf-bulk
+docker build -t sf-bulk:local ./sf-bulk
 ```
 
 **Build for multiple platforms (Mac ARM64 + Intel/AMD64):**
@@ -79,7 +100,15 @@ docker buildx build \
   --tag gforceinnovation/sf-ci:1.5.0 \
   --tag gforceinnovation/sf-ci:latest \
   --push \
-  ./sf-ci-ci
+  ./sf-ci
+
+# Build and push sf-bulk for multiple platforms
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --tag gforceinnovation/sf-bulk:1.0.0 \
+  --tag gforceinnovation/sf-bulk:latest \
+  --push \
+  ./sf-bulk
 ```
 
 **Note:** Multi-platform builds require pushing to a registry. You cannot load multi-platform images directly to your local Docker daemon.
@@ -95,6 +124,7 @@ pytest tests/ -v
 # Run tests for a single image
 pytest tests/test_sf_ci.py -v
 pytest tests/test_sf_devcontainer.py -v
+pytest tests/test_sf_bulk.py -v
 ```
 
 ## CI/CD

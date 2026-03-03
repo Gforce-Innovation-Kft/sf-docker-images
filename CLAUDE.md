@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Builds and publishes two Salesforce-focused Docker images to Docker Hub under the `gforceinnovation` organization. Both are based on `ubuntu:22.04` with Node.js 20.x, OpenJDK 17, and Salesforce CLI v2.
+Builds and publishes three Salesforce-focused Docker images to Docker Hub under the `gforceinnovation` organization. sf-ci and sf-devcontainer are based on `ubuntu:22.04` with Node.js 20.x, OpenJDK 17, and Salesforce CLI v2. sf-bulk is Alpine-based with Node.js 20.x (no Java) for a minimal footprint.
 
 ## Images
 
@@ -23,7 +23,17 @@ Builds and publishes two Salesforce-focused Docker images to Docker Hub under th
 - **Tools:** Everything in sf-ci plus vim, nano, wget, htop, tree, less, build-essential, openssl.
 - **Shell:** Zsh with Oh My Zsh, Powerlevel10k theme, zsh-autosuggestions, zsh-syntax-highlighting, zsh-completions.
 
-Both images set `WORKDIR /workspace`, include a `HEALTHCHECK` using `sf version --json`, and have `.dockerignore` files.
+### sf-bulk
+- **Purpose:** Ultra-lightweight Alpine-based image for bulk Salesforce org operations (no Java).
+- **Base:** `node:20-alpine` with `coreutils` (needed for `env -S` in SF CLI shebang on musl/BusyBox).
+- **User:** `ci` (UID 1000, bash shell) — created after removing the pre-existing `node` user from the base image.
+- **SF CLI plugins:** `sfdx-git-delta`.
+- **Tools:** bash, curl, git, jq, unzip, libc6-compat (gcompat).
+- **Env vars:** same set as sf-ci. XDG dirs pinned to `/opt/sf-data` and `/opt/sf-config` (chmod 777).
+- **Runtime:** runs as root (bypasses ARC dind UID mismatch, same as sf-ci).
+- **Design rule:** No Java, no editors, no interactive tools. Must stay under 500MB uncompressed.
+
+All three images set `WORKDIR /workspace`, include a `HEALTHCHECK` using `sf version --json`, and have `.dockerignore` files.
 
 ## Key Commands
 
@@ -31,17 +41,20 @@ Both images set `WORKDIR /workspace`, include a `HEALTHCHECK` using `sf version 
 # Build locally
 docker build -t sf-ci:local ./sf-ci
 docker build -t sf-devcontainer:local ./sf-devcontainer
+docker build -t sf-bulk:local ./sf-bulk
 
 # Run tests (pytest-testinfra)
 pip install -r tests/requirements.txt
 pytest tests/ -v
 pytest tests/test_sf_ci.py -v          # single image
 pytest tests/test_sf_devcontainer.py -v # single image
+pytest tests/test_sf_bulk.py -v         # single image
 
 # Multi-platform build and push (requires buildx)
 docker buildx create --name multiplatform --use
 docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf-ci:latest --push ./sf-ci
 docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf-devcontainer:latest --push ./sf-devcontainer
+docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf-bulk:latest --push ./sf-bulk
 ```
 
 ## CI/CD Workflows
@@ -59,12 +72,14 @@ git push origin v1.2.0
 
 ## Testing
 
-Tests use **pytest-testinfra** (in `tests/`). Each test file builds the image, starts a container, and verifies: OS version, user/UID/shell, runtimes (Node, Java, SF CLI), plugins, tools, env vars, directory structure. sf-ci tests verify vim/nano/zsh are NOT installed.
+Tests use **pytest-testinfra** (in `tests/`). Each test file builds the image, starts a container, and verifies: OS version, user/UID/shell, runtimes (Node, Java, SF CLI), plugins, tools, env vars, directory structure. sf-ci tests verify vim/nano/zsh are NOT installed. sf-bulk tests verify Java is NOT installed and image is under 500MB.
 
 ## Change Rules
 
 - When adding/removing tools: update the Dockerfile, the image's README, and add/adjust tests in `tests/test_sf_*.py`.
-- sf-ci must stay minimal; sf-devcontainer can be feature-rich.
-- Clean apt caches in the same `RUN` layer (`rm -rf /var/lib/apt/lists/*`).
+- sf-ci must stay minimal; sf-devcontainer can be feature-rich; sf-bulk must stay under 500MB with no Java.
+- Alpine images: use `apk add --no-cache` and include `coreutils` (needed for `env -S` in SF CLI shebang).
+- Alpine images: `node:20-alpine` ships a `node` user at UID 1000 — run `deluser node` before creating `ci`.
+- Ubuntu images: clean apt caches in the same `RUN` layer (`rm -rf /var/lib/apt/lists/*`).
 - Commit messages follow conventional commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
 - A pre-commit hook runs yamllint on staged YAML files. Config in `.yamllint` (max line length 120, 2-space indent).
