@@ -17,7 +17,7 @@ flowchart TD
 |-------|------|------|------|----------|
 | [`sf-ci`](../sf-ci/README.md) | `ubuntu:22.04` | ~840 MB | ✅ 17 | deploys, Apex tests, delta packaging in CI |
 | [`sf-devcontainer`](../sf-devcontainer/README.md) | `ubuntu:22.04` | ~2.6 GB | ✅ 17 | local development in VS Code |
-| [`sf-bulk`](../sf-bulk/README.md) | `node:20-alpine` | ~410 MB | ❌ | high-volume `sf data` / Bulk API work |
+| [`sf-bulk`](../sf-bulk/README.md) | `node:24-alpine` | ~410 MB | ❌ | high-volume `sf data` / Bulk API work |
 
 Rules of thumb:
 

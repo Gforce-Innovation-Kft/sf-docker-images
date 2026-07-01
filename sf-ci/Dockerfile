@@ -30,8 +30,8 @@ RUN apt-get update --allow-insecure-repositories || apt-get update \
 # Catch pipe failures (e.g. curl | bash)
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Install Node.js 20.x, Java, and Salesforce CLI in consolidated layers
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+# Install Node.js 24.x, Java, and Salesforce CLI in consolidated layers
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
     && apt-get install -y --no-install-recommends nodejs openjdk-17-jre-headless \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g @salesforce/cli@2.* \

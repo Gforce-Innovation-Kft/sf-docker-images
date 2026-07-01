@@ -10,7 +10,7 @@ description: >-
 # Working in the dev container
 
 The [`sf-devcontainer`](../../../sf-devcontainer/) image is the source of truth for local
-Salesforce development. Run tooling **inside it** so versions match CI (Node 20, Java 17,
+Salesforce development. Run tooling **inside it** so versions match CI (Node 24, Java 17,
 SF CLI + plugins) instead of relying on whatever is on the host.
 
 ## Discover the container

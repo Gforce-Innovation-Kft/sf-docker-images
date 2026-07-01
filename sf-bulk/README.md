@@ -9,8 +9,8 @@ operations. No Java, minimal footprint — kept **under 500 MB** uncompressed (~
 
 ## Features
 
-- **Alpine base** (`node:20-alpine` + `coreutils`): tiny image, `env -S` support for the SF CLI shebang
-- **Node.js 20.x**: Latest LTS version (no Java)
+- **Alpine base** (`node:24-alpine` + `coreutils`): tiny image, `env -S` support for the SF CLI shebang
+- **Node.js 24.x**: Latest LTS version (no Java)
 - **Salesforce CLI**: Latest v2 with the `sfdx-git-delta` plugin
 - **Utilities**: bash, curl, git, jq, unzip, libc6-compat
 - **Container-mode env**: `SFDX_CONTAINER_MODE`, `SFDX_DISABLE_DNS_CHECK`, `SF_AUTOUPDATE_DISABLE`,
