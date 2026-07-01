@@ -1,5 +1,7 @@
 # Salesforce Docker Images
 
+[![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+
 A collection of Docker images optimized for Salesforce development and CI/CD workflows.
 
 ## Available Images
@@ -138,9 +140,35 @@ git push origin v1.0.0
 
 This will:
 
-1. Build both Docker images
-2. Push to Docker Hub with version tag and `latest`
-3. Generate release notes automatically
+1. Build all three Docker images (multi-arch: linux/amd64 + linux/arm64)
+2. Run the pytest-testinfra tests and a Trivy scan
+3. Push to Docker Hub with semver tags (`1.2.3`, `1.2`, `1`, `latest`) plus SBOM + provenance
+4. Create a GitHub Release with generated notes augmented by the `CHANGELOG.md` section
+
+See [`CHANGELOG.md`](CHANGELOG.md) (Keep a Changelog format) and the
+[`releasing` skill](.claude/skills/releasing/SKILL.md) for the release checklist.
+
+## AI-Assisted Development
+
+This repo is built to be developed with [Claude Code](https://claude.com/claude-code). The
+loop is **CLAUDE.md → references → skills → tests → release**:
+
+- **[`CLAUDE.md`](CLAUDE.md)** — project overview, commands, and change rules Claude reads first.
+- **[`.claude/references/`](.claude/references/)** — rules to read before generating code:
+  [docker-best-practices](.claude/references/docker-best-practices.md),
+  [image-conventions](.claude/references/image-conventions.md) (per-image size budgets +
+  allowed/forbidden tools), [github-actions](.claude/references/github-actions.md),
+  [devops](.claude/references/devops.md).
+- **[`.claude/skills/`](.claude/skills/)** — repo skills: `building-a-docker-image`,
+  `testing-images`, `releasing`, and `working-in-the-devcontainer` (vendored, attributed).
+- **Tests** — [pytest-testinfra](tests/) suites gate every change and the CI pipeline.
+- **[`scripts/setup.sh`](scripts/setup.sh)** — one command to bootstrap the repo: verifies
+  Docker + Python + `gh`, installs test deps, and prints the recommended external Claude
+  skills to install.
+
+```bash
+./scripts/setup.sh
+```
 
 ## License
 
