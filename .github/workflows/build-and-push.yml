@@ -27,6 +27,10 @@ jobs:
     name: Dependency Review
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    # Non-blocking: requires the repo's Dependency Graph feature to be enabled
+    # (Settings -> Security & analysis). Runs and reports once enabled, but never
+    # blocks a PR when the feature is off.
+    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
