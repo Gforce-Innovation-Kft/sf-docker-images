@@ -7,15 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-07-01
+
 ### Added
 - Showcase documentation: rewritten README (badges, comparison table, quick starts, supported
   tags, security, decision diagram), community-health files (CONTRIBUTING refresh,
   CODE_OF_CONDUCT, SECURITY), GitHub issue forms, PR template, and CODEOWNERS
 - `docs/` image decision guide with a Mermaid diagram and a devcontainer GIF placeholder
+- graphify knowledge graph tooling for token-efficient Claude navigation
+  (`.claude/references/graphify.md`, `scripts/setup.sh` bootstrap, pre-commit refresh hook);
+  `graphify-out/` is a git-ignored local build artifact
 
 ### Changed
 - Bumped the Node.js runtime from 20 to **24 (Active LTS)** across all three images
   (`sf-ci`, `sf-devcontainer`, `sf-bulk`); Node 20 reaches end-of-life in 2026
+- Raised the `sf-bulk` image-size budget to 600 MB (Node 24-alpine is larger than Node 20)
+- CI builds only on version tags and pull requests (no redundant run on pushes to `main`)
+
+### Removed
+- `dependency-review` job (required the repo's Dependency Graph feature; non-functional without it)
 
 ## [1.5.0] - 2026-07-01
 
@@ -75,7 +85,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-platform build support (`linux/amd64` + `linux/arm64`)
 - GitHub Actions workflow for building and pushing to Docker Hub
 
-[Unreleased]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.1.0...v1.3.0
