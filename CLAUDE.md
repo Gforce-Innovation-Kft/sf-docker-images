@@ -43,7 +43,7 @@ docker build -t sf-ci:local ./sf-ci
 docker build -t sf-devcontainer:local ./sf-devcontainer
 docker build -t sf-bulk:local ./sf-bulk
 
-# Run tests (pytest-testinfra)
+# Run container tests (pytest-testinfra)
 pip install -r tests/requirements.txt
 pytest tests/ -v
 pytest tests/test_sf_ci.py -v          # single image
@@ -61,8 +61,9 @@ docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf
 
 ### `.github/workflows/build-and-push.yml` -- Build and Push
 - **Triggers:** Push to `main`, PRs to `main`, and version tags (`v*.*.*`).
-- **Jobs:** dependency-review -> build (matrix) -> test (pytest-testinfra + Trivy) -> push (Docker Hub on version tags only).
+- **Jobs:** dependency-review -> build (matrix) -> test (pytest-testinfra + Trivy) -> push (Docker Hub on version tags only) -> release (GitHub Release on version tags only).
 - Pushes with semver tags (e.g., `1.2.3`, `1.2`, `1`, `latest`). Generates SBOM and provenance attestations.
+- Registry is **Docker Hub only** (`gforceinnovation/*`).
 
 ### Release Process
 ```bash
@@ -72,7 +73,10 @@ git push origin v1.2.0
 
 ## Testing
 
-Tests use **pytest-testinfra** (in `tests/`). Each test file builds the image, starts a container, and verifies: OS version, user/UID/shell, runtimes (Node, Java, SF CLI), plugins, tools, env vars, directory structure. sf-ci tests verify vim/nano/zsh are NOT installed. sf-bulk tests verify Java is NOT installed and image is under 500MB.
+Tests use **pytest-testinfra** (in `tests/`). Each `tests/test_sf_*.py` builds the image, starts a
+container, and verifies: OS version, user/UID/shell, runtimes (Node, Java, SF CLI), plugins, tools,
+env vars, and directory structure. sf-ci tests verify vim/nano/zsh are NOT installed; sf-bulk tests
+verify Java is NOT installed and the image is under 500 MB.
 
 ## Change Rules
 
@@ -83,3 +87,18 @@ Tests use **pytest-testinfra** (in `tests/`). Each test file builds the image, s
 - Ubuntu images: clean apt caches in the same `RUN` layer (`rm -rf /var/lib/apt/lists/*`).
 - Commit messages follow conventional commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
 - A pre-commit hook runs yamllint on staged YAML files. Config in `.yamllint` (max line length 120, 2-space indent).
+
+## AI Pair-Development Layer
+
+This repo is set up to be developed with Claude Code. The loop is: **CLAUDE.md → references → skills → tests → release.**
+
+- **`.claude/references/`** — read before generating code:
+  [`docker-best-practices.md`](.claude/references/docker-best-practices.md),
+  [`image-conventions.md`](.claude/references/image-conventions.md) (per-image size budgets +
+  allowed/forbidden tools), [`github-actions.md`](.claude/references/github-actions.md),
+  [`devops.md`](.claude/references/devops.md).
+- **`.claude/skills/`** — repo skills: `building-a-docker-image`, `testing-images`, `releasing`,
+  and `working-in-the-devcontainer` (vendored, attributed).
+- **`.claude/settings.json`** — committed permission allow-list. `settings.local.json` is git-ignored.
+- **`scripts/setup.sh`** — one-command bootstrap: verifies Docker + Node 20 + `gh` and prints the
+  recommended external Claude skills to install.
