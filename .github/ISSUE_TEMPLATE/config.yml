@@ -1,0 +1,9 @@
+---
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/Gforce-Innovation-Kft/sf-docker-images/security/advisories/new
+    about: Please report security issues privately, not as public issues.
+  - name: Question or discussion
+    url: https://github.com/Gforce-Innovation-Kft/sf-docker-images/discussions
+    about: Ask a question or start a discussion.
