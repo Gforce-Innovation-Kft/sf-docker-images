@@ -213,3 +213,43 @@ jobs:
           cache-to: type=gha,mode=max
           sbom: true
           provenance: true
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: push
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract changelog section for this tag
+        id: changelog
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          NOTES_FILE="$(mktemp)"
+          # Pull the [VERSION] section out of CHANGELOG.md (Keep a Changelog format)
+          awk -v ver="$VERSION" '
+            /^## \[/ {
+              if (found) { exit }
+              if (index($0, "[" ver "]")) { found = 1; next }
+            }
+            found { print }
+          ' CHANGELOG.md > "$NOTES_FILE"
+          if [ ! -s "$NOTES_FILE" ]; then
+            echo "Release ${GITHUB_REF_NAME} — see the auto-generated notes below." > "$NOTES_FILE"
+          fi
+          echo "notes_file=${NOTES_FILE}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: ${{ steps.changelog.outputs.notes_file }}
+          generate_release_notes: true
