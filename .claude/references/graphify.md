@@ -23,23 +23,20 @@ lacks the detail you need.
 - The graph currently covers the repo's Dockerfiles, tests, workflow, scripts, and docs
   (~438 nodes / ~411 edges / 32 communities at last build).
 
-## What is committed vs ignored
+## Not committed — a local build artifact
 
-| Path | Tracked? | Why |
-|------|----------|-----|
-| `graphify-out/graph.json` | ✅ committed | the graph itself — powers `query`/`explain`/`path` |
-| `graphify-out/GRAPH_REPORT.md` | ✅ committed | human/broad architecture read |
-| `graphify-out/manifest.json`, `.graphify_labels.json`, `.graphify_root` | ✅ committed | graph metadata |
-| `graphify-out/cache/` | ⛔ git-ignored | machine-local AST rebuild cache |
-| `graphify-out/graph.html` | ⛔ git-ignored | regenerable visualization (`graphify update .`) |
+The whole **`graphify-out/` directory is git-ignored**, like `node_modules/` or `venv/`. It is a
+generated artifact: `scripts/setup.sh` and the pre-commit hook rebuild it locally with
+`graphify update .` (AST-only, no API cost). If it is missing, generate it with `graphify update .`;
+`query`/`explain`/`path` read it from disk.
 
 ## Local setup
 
 `scripts/setup.sh` installs the graphify Claude skill (`graphify install --platform claude`),
 builds the graph (`graphify update .`), and activates the git hooks (`core.hooksPath` →
-`.github/hooks`) if the `graphify` CLI is on PATH. Install it from its distribution if missing;
-the committed `graph.json` still works for `query`/`explain`/`path` without a local rebuild.
+`.github/hooks`) if the `graphify` CLI is on PATH. Install it from its distribution if missing,
+then run `graphify update .` to build `graphify-out/` locally.
 
-The `.github/hooks/pre-commit` hook re-runs `graphify update .` on every commit and re-stages the
-tracked graph files, so `graphify-out/graph.json` never drifts from the code. It is **non-blocking**:
-if `graphify` is missing or errors, the commit still proceeds.
+The `.github/hooks/pre-commit` hook re-runs `graphify update .` on every commit so the local
+`graphify-out/graph.json` never drifts from the code (nothing is staged — the dir is ignored). It
+is **non-blocking**: if `graphify` is missing or errors, the commit still proceeds.
