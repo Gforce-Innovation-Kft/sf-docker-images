@@ -6,20 +6,25 @@ This file gives concise, high-signal guidance for AI coding assistants working i
 - Purpose: build and publish Salesforce-focused Docker images.
 - Images:
   - `sf-devcontainer`: full-featured dev environment (interactive tools, Zsh, plugins).
-  - `sf-ci`: lightweight CI image (minimal tools, non-root user).
+  - `sf-ci`: lightweight CI image (minimal tools, non-root user, root runtime).
+  - `sf-bulk`: ultralight Alpine image (no Java, must stay under 500MB).
 
 ## Repo Layout
 - `sf-devcontainer/Dockerfile` + `sf-devcontainer/README.md`
 - `sf-ci/Dockerfile` + `sf-ci/README.md`
-- `tests/` pytest-testinfra tests (`tests/test_sf_devcontainer.py`, `tests/test_sf_ci.py`)
-- `README.md`, `CONTRIBUTING.md`, `SETUP.md`
-- `.github/workflows/*.yml` for CI/build+push on tag
+- `sf-bulk/Dockerfile` + `sf-bulk/README.md`
+- `tests/` pytest-testinfra container tests (`tests/test_sf_ci.py`, `tests/test_sf_devcontainer.py`, `tests/test_sf_bulk.py`)
+- `.claude/references/*` (rules) and `.claude/skills/*` (repo skills)
+- `README.md`, `CONTRIBUTING.md`, `SETUP.md`, `CLAUDE.md`
+- `.github/workflows/*.yml` for CI/build+test+push+release on tag
 
 ## Local Commands
 - Build dev image: `docker build -t sf-devcontainer:local ./sf-devcontainer`
 - Build CI image: `docker build -t sf-ci:local ./sf-ci`
+- Build bulk image: `docker build -t sf-bulk:local ./sf-bulk`
 - Tests (preferred): `pytest tests/ -v`
 - Test deps: `pip install -r tests/requirements.txt`
+- Bootstrap: `scripts/setup.sh`
 
 ## Change Rules (Critical)
 - `sf-devcontainer` can be feature-rich and interactive.
@@ -29,7 +34,8 @@ This file gives concise, high-signal guidance for AI coding assistants working i
   - Update the matching image README.
   - Add/adjust tests in `tests/test_sf_*.py`.
   - Update root `README.md` if user-facing features changed.
-- Keep non-root users (`vscode`, `ci`) and existing env vars.
+- `sf-bulk` must stay under 500MB with no Java.
+- Keep the `vscode`/`ci` users (UID 1000) and existing env vars; `sf-ci`/`sf-bulk` run as root at runtime.
 - Clean apt caches for small images (see `sf-ci/Dockerfile` pattern).
 
 ## Copilot Guidance (How to be "killer")

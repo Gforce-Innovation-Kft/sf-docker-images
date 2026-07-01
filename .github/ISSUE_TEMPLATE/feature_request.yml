@@ -1,0 +1,45 @@
+---
+name: Feature request
+description: Suggest a tool, plugin, or improvement for an image
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion. Please keep image size and role in mind — sf-ci stays
+        minimal and sf-bulk must remain under 500 MB with no Java.
+  - type: dropdown
+    id: image
+    attributes:
+      label: Target image
+      description: Which image should this apply to?
+      options:
+        - sf-ci
+        - sf-devcontainer
+        - sf-bulk
+        - new image
+        - repo tooling / CI
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do that is hard or impossible today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: The tool, plugin, or change you'd like, and why it belongs in this image.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you weighed (e.g. a different image, a runtime install).
+    validations:
+      required: false

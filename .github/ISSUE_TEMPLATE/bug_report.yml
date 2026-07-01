@@ -1,0 +1,60 @@
+---
+name: Bug report
+description: Report a problem with one of the images
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please fill in the details below.
+  - type: dropdown
+    id: image
+    attributes:
+      label: Affected image
+      description: Which image is affected?
+      options:
+        - sf-ci
+        - sf-devcontainer
+        - sf-bulk
+        - multiple / not sure
+    validations:
+      required: true
+  - type: input
+    id: tag
+    attributes:
+      label: Image tag
+      description: The tag you used (e.g. 1.4.0, 1, latest).
+      placeholder: "latest"
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: The exact commands or workflow snippet that triggers the bug.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Platform / architecture
+      description: Where you ran it (e.g. GitHub Actions ubuntu-latest, linux/arm64, local Docker Desktop).
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Paste any relevant log output. This is automatically formatted as code.
+      render: shell
+    validations:
+      required: false
