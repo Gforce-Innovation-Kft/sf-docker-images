@@ -1,6 +1,10 @@
 #!/bin/bash
-# Pre-commit hook to lint YAML files
+# Pre-commit hook:
+#   1. Lint staged YAML files with yamllint (blocking).
+#   2. Refresh the graphify knowledge graph so graphify-out/graph.json stays in
+#      sync with the code (non-blocking, AST-only, no API cost).
 
+# --- 1. YAML lint ------------------------------------------------------------
 echo "Running YAML linter..."
 
 # Determine how to invoke yamllint (binary on PATH or python module)
@@ -24,28 +28,42 @@ fi
 # Get all staged YAML files
 YAML_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ya?ml)$')
 
+YAML_FAILED=0
 if [ -z "$YAML_FILES" ]; then
     echo "✓ No YAML files to lint"
-    exit 0
-fi
-
-# Lint each file
-FAILED=0
-for file in $YAML_FILES; do
-    if [ -f "$file" ]; then
-        echo "Linting: $file"
-        if ! $YAMLLINT_CMD "$file"; then
-            FAILED=1
+else
+    for file in $YAML_FILES; do
+        if [ -f "$file" ]; then
+            echo "Linting: $file"
+            if ! $YAMLLINT_CMD "$file"; then
+                YAML_FAILED=1
+            fi
         fi
+    done
+    if [ $YAML_FAILED -eq 1 ]; then
+        echo ""
+        echo "❌ YAML linting failed. Please fix the errors above."
+        echo "   To skip this check, use: git commit --no-verify"
+        exit 1
     fi
-done
-
-if [ $FAILED -eq 1 ]; then
-    echo ""
-    echo "❌ YAML linting failed. Please fix the errors above."
-    echo "   To skip this check, use: git commit --no-verify"
-    exit 1
+    echo "✓ All YAML files passed linting"
 fi
 
-echo "✓ All YAML files passed linting"
+# --- 2. Refresh graphify graph (never blocks the commit) ---------------------
+if command -v graphify &> /dev/null; then
+    echo "Refreshing graphify graph..."
+    if graphify update . > /dev/null 2>&1; then
+        # Re-stage only the tracked graph artifacts (cache/ and graph.html are
+        # git-ignored, so this add cannot pull them in).
+        git add graphify-out/graph.json graphify-out/GRAPH_REPORT.md \
+                graphify-out/manifest.json graphify-out/.graphify_labels.json 2>/dev/null
+        echo "✓ graphify-out refreshed and staged"
+    else
+        echo "⚠️  graphify update failed — committing without a graph refresh"
+        echo "   (run 'graphify update .' manually to resync graphify-out/)"
+    fi
+else
+    echo "ℹ️  graphify not installed — skipping graph refresh"
+fi
+
 exit 0
