@@ -112,17 +112,14 @@ def test_xmlstarlet_installed(host):
     assert xml.rc == 0
 
 
-def test_sfdx_directories_exist(host):
-    """Test that Salesforce CLI directories are created"""
-    dirs = [
-        "/home/ci/.sfdx",
-        "/home/ci/.sf",
-        "/home/ci/.config"
-    ]
-    for directory in dirs:
-        d = host.file(directory)
+def test_xdg_directories_exist(host):
+    """SF CLI data dirs are pinned to /opt/sf-* (XDG_DATA_HOME/XDG_CONFIG_HOME) and
+    world-writable so any runner UID can write to them at runtime."""
+    for path in ["/opt/sf-data", "/opt/sf-config"]:
+        d = host.file(path)
         assert d.exists
         assert d.is_directory
+        assert d.mode == 0o777
 
 
 def test_ci_environment_variables(host):
