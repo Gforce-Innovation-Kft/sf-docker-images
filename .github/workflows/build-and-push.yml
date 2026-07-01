@@ -1,9 +1,9 @@
 name: Build and Push Docker Images
 
 on:
+  # Build/test/push only on version tags; PRs validate before merge.
+  # Pushes to main do not build (avoids a redundant run right before tagging).
   push:
-    branches:
-      - main
     tags:
       - 'v*.*.*'
   pull_request:
