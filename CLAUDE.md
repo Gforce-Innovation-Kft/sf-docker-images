@@ -86,7 +86,9 @@ verify Java is NOT installed and the image is under 500 MB.
 - Alpine images: `node:20-alpine` ships a `node` user at UID 1000 — run `deluser node` before creating `ci`.
 - Ubuntu images: clean apt caches in the same `RUN` layer (`rm -rf /var/lib/apt/lists/*`).
 - Commit messages follow conventional commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
-- A pre-commit hook runs yamllint on staged YAML files. Config in `.yamllint` (max line length 120, 2-space indent).
+- A pre-commit hook (`.github/hooks/pre-commit`, activated by `scripts/setup.sh` via
+  `core.hooksPath`) runs yamllint on staged YAML files (blocking) and refreshes the graphify graph
+  (non-blocking). Config in `.yamllint` (max line length 120, 2-space indent).
 
 ## AI Pair-Development Layer
 

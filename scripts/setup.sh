@@ -81,6 +81,16 @@ else
   warn "the committed graphify-out/graph.json still powers query/explain/path without a local rebuild"
 fi
 
+# --- git hooks (yamllint + graphify refresh) ---------------------------------
+info "Activating tracked git hooks"
+if [ -d "$REPO_ROOT/.git" ]; then
+  git -C "$REPO_ROOT" config core.hooksPath .github/hooks \
+    && ok "core.hooksPath -> .github/hooks (pre-commit: yamllint + graphify refresh)" \
+    || warn "could not set core.hooksPath"
+else
+  warn "not a git working copy — skipping hook activation"
+fi
+
 # --- recommended external Claude skills (manual, opt-in) ---------------------
 info "Recommended external Claude skills (run these yourself to install):"
 cat <<'EOF'
