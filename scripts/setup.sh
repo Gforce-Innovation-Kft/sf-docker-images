@@ -33,16 +33,10 @@ else
   MISSING=1
 fi
 
-if command -v node >/dev/null 2>&1; then
-  NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]')"
-  if [ "$NODE_MAJOR" -ge 20 ]; then
-    ok "node: $(node --version) (>= 20, node:test available)"
-  else
-    fail "node $(node --version) is too old — the container tests need Node >= 20"
-    MISSING=1
-  fi
+if command -v python3 >/dev/null 2>&1; then
+  ok "python3: $(python3 --version)"
 else
-  fail "node not found — install Node 20+: https://nodejs.org/"
+  fail "python3 not found — the pytest-testinfra tests need Python 3.8+"
   MISSING=1
 fi
 
@@ -52,9 +46,15 @@ else
   warn "gh (GitHub CLI) not found — needed for releases: https://cli.github.com/"
 fi
 
-# --- container tests need no dependency install ------------------------------
-info "Container tests use Node's built-in test runner — nothing to install"
-ok "run: node --test tests/"
+# --- install container test dependencies -------------------------------------
+info "Installing container test dependencies (pytest-testinfra)"
+if command -v python3 >/dev/null 2>&1; then
+  if python3 -m pip install -r "$REPO_ROOT/tests/requirements.txt" >/dev/null 2>&1; then
+    ok "installed tests/requirements.txt"
+  else
+    warn "could not install test deps automatically — run: pip install -r tests/requirements.txt"
+  fi
+fi
 
 # --- vendored Claude skill ---------------------------------------------------
 info "Checking vendored Claude skill"
@@ -89,7 +89,7 @@ fi
 info "Next steps"
 cat <<EOF
   1. Build the images:   docker build -t sf-ci:test ./sf-ci   (and sf-devcontainer, sf-bulk)
-  2. Run the tests:      node --test tests/
+  2. Run the tests:      pytest tests/ -v
   3. Read the rules:     .claude/references/  and  .claude/skills/
   4. Open in VS Code:    "Reopen in Container" (uses .devcontainer/devcontainer.json)
 EOF

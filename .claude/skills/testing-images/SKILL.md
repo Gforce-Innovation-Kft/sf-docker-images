@@ -1,53 +1,54 @@
 ---
 name: testing-images
 description: >-
-  Run and interpret the Node.js container tests for the Salesforce Docker images. Use when
-  asked to test an image, add a new assertion, debug a failing container test, or check an
-  image size budget. Tests use the built-in node:test runner (Node 20+) — no deps to install.
+  Run and interpret the pytest-testinfra container tests for the Salesforce Docker images.
+  Use when asked to test an image, add a new assertion, debug a failing container test, or
+  check an image size budget.
 ---
 
 # Testing the images
 
+Tests use **pytest-testinfra** in `tests/`. Each `tests/test_sf_<image>.py` builds the
+image (once, reusing `<image>:test` if present), starts a container, and asserts against it.
+
 ## Run
 
 ```bash
-node --test tests/                          # all three images
-node --test tests/sf-ci.test.mjs            # one image
-node --test tests/sf-bulk.test.mjs
+pip install -r tests/requirements.txt   # first time only
+pytest tests/ -v                          # all three images
+pytest tests/test_sf_ci.py -v             # one image
+pytest tests/test_sf_bulk.py -v
 ```
 
-Node 20+ only. There are **no dependencies to install** — tests use `node:test` and
-`node:child_process`. The first run of each suite builds `<image>:test` if it is missing
-(via `tests/helpers/docker.mjs`); later runs reuse it, so rebuild manually after changing a
-Dockerfile:
+The fixture builds `<image>:test` if missing, so rebuild manually after changing a Dockerfile:
 
 ```bash
-docker build -t sf-ci:test ./sf-ci && node --test tests/sf-ci.test.mjs
+docker build -t sf-ci:test ./sf-ci && pytest tests/test_sf_ci.py -v
 ```
 
 ## How it works
 
-`tests/helpers/docker.mjs` exposes:
+- A module-scoped `host` fixture (`@pytest.fixture(scope="module")`) checks for `<image>:test`
+  via `docker image inspect`, builds it if absent, then `docker run -d ... sleep infinity`
+  and yields a `testinfra.get_host("docker://<container>")`; it stops the container on teardown.
+- Assertions use the testinfra API: `host.run("cmd")` (`.rc`, `.stdout`, `.stderr`),
+  `host.user("ci")` (`.uid`, `.shell`), `host.file("/path")` (`.exists`, `.is_directory`,
+  `.mode`, `.user`), `host.system_info.distribution`.
 
-- `ensureImage(name, contextDir)` — build `<name>:test` once if absent.
-- `run(image, cmd)` — `docker run --rm <image>:test bash -c "<cmd>"`, returns trimmed stdout.
-- `inspect(image, format)` — wraps `docker image inspect` (WORKDIR, Healthcheck, env).
-- `sizeBytes(image)` — image size for the budget assertions.
-
-Each `tests/sf-*.test.mjs` mirrors the image's rules: OS, user/UID/shell, runtimes,
-`sf version --json`, plugins, present tools, **absent** forbidden tools, env vars, WORKDIR,
-HEALTHCHECK, and size budget.
+Each suite mirrors the image's rules: OS, user/UID/shell, runtimes, `sf version`, plugins,
+present tools, **absent** forbidden tools, env vars, `/workspace`, and (sf-bulk) the size cap.
 
 ## Adding an assertion
 
-Add a `test('...', () => { ... })` in the relevant suite using `run(...)`/`inspect(...)` and
-`node:assert/strict`. Keep it aligned with the change you made to the Dockerfile and README
-(see the `building-a-docker-image` skill). Every added/removed tool needs a matching test.
+Add a `def test_<thing>(host):` in the relevant file using `host.run(...)` / `host.file(...)`
+and plain `assert`. Keep it aligned with the Dockerfile/README change you made (see the
+`building-a-docker-image` skill). Every added/removed tool needs a matching test.
 
 ## Interpreting failures
 
-- **Size budget failed** — the image grew past its cap (sf-bulk < 500 MB). Slim the layers;
-  do not raise the cap without a decision.
-- **"forbidden tool present" (sf-ci)** — an editor/zsh/interactive tool leaked in; remove it.
-- **plugin/env missing** — check the `sf plugins install` step and the `ENV` block.
-- **build failed** — run the raw `docker build` to see the full log.
+- **sf-bulk size assertion failed** — the image grew past 500 MB; slim the layers, don't
+  raise the cap without a decision.
+- **`test_no_interactive_tools` / `test_minimal_footprint` (sf-ci)** — an editor/zsh leaked
+  in; remove it.
+- **plugin/env test failed** — check the `sf plugins install` step and the `ENV` block.
+- **build failed inside the fixture** — run the raw `docker build ./sf-<image>` to see the log.

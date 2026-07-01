@@ -2,7 +2,7 @@
 name: building-a-docker-image
 description: >-
   Scaffold or modify a Salesforce Docker image in this repo (sf-ci, sf-devcontainer,
-  sf-bulk) — the Dockerfile, its README, the Node container tests, and the CI build
+  sf-bulk) — the Dockerfile, its README, the pytest-testinfra container tests, and the CI build
   matrix — while honouring the per-image size and tool rules. Use when adding/removing a
   tool or plugin, changing a base image, or creating a new image.
 ---
@@ -24,7 +24,7 @@ For any tool/plugin/base change to `sf-ci`, `sf-devcontainer`, or `sf-bulk`:
    caches in the same `RUN` (`rm -rf /var/lib/apt/lists/*` on Ubuntu, `apk --no-cache` on
    Alpine). Keep `WORKDIR /workspace`, the `HEALTHCHECK`, and the `LABEL` block.
 2. **Image README** — `<image>/README.md`. Update the feature list.
-3. **Node test** — `tests/sf-<image>.test.mjs`. Add/adjust an assertion (present tool,
+3. **pytest test** — `tests/test_sf_<image>.py`. Add/adjust an assertion (present tool,
    absent forbidden tool, plugin, env var, size). See the `testing-images` skill.
 4. **Root docs if user-facing** — `README.md`, `CHANGELOG.md` `[Unreleased]`.
 
@@ -39,7 +39,7 @@ For any tool/plugin/base change to `sf-ci`, `sf-devcontainer`, or `sf-bulk`:
 ## New image checklist
 
 - Create `<image>/Dockerfile`, `<image>/README.md`, `<image>/.dockerignore`.
-- Add `tests/sf-<image>.test.mjs` using `tests/helpers/docker.mjs`.
+- Add `tests/test_sf_<image>.py` (copy the `host` fixture from an existing test file).
 - Add the image to the `build`, `test`, and `push` matrices in
   [`.github/workflows/build-and-push.yml`](../../../.github/workflows/build-and-push.yml).
 - Document it in root `README.md`, `CLAUDE.md`, `AGENTS.md`, and `CHANGELOG.md`.
@@ -48,5 +48,5 @@ For any tool/plugin/base change to `sf-ci`, `sf-devcontainer`, or `sf-bulk`:
 
 ```bash
 docker build -t sf-<image>:test ./sf-<image>
-node --test tests/sf-<image>.test.mjs
+pytest tests/test_sf_<image>.py -v
 ```
