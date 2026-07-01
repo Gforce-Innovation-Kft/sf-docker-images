@@ -53,5 +53,6 @@ Or build locally first: `docker build -t sf-devcontainer:local ./sf-devcontainer
 
 - Don't install Salesforce tooling on the host to "work around" the container — fix the
   image ([`building-a-docker-image`](../building-a-docker-image/SKILL.md)) instead.
-- Container image tests are separate — those use `sf-devcontainer:test` and the Node suite
-  ([`testing-images`](../testing-images/SKILL.md)), not the running dev container.
+- Container image tests are separate — those use `sf-devcontainer:test` and the
+  pytest-testinfra suite ([`testing-images`](../testing-images/SKILL.md)), not the running
+  dev container.

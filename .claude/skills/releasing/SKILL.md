@@ -31,7 +31,7 @@ release. Read [`.claude/references/devops.md`](../../references/devops.md) for t
    git push origin vX.Y.Z
    ```
 3. **CI does the rest** ([`build-and-push.yml`](../../../.github/workflows/build-and-push.yml)):
-   build (matrix) → Node tests + Trivy → multi-arch push to Docker Hub with SBOM + provenance
+   build (matrix) → pytest-testinfra + Trivy → multi-arch push to Docker Hub with SBOM + provenance
    (tags `X.Y.Z`, `X.Y`, `X`, `latest`) → GitHub Release with generated notes + the CHANGELOG
    section.
 
