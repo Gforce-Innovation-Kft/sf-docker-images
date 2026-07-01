@@ -48,3 +48,8 @@ Thumbs.db
 tmp/
 temp/
 *.tmp
+
+# graphify: commit the graph (graph.json) + report, but not the machine-local
+# rebuild cache or the regenerable HTML visualization
+graphify-out/cache/
+graphify-out/graph.html
