@@ -102,3 +102,17 @@ This repo is set up to be developed with Claude Code. The loop is: **CLAUDE.md �
 - **`.claude/settings.json`** — committed permission allow-list. `settings.local.json` is git-ignored.
 - **`scripts/setup.sh`** — one-command bootstrap: verifies Docker + Node 20 + `gh` and prints the
   recommended external Claude skills to install.
+
+## Knowledge Graph (graphify)
+
+This repo ships a [graphify](https://github.com/) knowledge graph in `graphify-out/` so Claude
+answers codebase questions from a **scoped subgraph** instead of grepping/reading whole files —
+this is the token-management win. See [`.claude/references/graphify.md`](.claude/references/graphify.md).
+
+- **For codebase questions**, run `graphify query "<question>"` (scoped subgraph, usually much
+  smaller than raw grep/reads). Use `graphify explain "<concept>"` for one node + neighbors and
+  `graphify path "<A>" "<B>"` for relationships. Read `graphify-out/GRAPH_REPORT.md` only for a
+  broad architecture pass.
+- **After modifying code**, run `graphify update .` to keep the graph current (AST-only, no API cost).
+- Committed: `graphify-out/graph.json` + `GRAPH_REPORT.md`. Git-ignored: `graphify-out/cache/` and
+  the regenerable `graph.html`.
