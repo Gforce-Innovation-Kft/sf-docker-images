@@ -64,6 +64,33 @@ else
   warn "vendored devcontainer skill missing at .claude/skills/working-in-the-devcontainer/"
 fi
 
+# --- graphify knowledge graph (token-efficient codebase navigation) ----------
+info "Setting up graphify knowledge graph"
+if command -v graphify >/dev/null 2>&1; then
+  ok "graphify: $(graphify --version 2>/dev/null || echo present)"
+  # Install the graphify skill into Claude's config (idempotent)
+  graphify install --platform claude >/dev/null 2>&1 \
+    && ok "graphify skill installed for Claude" \
+    || warn "could not install graphify skill (run: graphify install --platform claude)"
+  # Build/refresh the graph (AST-only, no API cost)
+  graphify update . >/dev/null 2>&1 \
+    && ok "graph built/refreshed at graphify-out/graph.json" \
+    || warn "could not build graph (run: graphify update .)"
+else
+  warn "graphify not found — install it, then: graphify install --platform claude && graphify update ."
+  warn "the committed graphify-out/graph.json still powers query/explain/path without a local rebuild"
+fi
+
+# --- git hooks (yamllint + graphify refresh) ---------------------------------
+info "Activating tracked git hooks"
+if [ -d "$REPO_ROOT/.git" ]; then
+  git -C "$REPO_ROOT" config core.hooksPath .github/hooks \
+    && ok "core.hooksPath -> .github/hooks (pre-commit: yamllint + graphify refresh)" \
+    || warn "could not set core.hooksPath"
+else
+  warn "not a git working copy — skipping hook activation"
+fi
+
 # --- recommended external Claude skills (manual, opt-in) ---------------------
 info "Recommended external Claude skills (run these yourself to install):"
 cat <<'EOF'
@@ -91,6 +118,7 @@ cat <<EOF
   1. Build the images:   docker build -t sf-ci:test ./sf-ci   (and sf-devcontainer, sf-bulk)
   2. Run the tests:      pytest tests/ -v
   3. Read the rules:     .claude/references/  and  .claude/skills/
-  4. Open in VS Code:    "Reopen in Container" (uses .devcontainer/devcontainer.json)
+  4. Query the graph:    graphify query "how are the images built?"   (token-efficient)
+  5. Open in VS Code:    "Reopen in Container" (uses .devcontainer/devcontainer.json)
 EOF
 ok "Setup complete"

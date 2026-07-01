@@ -86,7 +86,9 @@ verify Java is NOT installed and the image is under 500 MB.
 - Alpine images: `node:24-alpine` ships a `node` user at UID 1000 — run `deluser node` before creating `ci`.
 - Ubuntu images: clean apt caches in the same `RUN` layer (`rm -rf /var/lib/apt/lists/*`).
 - Commit messages follow conventional commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
-- A pre-commit hook runs yamllint on staged YAML files. Config in `.yamllint` (max line length 120, 2-space indent).
+- A pre-commit hook (`.github/hooks/pre-commit`, activated by `scripts/setup.sh` via
+  `core.hooksPath`) runs yamllint on staged YAML files (blocking) and refreshes the graphify graph
+  (non-blocking). Config in `.yamllint` (max line length 120, 2-space indent).
 
 ## AI Pair-Development Layer
 
@@ -102,3 +104,17 @@ This repo is set up to be developed with Claude Code. The loop is: **CLAUDE.md �
 - **`.claude/settings.json`** — committed permission allow-list. `settings.local.json` is git-ignored.
 - **`scripts/setup.sh`** — one-command bootstrap: verifies Docker + Python + `gh`, installs test
   deps, and prints the recommended external Claude skills to install.
+
+## Knowledge Graph (graphify)
+
+This repo ships a [graphify](https://github.com/) knowledge graph in `graphify-out/` so Claude
+answers codebase questions from a **scoped subgraph** instead of grepping/reading whole files —
+this is the token-management win. See [`.claude/references/graphify.md`](.claude/references/graphify.md).
+
+- **For codebase questions**, run `graphify query "<question>"` (scoped subgraph, usually much
+  smaller than raw grep/reads). Use `graphify explain "<concept>"` for one node + neighbors and
+  `graphify path "<A>" "<B>"` for relationships. Read `graphify-out/GRAPH_REPORT.md` only for a
+  broad architecture pass.
+- **After modifying code**, run `graphify update .` to keep the graph current (AST-only, no API cost).
+- Committed: `graphify-out/graph.json` + `GRAPH_REPORT.md`. Git-ignored: `graphify-out/cache/` and
+  the regenerable `graph.html`.
