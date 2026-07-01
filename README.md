@@ -18,9 +18,9 @@ build.
 
 | Image | Base | Purpose | Size (uncompressed) | Use it when… |
 |-------|------|---------|---------------------|--------------|
-| [`sf-ci`](sf-ci/README.md) | `ubuntu:22.04` | Minimal CI/CD runner (Node 20 + Java 17 + SF CLI) | ~840 MB | you run deploys, Apex tests, or delta packaging in a pipeline |
+| [`sf-ci`](sf-ci/README.md) | `ubuntu:22.04` | Minimal CI/CD runner (Node 24 + Java 17 + SF CLI) | ~840 MB | you run deploys, Apex tests, or delta packaging in a pipeline |
 | [`sf-devcontainer`](sf-devcontainer/README.md) | `ubuntu:22.04` | Full VS Code dev environment (zsh, editors, extra plugins) | ~2.6 GB | you develop Salesforce locally in VS Code / Dev Containers |
-| [`sf-bulk`](sf-bulk/README.md) | `node:20-alpine` | Ultra-light bulk ops, **no Java** | ~410 MB (< 500 MB) | you do high-volume `sf data` / Bulk API work and don't need Apex |
+| [`sf-bulk`](sf-bulk/README.md) | `node:24-alpine` | Ultra-light bulk ops, **no Java** | ~410 MB (< 500 MB) | you do high-volume `sf data` / Bulk API work and don't need Apex |
 
 > Live pull/size badges are shown for `sf-devcontainer` (published). `sf-ci` and `sf-bulk`
 > sizes above are measured from the current build; their Docker Hub badges will be added once

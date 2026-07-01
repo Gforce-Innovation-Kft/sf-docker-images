@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   CODE_OF_CONDUCT, SECURITY), GitHub issue forms, PR template, and CODEOWNERS
 - `docs/` image decision guide with a Mermaid diagram and a devcontainer GIF placeholder
 
+### Changed
+- Bumped the Node.js runtime from 20 to **24 (Active LTS)** across all three images
+  (`sf-ci`, `sf-devcontainer`, `sf-bulk`); Node 20 reaches end-of-life in 2026
+
 ## [1.5.0] - 2026-07-01
 
 ### Added

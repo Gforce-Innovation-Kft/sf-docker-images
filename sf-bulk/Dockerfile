@@ -1,11 +1,11 @@
-FROM node:20-alpine
+FROM node:24-alpine
 
 # Metadata labels
 LABEL maintainer="GForce Innovation"
 LABEL org.opencontainers.image.title="Salesforce Bulk Runner"
 LABEL org.opencontainers.image.description="Lightweight SF CLI image for bulk org operations. Alpine-based, no Java."
 LABEL org.opencontainers.image.source="https://github.com/gforceinnovation/sf-docker-images"
-LABEL org.opencontainers.image.base.name="node:20-alpine"
+LABEL org.opencontainers.image.base.name="node:24-alpine"
 
 # libc6-compat: glibc compatibility layer for musl Alpine.
 # Required because some npm native modules (included transitively by SF CLI)
@@ -28,7 +28,7 @@ RUN npm install -g @salesforce/cli@2.* \
     && npm cache clean --force
 
 # Create ci user (UID 1000) — used only to install plugins into XDG_DATA_HOME.
-# node:20-alpine ships with a 'node' user at UID 1000; remove it first.
+# node:24-alpine ships with a 'node' user at UID 1000; remove it first.
 # Alpine's adduser syntax differs from useradd; -D = no password, -s = shell.
 RUN deluser node \
     && adduser -D -u 1000 -s /bin/bash ci

@@ -6,7 +6,7 @@ repo-specific rule set. The exhaustive rationale lives in
 
 ## Non-negotiable rules here
 
-- **Pin the base image** by tag (`ubuntu:22.04`, `node:20-alpine`). Never `latest`.
+- **Pin the base image** by tag (`ubuntu:22.04`, `node:24-alpine`). Never `latest`.
 - **One `RUN` per concern, clean up in the same layer.**
   - Ubuntu: `apt-get update && apt-get install -y --no-install-recommends ... && rm -rf /var/lib/apt/lists/*`
   - Alpine: `apk add --no-cache ...` (never leave an apk cache).
