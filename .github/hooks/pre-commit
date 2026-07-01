@@ -1,7 +1,7 @@
 #!/bin/bash
 # Pre-commit hook:
 #   1. Lint staged YAML files with yamllint (blocking).
-#   2. Refresh the graphify knowledge graph so graphify-out/graph.json stays in
+#   2. Refresh the graphify knowledge graph locally (graphify-out/ is git-ignored) so it
 #      sync with the code (non-blocking, AST-only, no API cost).
 
 # --- 1. YAML lint ------------------------------------------------------------
@@ -53,11 +53,8 @@ fi
 if command -v graphify &> /dev/null; then
     echo "Refreshing graphify graph..."
     if graphify update . > /dev/null 2>&1; then
-        # Re-stage only the tracked graph artifacts (cache/ and graph.html are
-        # git-ignored, so this add cannot pull them in).
-        git add graphify-out/graph.json graphify-out/GRAPH_REPORT.md \
-                graphify-out/manifest.json graphify-out/.graphify_labels.json 2>/dev/null
-        echo "✓ graphify-out refreshed and staged"
+        # graphify-out/ is git-ignored (a local build artifact) — nothing to stage.
+        echo "✓ graphify-out refreshed (local, git-ignored)"
     else
         echo "⚠️  graphify update failed — committing without a graph refresh"
         echo "   (run 'graphify update .' manually to resync graphify-out/)"

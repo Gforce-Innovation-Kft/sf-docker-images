@@ -58,10 +58,10 @@ def test_vscode_user_exists(host):
 
 
 def test_nodejs_installed(host):
-    """Test that Node.js 20.x is installed"""
+    """Test that Node.js 24.x is installed"""
     node = host.run("node --version")
     assert node.rc == 0
-    assert node.stdout.startswith("v20.")
+    assert node.stdout.startswith("v24.")
 
 
 def test_npm_installed(host):

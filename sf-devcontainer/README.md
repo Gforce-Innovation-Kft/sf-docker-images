@@ -12,7 +12,7 @@ plugins on top of the [`sf-ci`](../sf-ci/README.md) toolchain.
 
 ## What's inside
 
-- **Node.js 20.x** (LTS) and **Java 17** (OpenJDK).
+- **Node.js 24.x** (LTS) and **Java 17** (OpenJDK).
 - **Salesforce CLI v2** with plugins: `code-analyzer`, `sfdx-git-delta`, `sfdx-browserforce-plugin`.
 - **Shell**: zsh with Oh My Zsh, Powerlevel10k, autosuggestions, syntax-highlighting, completions.
 - **Editors & tools**: vim, nano, wget, htop, tree, less, build-essential, openssl.

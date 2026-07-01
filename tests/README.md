@@ -58,7 +58,7 @@ The first time you run the tests, it will build the images. Subsequent runs will
 ### test_sf_devcontainer.py
 Tests for the full-featured development container:
 - ✅ Ubuntu 22.04 base
-- ✅ Node.js 20.x & npm
+- ✅ Node.js 24.x & npm
 - ✅ Java 17 (OpenJDK)
 - ✅ Salesforce CLI with plugins (code-analyzer, sfdx-git-delta, sfdx-browserforce-plugin)
 - ✅ Oh My Zsh with Powerlevel10k theme
@@ -70,7 +70,7 @@ Tests for the full-featured development container:
 ### test_sf_ci.py
 Tests for the lightweight CI/CD container:
 - ✅ Ubuntu 22.04 base
-- ✅ Node.js 20.x & npm
+- ✅ Node.js 24.x & npm
 - ✅ Java 17 (OpenJDK)
 - ✅ Salesforce CLI with sfdx-git-delta plugin
 - ✅ CI utilities (git, jq, xmlstarlet)
@@ -81,7 +81,7 @@ Tests for the lightweight CI/CD container:
 ### test_sf_bulk.py
 Tests for the ultra-lightweight Alpine bulk runner:
 - ✅ Alpine Linux base (no Java)
-- ✅ Node.js 20.x
+- ✅ Node.js 24.x
 - ✅ Salesforce CLI with sfdx-git-delta plugin
 - ✅ Essentials: bash, curl, git, jq, libc6-compat
 - ✅ ci user (UID 1000, bash shell)
