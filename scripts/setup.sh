@@ -2,7 +2,7 @@
 #
 # setup.sh — bootstrap sf-docker-images for AI pair-development.
 #
-# Verifies Docker + Node 20 + gh, checks the vendored Claude skill, and prints the
+# Verifies Docker + Python + gh, checks the vendored Claude skill, and prints the
 # recommended external Claude skills to install. Idempotent and safe to re-run.
 #
 set -euo pipefail

@@ -55,10 +55,10 @@ def test_ci_user_exists(host):
 
 
 def test_nodejs_installed(host):
-    """Node.js 20.x is installed."""
+    """Node.js 24.x is installed."""
     node = host.run("node --version")
     assert node.rc == 0
-    assert node.stdout.startswith("v20.")
+    assert node.stdout.startswith("v24.")
 
 
 def test_salesforce_cli_installed(host):

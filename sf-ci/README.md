@@ -10,7 +10,7 @@ the build if editors or interactive shells sneak in.
 
 ## What's inside
 
-- **Node.js 20.x** (LTS) and **Java 17** (OpenJDK) — for Apex compile and `code-analyzer`.
+- **Node.js 24.x** (LTS) and **Java 17** (OpenJDK) — for Apex compile and `code-analyzer`.
 - **Salesforce CLI v2** with the `sfdx-git-delta` plugin (delta deployments).
 - **CI utilities**: git, jq, xmlstarlet, curl, unzip/zip.
 - **Container-mode env**: `SFDX_CONTAINER_MODE`, `SFDX_DISABLE_DNS_CHECK`, `SF_AUTOUPDATE_DISABLE`,
