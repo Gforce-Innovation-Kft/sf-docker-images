@@ -39,6 +39,12 @@ pytest tests/test_sf_devcontainer.py -v
 pytest tests/test_sf_ci.py -v
 ```
 
+### Test sf-bulk
+
+```bash
+pytest tests/test_sf_bulk.py -v
+```
+
 ### Run All Tests
 
 ```bash
@@ -71,6 +77,19 @@ Tests for the lightweight CI/CD container:
 - ✅ User configuration (ci user, non-root)
 - ✅ CI environment variables
 - ✅ Minimal footprint (no interactive tools)
+
+### test_sf_bulk.py
+Tests for the ultra-lightweight Alpine bulk runner:
+- ✅ Alpine Linux base (no Java)
+- ✅ Node.js 20.x
+- ✅ Salesforce CLI with sfdx-git-delta plugin
+- ✅ Essentials: bash, curl, git, jq, libc6-compat
+- ✅ ci user (UID 1000, bash shell)
+- ✅ XDG dirs pinned to /opt/sf-data and /opt/sf-config (chmod 777)
+- ✅ CI environment variables
+- ✅ Runs as root at runtime
+- ✅ Java NOT installed (intentionally lightweight)
+- ✅ Image smaller than 500MB
 
 ## Test Options
 

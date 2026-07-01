@@ -35,6 +35,9 @@ Thumbs.db
 *.swp
 *.swo
 
+# Claude Code local (machine-specific overrides; settings.json is committed)
+.claude/settings.local.json
+
 # Test artifacts
 *.test
 
