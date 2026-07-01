@@ -1,7 +1,11 @@
-# SF Bulk
+# sf-bulk
 
-Ultra-lightweight Alpine-based Docker image for bulk Salesforce org operations. No Java,
-minimal footprint — kept **under 500 MB** uncompressed.
+> Ultra-light Alpine image for bulk Salesforce org operations — no Java.
+
+[![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+
+Part of [**sf-docker-images**](../README.md). An Alpine-based image for bulk Salesforce org
+operations. No Java, minimal footprint — kept **under 500 MB** uncompressed (~410 MB).
 
 ## Features
 
