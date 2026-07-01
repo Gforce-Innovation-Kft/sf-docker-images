@@ -1,157 +1,163 @@
 # Salesforce Docker Images
 
+> Lean, tested, multi-arch Docker images for Salesforce CI/CD and development.
+
+[![CI](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml)
+[![Release](https://img.shields.io/github/v/release/Gforce-Innovation-Kft/sf-docker-images?sort=semver)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/releases)
+[![License](https://img.shields.io/github/license/Gforce-Innovation-Kft/sf-docker-images)](LICENSE)
+[![sf-devcontainer size](https://img.shields.io/docker/image-size/gforceinnovation/sf-devcontainer/latest?label=sf-devcontainer)](https://hub.docker.com/r/gforceinnovation/sf-devcontainer)
+[![sf-devcontainer pulls](https://img.shields.io/docker/pulls/gforceinnovation/sf-devcontainer?label=pulls)](https://hub.docker.com/r/gforceinnovation/sf-devcontainer)
 [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
-A collection of Docker images optimized for Salesforce development and CI/CD workflows.
+Three purpose-built images for Salesforce work — a minimal CI runner, a full VS Code
+devcontainer, and an ultra-light Alpine image for bulk data operations. All are multi-arch
+(`linux/amd64` + `linux/arm64`), version-pinned, gated by a test suite, and scanned on every
+build.
 
-## Available Images
+## What's inside
 
-### sf-devcontainer
+| Image | Base | Purpose | Size (uncompressed) | Use it when… |
+|-------|------|---------|---------------------|--------------|
+| [`sf-ci`](sf-ci/README.md) | `ubuntu:22.04` | Minimal CI/CD runner (Node 20 + Java 17 + SF CLI) | ~840 MB | you run deploys, Apex tests, or delta packaging in a pipeline |
+| [`sf-devcontainer`](sf-devcontainer/README.md) | `ubuntu:22.04` | Full VS Code dev environment (zsh, editors, extra plugins) | ~2.6 GB | you develop Salesforce locally in VS Code / Dev Containers |
+| [`sf-bulk`](sf-bulk/README.md) | `node:20-alpine` | Ultra-light bulk ops, **no Java** | ~410 MB (< 500 MB) | you do high-volume `sf data` / Bulk API work and don't need Apex |
 
-A full-featured development container for Salesforce development with:
+> Live pull/size badges are shown for `sf-devcontainer` (published). `sf-ci` and `sf-bulk`
+> sizes above are measured from the current build; their Docker Hub badges will be added once
+> those repositories are published. See [the image decision guide](docs/README.md).
 
-- Node.js 20.x
-- Java 17 (OpenJDK)
-- Salesforce CLI with plugins
-- Zsh with Oh My Zsh and Powerlevel10k
-- Development tools and utilities
-
-**Docker Hub:** `gforceinnovation/sf-devcontainer`
-
-**Usage:**
-
-```bash
-docker pull gforceinnovation/sf-devcontainer:latest
+```mermaid
+flowchart TD
+    A[What are you doing?] --> B{Developing locally<br/>in VS Code?}
+    B -- Yes --> C[sf-devcontainer]
+    B -- No --> D{Need Apex compile /<br/>code-analyzer / Java?}
+    D -- Yes --> E[sf-ci]
+    D -- No --> F{High-volume data /<br/>Bulk API only?}
+    F -- Yes --> G[sf-bulk]
+    F -- No --> E
 ```
 
-### sf-ci
+## Quick start
 
-A lightweight CI/CD optimized image for Salesforce automation with:
+### `sf-ci` — in a GitHub Actions job
 
-- Node.js 20.x
-- Java 17 (OpenJDK)
-- Salesforce CLI with essential plugins
-- CI/CD utilities (jq, xmlstarlet)
-
-**Docker Hub:** `gforceinnovation/sf-ci`
-
-**Usage:**
-
-```bash
-docker pull gforceinnovation/sf-ci:latest
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container: gforceinnovation/sf-ci:1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Authenticate to Salesforce
+        run: |
+          echo "${{ secrets.SF_AUTH_URL }}" > authfile
+          sf org login sfdx-url --sfdx-url-file authfile
+      - name: Deploy
+        run: sf project deploy start
 ```
 
-### sf-bulk
+### `sf-devcontainer` — in VS Code
 
-An ultra-lightweight Alpine-based image for bulk Salesforce org operations with:
+Add `.devcontainer/devcontainer.json` (already present at the repo root as an example), then
+run **Dev Containers: Reopen in Container** from the Command Palette:
 
-- Node.js 20.x (Alpine base — no Java, ~300MB)
-- Salesforce CLI with `sfdx-git-delta` plugin
-- Essentials only: bash, curl, git, jq, unzip
-- XDG dirs pinned to `/opt/sf-*` for any-UID runner compatibility
-- Runs as root at runtime (works with ARC dind runners)
+```json
+{
+  "name": "Salesforce Development",
+  "image": "gforceinnovation/sf-devcontainer:latest",
+  "customizations": {
+    "vscode": { "extensions": ["salesforce.salesforcedx-vscode"] }
+  }
+}
+```
 
-**Docker Hub:** `gforceinnovation/sf-bulk`
-
-**Usage:**
+### `sf-bulk` — one-liner
 
 ```bash
-docker pull gforceinnovation/sf-bulk:latest
+docker run --rm -v "$(pwd):/workspace" gforceinnovation/sf-bulk:latest sf org list
 ```
+
+## Supported tags
+
+Images are published with semver tags on every version release, in the style of the official
+Docker Library images:
+
+| Tag | Moves? | Points at |
+|-----|--------|-----------|
+| `1.4.0` | **immutable** | one exact release — pin this in production |
+| `1.4` | moving | latest `1.4.x` |
+| `1` | moving | latest `1.x.x` |
+| `latest` | moving | most recent release |
+
+Pin an immutable tag (`gforceinnovation/sf-ci:1.4.0`) for reproducible pipelines; track a
+moving tag (`:1`) to pick up patch and minor updates automatically. The tag matrix is generated
+by CI from the pushed git tag (see [`.github/workflows/build-and-push.yml`](.github/workflows/build-and-push.yml)).
+
+## Security & provenance
+
+Every build in CI:
+
+- **Scans** each image with [Trivy](https://github.com/aquasecurity/trivy); results are uploaded
+  to GitHub Security (code scanning).
+- **Generates an SBOM** and **provenance attestations** on push, so consumers can verify how and
+  from what each image was built.
+- Runs a **dependency review** on pull requests.
+
+Found a vulnerability? See [`SECURITY.md`](SECURITY.md).
+
+## Design principles
+
+- **Thin by default** — `sf-ci` stays minimal (no editors, no zsh); tests fail the build if
+  forbidden tools appear. `sf-bulk` is kept under 500 MB with no Java.
+- **Reproducible** — base images and toolchains are pinned; immutable version tags are published
+  alongside moving ones.
+- **Multi-arch** — `linux/amd64` and `linux/arm64` from a single build.
+- **Tested** — every image has a [pytest-testinfra](tests/) suite asserting OS, user, runtimes,
+  plugins, tools, env vars, and size budgets. Nothing ships unless the suite is green.
+- **Non-root build, container-mode aware** — non-root users are created at build time; SF CLI is
+  configured for containers (`SFDX_CONTAINER_MODE`, telemetry/auto-update disabled).
 
 ## Development
 
-### Building Images Locally
-
-**Build for your local platform only (faster):**
-
 ```bash
-# Build sf-devcontainer
-docker build -t sf-devcontainer:local ./sf-devcontainer
+./scripts/setup.sh              # verify Docker + Python + gh, install test deps
 
-# Build sf-ci
 docker build -t sf-ci:local ./sf-ci
-
-# Build sf-bulk
+docker build -t sf-devcontainer:local ./sf-devcontainer
 docker build -t sf-bulk:local ./sf-bulk
+
+pip install -r tests/requirements.txt
+pytest tests/ -v                # all images
+pytest tests/test_sf_bulk.py -v # a single image
 ```
 
-**Build for multiple platforms (Mac ARM64 + Intel/AMD64):**
-
-First, create a builder that supports multi-platform builds:
+Multi-platform build and push (requires buildx):
 
 ```bash
 docker buildx create --name multiplatform --use
-docker buildx inspect --bootstrap
+docker buildx build --platform linux/amd64,linux/arm64 \
+  --tag gforceinnovation/sf-ci:latest --push ./sf-ci
 ```
 
-Then build and push to Docker Hub:
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full workflow and [`CHANGELOG.md`](CHANGELOG.md)
+(Keep a Changelog) for release history.
+
+### Releasing
 
 ```bash
-# Build and push sf-devcontainer for multiple platforms
-docker buildx build \
-  --platform linux/amd64,linux/arm64 \
-  --tag gforceinnovation/sf-devcontainer:1.0.1 \
-  --tag gforceinnovation/sf-devcontainer:latest \
-  --push \
-  ./sf-devcontainer
-
-# Build and push sf-ci for multiple platforms
-docker buildx build \
-  --platform linux/amd64,linux/arm64 \
-  --tag gforceinnovation/sf-ci:1.5.0 \
-  --tag gforceinnovation/sf-ci:latest \
-  --push \
-  ./sf-ci
-
-# Build and push sf-bulk for multiple platforms
-docker buildx build \
-  --platform linux/amd64,linux/arm64 \
-  --tag gforceinnovation/sf-bulk:1.0.0 \
-  --tag gforceinnovation/sf-bulk:latest \
-  --push \
-  ./sf-bulk
+git tag -a v1.5.0 -m "Release v1.5.0"
+git push origin v1.5.0
 ```
 
-**Note:** Multi-platform builds require pushing to a registry. You cannot load multi-platform images directly to your local Docker daemon.
-
-### Running Tests
-
-```bash
-pip install -r tests/requirements.txt
-
-# Run all tests
-pytest tests/ -v
-
-# Run tests for a single image
-pytest tests/test_sf_ci.py -v
-pytest tests/test_sf_devcontainer.py -v
-pytest tests/test_sf_bulk.py -v
-```
-
-## CI/CD
-
-Images are automatically built and pushed to Docker Hub when tags are created:
-
-```bash
-git tag -a v1.0.0 -m "Release v1.0.0"
-git push origin v1.0.0
-```
-
-This will:
-
-1. Build all three Docker images (multi-arch: linux/amd64 + linux/arm64)
-2. Run the pytest-testinfra tests and a Trivy scan
-3. Push to Docker Hub with semver tags (`1.2.3`, `1.2`, `1`, `latest`) plus SBOM + provenance
-4. Create a GitHub Release with generated notes augmented by the `CHANGELOG.md` section
-
-See [`CHANGELOG.md`](CHANGELOG.md) (Keep a Changelog format) and the
-[`releasing` skill](.claude/skills/releasing/SKILL.md) for the release checklist.
+CI then builds all three images multi-arch, runs the tests + Trivy scan, pushes to Docker Hub
+with semver tags plus SBOM and provenance, and opens a GitHub Release with notes drawn from the
+matching `CHANGELOG.md` section.
 
 ## AI-Assisted Development
 
-This repo is built to be developed with [Claude Code](https://claude.com/claude-code). The
-loop is **CLAUDE.md → references → skills → tests → release**:
+This repo is developed with [Claude Code](https://claude.com/claude-code) against a disciplined,
+committed context — a differentiator, not a shortcut. The loop is
+**`CLAUDE.md` → references → skills → tests → release**:
 
 - **[`CLAUDE.md`](CLAUDE.md)** — project overview, commands, and change rules Claude reads first.
 - **[`.claude/references/`](.claude/references/)** — rules to read before generating code:
@@ -162,14 +168,14 @@ loop is **CLAUDE.md → references → skills → tests → release**:
 - **[`.claude/skills/`](.claude/skills/)** — repo skills: `building-a-docker-image`,
   `testing-images`, `releasing`, and `working-in-the-devcontainer` (vendored, attributed).
 - **Tests** — [pytest-testinfra](tests/) suites gate every change and the CI pipeline.
-- **[`scripts/setup.sh`](scripts/setup.sh)** — one command to bootstrap the repo: verifies
-  Docker + Python + `gh`, installs test deps, and prints the recommended external Claude
-  skills to install.
 
-```bash
-./scripts/setup.sh
-```
+## Contributing
+
+Issues and PRs are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) and our
+[`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md). Commits follow
+[Conventional Commits](https://www.conventionalcommits.org/).
 
 ## License
 
-MIT
+[MIT](LICENSE) © [Gforce Innovation Kft](https://gforceinnovation.com) — maintained by
+[@gambe94](https://github.com/gambe94).
