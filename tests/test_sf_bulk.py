@@ -174,5 +174,6 @@ def test_image_is_smaller_than_sf_ci(host):
         "du -sb / --exclude=/proc 2>/dev/null | cut -f1"
     )
     size_bytes = int(result.stdout.strip())
-    # sf-ci is ~800MB uncompressed; sf-bulk should be well under 500MB
-    assert size_bytes < 500 * 1024 * 1024, f"Image too large: {size_bytes / 1024 / 1024:.0f}MB"
+    # sf-ci is ~800MB uncompressed; sf-bulk stays well below that. Budget bumped to
+    # 600MB after the Node 24 base bump (Node 24-alpine is larger than Node 20).
+    assert size_bytes < 600 * 1024 * 1024, f"Image too large: {size_bytes / 1024 / 1024:.0f}MB"
