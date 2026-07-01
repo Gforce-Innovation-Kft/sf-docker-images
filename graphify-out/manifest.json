@@ -10,13 +10,13 @@
     "semantic_hash": ""
   },
   ".github/hooks/pre-commit": {
-    "mtime": 1770891683.4551063,
-    "ast_hash": "6729568fb546b470f88ba179dc677fba",
+    "mtime": 1782902467.6761277,
+    "ast_hash": "6ba4fcd1b4f8bdeca1ded7221d19ff37",
     "semantic_hash": ""
   },
   "scripts/setup.sh": {
-    "mtime": 1782902012.8907578,
-    "ast_hash": "321b39c0b666581fb97796a03cef330a",
+    "mtime": 1782902481.7262933,
+    "ast_hash": "f19c3dc6e702bbe4569cb92b3829ca47",
     "semantic_hash": ""
   },
   "tests/test_sf_bulk.py": {
@@ -125,8 +125,8 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1782902012.888326,
-    "ast_hash": "5db7fec3adb19e278263f4957edb45bd",
+    "mtime": 1782902490.392745,
+    "ast_hash": "8fdbb7d8b201f470d5b935b527731d32",
     "semantic_hash": ""
   },
   "CODE_OF_CONDUCT.md": {
@@ -182,6 +182,11 @@
   "tests/requirements.txt": {
     "mtime": 1770891085.9036431,
     "ast_hash": "d37eebbce387900505ed4f14fb09b178",
+    "semantic_hash": ""
+  },
+  ".claude/references/graphify.md": {
+    "mtime": 1782902497.9738626,
+    "ast_hash": "569f074ed7823a94a939a45fce597932",
     "semantic_hash": ""
   }
 }

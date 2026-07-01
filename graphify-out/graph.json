@@ -1658,6 +1658,66 @@
       "norm_label": "release job"
     },
     {
+      "label": "graphify.md",
+      "file_type": "document",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "references_graphify",
+      "community": 32,
+      "norm_label": "graphify.md"
+    },
+    {
+      "label": "graphify \u2014 knowledge graph for token-efficient navigation",
+      "file_type": "document",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "references_graphify_graphify_knowledge_graph_for_token_efficient_navigation",
+      "community": 32,
+      "norm_label": "graphify \u2014 knowledge graph for token-efficient navigation"
+    },
+    {
+      "label": "When to use it (before reaching for grep / full-file reads)",
+      "file_type": "document",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "references_graphify_when_to_use_it_before_reaching_for_grep_full_file_reads",
+      "community": 32,
+      "norm_label": "when to use it (before reaching for grep / full-file reads)"
+    },
+    {
+      "label": "Keeping it current",
+      "file_type": "document",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "references_graphify_keeping_it_current",
+      "community": 32,
+      "norm_label": "keeping it current"
+    },
+    {
+      "label": "What is committed vs ignored",
+      "file_type": "document",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "references_graphify_what_is_committed_vs_ignored",
+      "community": 32,
+      "norm_label": "what is committed vs ignored"
+    },
+    {
+      "label": "Local setup",
+      "file_type": "document",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "references_graphify_local_setup",
+      "community": 32,
+      "norm_label": "local setup"
+    },
+    {
       "label": "image-conventions.md",
       "file_type": "document",
       "source_file": ".claude/references/image-conventions.md",
@@ -2134,7 +2194,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices",
-      "community": 12,
+      "community": 4,
       "norm_label": "dockerfile best practices"
     },
     {
@@ -2144,7 +2204,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "instructions_containerization_docker_best_practices_instructions_1_multi_stage_builds_the_golden_rule",
-      "community": 12,
+      "community": 4,
       "norm_label": "**1. multi-stage builds (the golden rule)**"
     },
     {
@@ -2154,7 +2214,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "instructions_containerization_docker_best_practices_instructions_2_choose_the_right_base_image",
-      "community": 12,
+      "community": 4,
       "norm_label": "**2. choose the right base image**"
     },
     {
@@ -2164,7 +2224,7 @@
       "source_location": "L131",
       "_origin": "ast",
       "id": "instructions_containerization_docker_best_practices_instructions_3_optimize_image_layers",
-      "community": 12,
+      "community": 4,
       "norm_label": "**3. optimize image layers**"
     },
     {
@@ -2174,7 +2234,7 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "instructions_containerization_docker_best_practices_instructions_4_use_dockerignore_effectively",
-      "community": 12,
+      "community": 4,
       "norm_label": "**4. use `.dockerignore` effectively**"
     },
     {
@@ -2184,7 +2244,7 @@
       "source_location": "L217",
       "_origin": "ast",
       "id": "instructions_containerization_docker_best_practices_instructions_5_minimize_copy_instructions",
-      "community": 12,
+      "community": 4,
       "norm_label": "**5. minimize `copy` instructions**"
     },
     {
@@ -2194,7 +2254,7 @@
       "source_location": "L245",
       "_origin": "ast",
       "id": "instructions_containerization_docker_best_practices_instructions_6_define_default_user_and_port",
-      "community": 12,
+      "community": 4,
       "norm_label": "**6. define default user and port**"
     },
     {
@@ -2204,7 +2264,7 @@
       "source_location": "L275",
       "_origin": "ast",
       "id": "instructions_containerization_docker_best_practices_instructions_7_use_cmd_and_entrypoint_correctly",
-      "community": 12,
+      "community": 4,
       "norm_label": "**7. use `cmd` and `entrypoint` correctly**"
     },
     {
@@ -2214,7 +2274,7 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "instructions_containerization_docker_best_practices_instructions_8_environment_variables_for_configuration",
-      "community": 12,
+      "community": 4,
       "norm_label": "**8. environment variables for configuration**"
     },
     {
@@ -2514,7 +2574,7 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "instructions_github_actions_ci_cd_best_practices_instructions_security_best_practices_in_github_actions",
-      "community": 1,
+      "community": 12,
       "norm_label": "security best practices in github actions"
     },
     {
@@ -2524,7 +2584,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "instructions_github_actions_ci_cd_best_practices_instructions_1_secret_management",
-      "community": 1,
+      "community": 12,
       "norm_label": "**1. secret management**"
     },
     {
@@ -2534,7 +2594,7 @@
       "source_location": "L131",
       "_origin": "ast",
       "id": "instructions_github_actions_ci_cd_best_practices_instructions_2_openid_connect_oidc_for_cloud_authentication",
-      "community": 1,
+      "community": 12,
       "norm_label": "**2. openid connect (oidc) for cloud authentication**"
     },
     {
@@ -2544,7 +2604,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "instructions_github_actions_ci_cd_best_practices_instructions_3_least_privilege_for_github_token",
-      "community": 1,
+      "community": 12,
       "norm_label": "**3. least privilege for `github_token`**"
     },
     {
@@ -2554,7 +2614,7 @@
       "source_location": "L169",
       "_origin": "ast",
       "id": "instructions_github_actions_ci_cd_best_practices_instructions_4_dependency_review_and_software_composition_analysis_sca",
-      "community": 1,
+      "community": 12,
       "norm_label": "**4. dependency review and software composition analysis (sca)**"
     },
     {
@@ -2564,7 +2624,7 @@
       "source_location": "L180",
       "_origin": "ast",
       "id": "instructions_github_actions_ci_cd_best_practices_instructions_5_static_application_security_testing_sast",
-      "community": 1,
+      "community": 12,
       "norm_label": "**5. static application security testing (sast)**"
     },
     {
@@ -2574,7 +2634,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "id": "instructions_github_actions_ci_cd_best_practices_instructions_6_secret_scanning_and_credential_leak_prevention",
-      "community": 1,
+      "community": 12,
       "norm_label": "**6. secret scanning and credential leak prevention**"
     },
     {
@@ -2584,7 +2644,7 @@
       "source_location": "L202",
       "_origin": "ast",
       "id": "instructions_github_actions_ci_cd_best_practices_instructions_7_immutable_infrastructure_image_signing",
-      "community": 1,
+      "community": 12,
       "norm_label": "**7. immutable infrastructure & image signing**"
     },
     {
@@ -3261,11 +3321,21 @@
       "label": "AI Pair-Development Layer",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L91",
+      "source_location": "L93",
       "_origin": "ast",
       "id": "claude_ai_pair_development_layer",
       "community": 10,
       "norm_label": "ai pair-development layer"
+    },
+    {
+      "label": "Knowledge Graph (graphify)",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L108",
+      "_origin": "ast",
+      "id": "claude_knowledge_graph_graphify",
+      "community": 10,
+      "norm_label": "knowledge graph (graphify)"
     },
     {
       "label": "CODE_OF_CONDUCT.md",
@@ -4415,9 +4485,9 @@
       "source_file": ".claude/settings.json",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_settings",
-      "target": "claude_settings_permissions",
-      "confidence_score": 1.0
+      "target": "claude_settings_permissions"
     },
     {
       "relation": "contains",
@@ -4425,9 +4495,9 @@
       "source_file": ".claude/settings.json",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_settings",
-      "target": "claude_settings_schema",
-      "confidence_score": 1.0
+      "target": "claude_settings_schema"
     },
     {
       "relation": "contains",
@@ -4435,9 +4505,9 @@
       "source_file": ".claude/settings.json",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_settings_permissions",
-      "target": "claude_settings_permissions_allow",
-      "confidence_score": 1.0
+      "target": "claude_settings_permissions_allow"
     },
     {
       "relation": "contains",
@@ -4445,9 +4515,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer",
-      "target": "devcontainer_devcontainer_customizations",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_customizations"
     },
     {
       "relation": "contains",
@@ -4455,9 +4525,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer",
-      "target": "devcontainer_devcontainer_image",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_image"
     },
     {
       "relation": "contains",
@@ -4465,9 +4535,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer",
-      "target": "devcontainer_devcontainer_name",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_name"
     },
     {
       "relation": "contains",
@@ -4475,9 +4545,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer",
-      "target": "devcontainer_devcontainer_overridecommand",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_overridecommand"
     },
     {
       "relation": "contains",
@@ -4485,9 +4555,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer",
-      "target": "devcontainer_devcontainer_postcreatecommand",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_postcreatecommand"
     },
     {
       "relation": "contains",
@@ -4495,9 +4565,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer",
-      "target": "devcontainer_devcontainer_remoteuser",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_remoteuser"
     },
     {
       "relation": "contains",
@@ -4505,9 +4575,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer",
-      "target": "devcontainer_devcontainer_workspacefolder",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_workspacefolder"
     },
     {
       "relation": "contains",
@@ -4515,9 +4585,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer",
-      "target": "devcontainer_devcontainer_workspacemount",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_workspacemount"
     },
     {
       "relation": "contains",
@@ -4525,9 +4595,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer_customizations",
-      "target": "devcontainer_devcontainer_customizations_vscode",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_customizations_vscode"
     },
     {
       "relation": "contains",
@@ -4535,9 +4605,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer_customizations_vscode",
-      "target": "devcontainer_devcontainer_vscode_extensions",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_vscode_extensions"
     },
     {
       "relation": "contains",
@@ -4545,9 +4615,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer_customizations_vscode",
-      "target": "devcontainer_devcontainer_vscode_settings",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_vscode_settings"
     },
     {
       "relation": "contains",
@@ -4555,9 +4625,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer_vscode_settings",
-      "target": "devcontainer_devcontainer_settings_editor_formatonsave",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_settings_editor_formatonsave"
     },
     {
       "relation": "contains",
@@ -4565,9 +4635,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer_vscode_settings",
-      "target": "devcontainer_devcontainer_settings_salesforcedx_vscode_core_telemetry_enabled",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_settings_salesforcedx_vscode_core_telemetry_enabled"
     },
     {
       "relation": "contains",
@@ -4575,9 +4645,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer_vscode_settings",
-      "target": "devcontainer_devcontainer_settings_terminal_integrated_defaultprofile_linux",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_settings_terminal_integrated_defaultprofile_linux"
     },
     {
       "relation": "contains",
@@ -4585,9 +4655,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer_vscode_settings",
-      "target": "devcontainer_devcontainer_settings_terminal_integrated_profiles_linux",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_settings_terminal_integrated_profiles_linux"
     },
     {
       "relation": "contains",
@@ -4595,9 +4665,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer_settings_terminal_integrated_profiles_linux",
-      "target": "devcontainer_devcontainer_terminal_integrated_profiles_linux_zsh",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_terminal_integrated_profiles_linux_zsh"
     },
     {
       "relation": "contains",
@@ -4605,9 +4675,9 @@
       "source_file": ".devcontainer/devcontainer.json",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "devcontainer_devcontainer_terminal_integrated_profiles_linux_zsh",
-      "target": "devcontainer_devcontainer_zsh_path",
-      "confidence_score": 1.0
+      "target": "devcontainer_devcontainer_zsh_path"
     },
     {
       "relation": "defines",
@@ -4615,9 +4685,9 @@
       "source_file": "scripts/setup.sh",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_setup",
-      "target": "scripts_setup_fail",
-      "confidence_score": 1.0
+      "target": "scripts_setup_fail"
     },
     {
       "relation": "defines",
@@ -4625,9 +4695,9 @@
       "source_file": "scripts/setup.sh",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_setup",
-      "target": "scripts_setup_info",
-      "confidence_score": 1.0
+      "target": "scripts_setup_info"
     },
     {
       "relation": "defines",
@@ -4635,9 +4705,9 @@
       "source_file": "scripts/setup.sh",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_setup",
-      "target": "scripts_setup_ok",
-      "confidence_score": 1.0
+      "target": "scripts_setup_ok"
     },
     {
       "relation": "defines",
@@ -4645,9 +4715,9 @@
       "source_file": "scripts/setup.sh",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_setup",
-      "target": "scripts_setup_warn",
-      "confidence_score": 1.0
+      "target": "scripts_setup_warn"
     },
     {
       "relation": "contains",
@@ -4655,9 +4725,9 @@
       "source_file": "scripts/setup.sh",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_setup",
-      "target": "users_demetergabor_gforce_sf_docker_images_scripts_setup_sh__entry",
-      "confidence_score": 1.0
+      "target": "users_demetergabor_gforce_sf_docker_images_scripts_setup_sh__entry"
     },
     {
       "relation": "calls",
@@ -4666,9 +4736,9 @@
       "source_location": "L32",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "users_demetergabor_gforce_sf_docker_images_scripts_setup_sh__entry",
-      "target": "scripts_setup_fail",
-      "confidence_score": 1.0
+      "target": "scripts_setup_fail"
     },
     {
       "relation": "calls",
@@ -4677,9 +4747,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "users_demetergabor_gforce_sf_docker_images_scripts_setup_sh__entry",
-      "target": "scripts_setup_info",
-      "confidence_score": 1.0
+      "target": "scripts_setup_info"
     },
     {
       "relation": "calls",
@@ -4688,9 +4758,9 @@
       "source_location": "L25",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "users_demetergabor_gforce_sf_docker_images_scripts_setup_sh__entry",
-      "target": "scripts_setup_ok",
-      "confidence_score": 1.0
+      "target": "scripts_setup_ok"
     },
     {
       "relation": "calls",
@@ -4699,9 +4769,9 @@
       "source_location": "L29",
       "weight": 1.0,
       "context": "call",
+      "confidence_score": 1.0,
       "source": "users_demetergabor_gforce_sf_docker_images_scripts_setup_sh__entry",
-      "target": "scripts_setup_warn",
-      "confidence_score": 1.0
+      "target": "scripts_setup_warn"
     },
     {
       "relation": "contains",
@@ -4709,9 +4779,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_host",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_host"
     },
     {
       "relation": "contains",
@@ -4719,9 +4789,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L98",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_bash_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_bash_installed"
     },
     {
       "relation": "contains",
@@ -4729,9 +4799,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_ci_user_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_ci_user_exists"
     },
     {
       "relation": "contains",
@@ -4739,9 +4809,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_container_os",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_container_os"
     },
     {
       "relation": "contains",
@@ -4749,9 +4819,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_curl_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_curl_installed"
     },
     {
       "relation": "contains",
@@ -4759,9 +4829,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L91",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_git_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_git_installed"
     },
     {
       "relation": "contains",
@@ -4769,9 +4839,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L171",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_image_is_smaller_than_sf_ci",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_image_is_smaller_than_sf_ci"
     },
     {
       "relation": "contains",
@@ -4779,9 +4849,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_java_not_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_java_not_installed"
     },
     {
       "relation": "contains",
@@ -4789,9 +4859,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L78",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_jq_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_jq_installed"
     },
     {
       "relation": "contains",
@@ -4799,9 +4869,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L159",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_libc6_compat_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_libc6_compat_installed"
     },
     {
       "relation": "contains",
@@ -4809,9 +4879,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_no_java",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_no_java"
     },
     {
       "relation": "contains",
@@ -4819,9 +4889,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_nodejs_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_nodejs_installed"
     },
     {
       "relation": "contains",
@@ -4829,9 +4899,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_runtime_user_is_root",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_runtime_user_is_root"
     },
     {
       "relation": "contains",
@@ -4839,9 +4909,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L64",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_salesforce_cli_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_salesforce_cli_installed"
     },
     {
       "relation": "contains",
@@ -4849,9 +4919,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L132",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_sf_environment_variables",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_sf_environment_variables"
     },
     {
       "relation": "contains",
@@ -4859,9 +4929,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_sf_git_delta_plugin_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_sf_git_delta_plugin_installed"
     },
     {
       "relation": "contains",
@@ -4869,9 +4939,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L146",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_workspace_directory_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_workspace_directory_exists"
     },
     {
       "relation": "contains",
@@ -4879,9 +4949,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L117",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_xdg_config_home_env",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_xdg_config_home_env"
     },
     {
       "relation": "contains",
@@ -4889,9 +4959,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_xdg_data_home_env",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_xdg_data_home_env"
     },
     {
       "relation": "contains",
@@ -4899,9 +4969,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk",
-      "target": "tests_test_sf_bulk_test_xdg_dirs_exist_and_writable",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_xdg_dirs_exist_and_writable"
     },
     {
       "relation": "rationale_for",
@@ -4909,9 +4979,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_1",
-      "target": "tests_test_sf_bulk",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk"
     },
     {
       "relation": "rationale_for",
@@ -4919,9 +4989,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_14",
-      "target": "tests_test_sf_bulk_host",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_host"
     },
     {
       "relation": "rationale_for",
@@ -4929,9 +4999,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_50",
-      "target": "tests_test_sf_bulk_test_ci_user_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_ci_user_exists"
     },
     {
       "relation": "rationale_for",
@@ -4939,9 +5009,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_58",
-      "target": "tests_test_sf_bulk_test_nodejs_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_nodejs_installed"
     },
     {
       "relation": "rationale_for",
@@ -4949,9 +5019,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_65",
-      "target": "tests_test_sf_bulk_test_salesforce_cli_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_salesforce_cli_installed"
     },
     {
       "relation": "rationale_for",
@@ -4959,9 +5029,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_72",
-      "target": "tests_test_sf_bulk_test_sf_git_delta_plugin_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_sf_git_delta_plugin_installed"
     },
     {
       "relation": "rationale_for",
@@ -4969,9 +5039,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L99",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_99",
-      "target": "tests_test_sf_bulk_test_bash_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_bash_installed"
     },
     {
       "relation": "rationale_for",
@@ -4979,9 +5049,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_106",
-      "target": "tests_test_sf_bulk_test_java_not_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_java_not_installed"
     },
     {
       "relation": "rationale_for",
@@ -4989,9 +5059,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L112",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_112",
-      "target": "tests_test_sf_bulk_test_xdg_data_home_env",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_xdg_data_home_env"
     },
     {
       "relation": "rationale_for",
@@ -4999,9 +5069,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_118",
-      "target": "tests_test_sf_bulk_test_xdg_config_home_env",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_xdg_config_home_env"
     },
     {
       "relation": "rationale_for",
@@ -5009,9 +5079,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L124",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_124",
-      "target": "tests_test_sf_bulk_test_xdg_dirs_exist_and_writable",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_xdg_dirs_exist_and_writable"
     },
     {
       "relation": "rationale_for",
@@ -5019,9 +5089,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L133",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_133",
-      "target": "tests_test_sf_bulk_test_sf_environment_variables",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_sf_environment_variables"
     },
     {
       "relation": "rationale_for",
@@ -5029,9 +5099,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_147",
-      "target": "tests_test_sf_bulk_test_workspace_directory_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_workspace_directory_exists"
     },
     {
       "relation": "rationale_for",
@@ -5039,9 +5109,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_154",
-      "target": "tests_test_sf_bulk_test_runtime_user_is_root",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_runtime_user_is_root"
     },
     {
       "relation": "rationale_for",
@@ -5049,9 +5119,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L160",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_160",
-      "target": "tests_test_sf_bulk_test_libc6_compat_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_libc6_compat_installed"
     },
     {
       "relation": "rationale_for",
@@ -5059,9 +5129,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L166",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_166",
-      "target": "tests_test_sf_bulk_test_no_java",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_no_java"
     },
     {
       "relation": "rationale_for",
@@ -5069,9 +5139,9 @@
       "source_file": "tests/test_sf_bulk.py",
       "source_location": "L172",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_bulk_rationale_172",
-      "target": "tests_test_sf_bulk_test_image_is_smaller_than_sf_ci",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_bulk_test_image_is_smaller_than_sf_ci"
     },
     {
       "relation": "contains",
@@ -5079,9 +5149,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_host",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_host"
     },
     {
       "relation": "contains",
@@ -5089,9 +5159,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_ci_environment_variables",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_ci_environment_variables"
     },
     {
       "relation": "contains",
@@ -5099,9 +5169,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_ci_user_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_ci_user_exists"
     },
     {
       "relation": "contains",
@@ -5109,9 +5179,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_container_os",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_container_os"
     },
     {
       "relation": "contains",
@@ -5119,9 +5189,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L95",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_git_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_git_installed"
     },
     {
       "relation": "contains",
@@ -5129,9 +5199,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_java_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_java_installed"
     },
     {
       "relation": "contains",
@@ -5139,9 +5209,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_jq_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_jq_installed"
     },
     {
       "relation": "contains",
@@ -5149,9 +5219,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L156",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_minimal_footprint",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_minimal_footprint"
     },
     {
       "relation": "contains",
@@ -5159,9 +5229,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L146",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_no_interactive_tools",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_no_interactive_tools"
     },
     {
       "relation": "contains",
@@ -5169,9 +5239,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_nodejs_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_nodejs_installed"
     },
     {
       "relation": "contains",
@@ -5179,9 +5249,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_npm_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_npm_installed"
     },
     {
       "relation": "contains",
@@ -5189,9 +5259,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_salesforce_cli_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_salesforce_cli_installed"
     },
     {
       "relation": "contains",
@@ -5199,9 +5269,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_sf_git_delta_plugin_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_sf_git_delta_plugin_installed"
     },
     {
       "relation": "contains",
@@ -5209,9 +5279,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_workspace_directory_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_workspace_directory_exists"
     },
     {
       "relation": "contains",
@@ -5219,9 +5289,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L115",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_xdg_directories_exist",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_xdg_directories_exist"
     },
     {
       "relation": "contains",
@@ -5229,9 +5299,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L109",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci",
-      "target": "tests_test_sf_ci_test_xmlstarlet_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_xmlstarlet_installed"
     },
     {
       "relation": "rationale_for",
@@ -5239,9 +5309,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_1",
-      "target": "tests_test_sf_ci",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci"
     },
     {
       "relation": "rationale_for",
@@ -5249,9 +5319,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_14",
-      "target": "tests_test_sf_ci_host",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_host"
     },
     {
       "relation": "rationale_for",
@@ -5259,9 +5329,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_47",
-      "target": "tests_test_sf_ci_test_container_os",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_container_os"
     },
     {
       "relation": "rationale_for",
@@ -5269,9 +5339,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_53",
-      "target": "tests_test_sf_ci_test_ci_user_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_ci_user_exists"
     },
     {
       "relation": "rationale_for",
@@ -5279,9 +5349,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_61",
-      "target": "tests_test_sf_ci_test_nodejs_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_nodejs_installed"
     },
     {
       "relation": "rationale_for",
@@ -5289,9 +5359,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L68",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_68",
-      "target": "tests_test_sf_ci_test_npm_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_npm_installed"
     },
     {
       "relation": "rationale_for",
@@ -5299,9 +5369,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_75",
-      "target": "tests_test_sf_ci_test_java_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_java_installed"
     },
     {
       "relation": "rationale_for",
@@ -5309,9 +5379,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L82",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_82",
-      "target": "tests_test_sf_ci_test_salesforce_cli_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_salesforce_cli_installed"
     },
     {
       "relation": "rationale_for",
@@ -5319,9 +5389,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_89",
-      "target": "tests_test_sf_ci_test_sf_git_delta_plugin_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_sf_git_delta_plugin_installed"
     },
     {
       "relation": "rationale_for",
@@ -5329,9 +5399,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_96",
-      "target": "tests_test_sf_ci_test_git_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_git_installed"
     },
     {
       "relation": "rationale_for",
@@ -5339,9 +5409,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L103",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_103",
-      "target": "tests_test_sf_ci_test_jq_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_jq_installed"
     },
     {
       "relation": "rationale_for",
@@ -5349,9 +5419,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L110",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_110",
-      "target": "tests_test_sf_ci_test_xmlstarlet_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_xmlstarlet_installed"
     },
     {
       "relation": "rationale_for",
@@ -5359,9 +5429,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_116",
-      "target": "tests_test_sf_ci_test_xdg_directories_exist",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_xdg_directories_exist"
     },
     {
       "relation": "rationale_for",
@@ -5369,9 +5439,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L126",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_126",
-      "target": "tests_test_sf_ci_test_ci_environment_variables",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_ci_environment_variables"
     },
     {
       "relation": "rationale_for",
@@ -5379,9 +5449,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L140",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_140",
-      "target": "tests_test_sf_ci_test_workspace_directory_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_workspace_directory_exists"
     },
     {
       "relation": "rationale_for",
@@ -5389,9 +5459,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_147",
-      "target": "tests_test_sf_ci_test_no_interactive_tools",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_no_interactive_tools"
     },
     {
       "relation": "rationale_for",
@@ -5399,9 +5469,9 @@
       "source_file": "tests/test_sf_ci.py",
       "source_location": "L157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_ci_rationale_157",
-      "target": "tests_test_sf_ci_test_minimal_footprint",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_ci_test_minimal_footprint"
     },
     {
       "relation": "contains",
@@ -5409,9 +5479,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_host",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_host"
     },
     {
       "relation": "contains",
@@ -5419,9 +5489,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_container_os",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_container_os"
     },
     {
       "relation": "contains",
@@ -5429,9 +5499,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L176",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_environment_variables",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_environment_variables"
     },
     {
       "relation": "contains",
@@ -5439,9 +5509,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_git_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_git_installed"
     },
     {
       "relation": "contains",
@@ -5449,9 +5519,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_java_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_java_installed"
     },
     {
       "relation": "contains",
@@ -5459,9 +5529,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_jq_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_jq_installed"
     },
     {
       "relation": "contains",
@@ -5469,9 +5539,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L202",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_nano_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_nano_installed"
     },
     {
       "relation": "contains",
@@ -5479,9 +5549,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_nodejs_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_nodejs_installed"
     },
     {
       "relation": "contains",
@@ -5489,9 +5559,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_npm_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_npm_installed"
     },
     {
       "relation": "contains",
@@ -5499,9 +5569,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L124",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_oh_my_zsh_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_oh_my_zsh_installed"
     },
     {
       "relation": "contains",
@@ -5509,9 +5579,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L156",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_p10k_config_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_p10k_config_exists"
     },
     {
       "relation": "contains",
@@ -5519,9 +5589,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L131",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_powerlevel10k_theme_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_powerlevel10k_theme_installed"
     },
     {
       "relation": "contains",
@@ -5529,9 +5599,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_salesforce_cli_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_salesforce_cli_installed"
     },
     {
       "relation": "contains",
@@ -5539,9 +5609,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_sf_cli_plugins_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_sf_cli_plugins_installed"
     },
     {
       "relation": "contains",
@@ -5549,9 +5619,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L163",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_sfdx_directories_exist",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_sfdx_directories_exist"
     },
     {
       "relation": "contains",
@@ -5559,9 +5629,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L208",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_sudo_available",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_sudo_available"
     },
     {
       "relation": "contains",
@@ -5569,9 +5639,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L196",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_vim_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_vim_installed"
     },
     {
       "relation": "contains",
@@ -5579,9 +5649,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_vscode_user_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_vscode_user_exists"
     },
     {
       "relation": "contains",
@@ -5589,9 +5659,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L189",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_workspace_directory_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_workspace_directory_exists"
     },
     {
       "relation": "contains",
@@ -5599,9 +5669,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_xmlstarlet_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_xmlstarlet_installed"
     },
     {
       "relation": "contains",
@@ -5609,9 +5679,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L117",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_zsh_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_zsh_installed"
     },
     {
       "relation": "contains",
@@ -5619,9 +5689,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L138",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_zsh_plugins_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_zsh_plugins_installed"
     },
     {
       "relation": "contains",
@@ -5629,9 +5699,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L149",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer",
-      "target": "tests_test_sf_devcontainer_test_zshrc_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_zshrc_exists"
     },
     {
       "relation": "rationale_for",
@@ -5639,9 +5709,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_1",
-      "target": "tests_test_sf_devcontainer",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer"
     },
     {
       "relation": "rationale_for",
@@ -5649,9 +5719,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_14",
-      "target": "tests_test_sf_devcontainer_host",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_host"
     },
     {
       "relation": "rationale_for",
@@ -5659,9 +5729,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_47",
-      "target": "tests_test_sf_devcontainer_test_container_os",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_container_os"
     },
     {
       "relation": "rationale_for",
@@ -5669,9 +5739,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_53",
-      "target": "tests_test_sf_devcontainer_test_vscode_user_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_vscode_user_exists"
     },
     {
       "relation": "rationale_for",
@@ -5679,9 +5749,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_61",
-      "target": "tests_test_sf_devcontainer_test_nodejs_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_nodejs_installed"
     },
     {
       "relation": "rationale_for",
@@ -5689,9 +5759,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L68",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_68",
-      "target": "tests_test_sf_devcontainer_test_npm_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_npm_installed"
     },
     {
       "relation": "rationale_for",
@@ -5699,9 +5769,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_75",
-      "target": "tests_test_sf_devcontainer_test_java_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_java_installed"
     },
     {
       "relation": "rationale_for",
@@ -5709,9 +5779,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L82",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_82",
-      "target": "tests_test_sf_devcontainer_test_salesforce_cli_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_salesforce_cli_installed"
     },
     {
       "relation": "rationale_for",
@@ -5719,9 +5789,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L89",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_89",
-      "target": "tests_test_sf_devcontainer_test_sf_cli_plugins_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_sf_cli_plugins_installed"
     },
     {
       "relation": "rationale_for",
@@ -5729,9 +5799,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L98",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_98",
-      "target": "tests_test_sf_devcontainer_test_git_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_git_installed"
     },
     {
       "relation": "rationale_for",
@@ -5739,9 +5809,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_105",
-      "target": "tests_test_sf_devcontainer_test_jq_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_jq_installed"
     },
     {
       "relation": "rationale_for",
@@ -5749,9 +5819,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L112",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_112",
-      "target": "tests_test_sf_devcontainer_test_xmlstarlet_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_xmlstarlet_installed"
     },
     {
       "relation": "rationale_for",
@@ -5759,9 +5829,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_118",
-      "target": "tests_test_sf_devcontainer_test_zsh_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_zsh_installed"
     },
     {
       "relation": "rationale_for",
@@ -5769,9 +5839,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_125",
-      "target": "tests_test_sf_devcontainer_test_oh_my_zsh_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_oh_my_zsh_installed"
     },
     {
       "relation": "rationale_for",
@@ -5779,9 +5849,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L132",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_132",
-      "target": "tests_test_sf_devcontainer_test_powerlevel10k_theme_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_powerlevel10k_theme_installed"
     },
     {
       "relation": "rationale_for",
@@ -5789,9 +5859,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L139",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_139",
-      "target": "tests_test_sf_devcontainer_test_zsh_plugins_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_zsh_plugins_installed"
     },
     {
       "relation": "rationale_for",
@@ -5799,9 +5869,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L150",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_150",
-      "target": "tests_test_sf_devcontainer_test_zshrc_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_zshrc_exists"
     },
     {
       "relation": "rationale_for",
@@ -5809,9 +5879,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_157",
-      "target": "tests_test_sf_devcontainer_test_p10k_config_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_p10k_config_exists"
     },
     {
       "relation": "rationale_for",
@@ -5819,9 +5889,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L164",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_164",
-      "target": "tests_test_sf_devcontainer_test_sfdx_directories_exist",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_sfdx_directories_exist"
     },
     {
       "relation": "rationale_for",
@@ -5829,9 +5899,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L177",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_177",
-      "target": "tests_test_sf_devcontainer_test_environment_variables",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_environment_variables"
     },
     {
       "relation": "rationale_for",
@@ -5839,9 +5909,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L190",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_190",
-      "target": "tests_test_sf_devcontainer_test_workspace_directory_exists",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_workspace_directory_exists"
     },
     {
       "relation": "rationale_for",
@@ -5849,9 +5919,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L197",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_197",
-      "target": "tests_test_sf_devcontainer_test_vim_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_vim_installed"
     },
     {
       "relation": "rationale_for",
@@ -5859,9 +5929,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L203",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_203",
-      "target": "tests_test_sf_devcontainer_test_nano_installed",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_nano_installed"
     },
     {
       "relation": "rationale_for",
@@ -5869,9 +5939,9 @@
       "source_file": "tests/test_sf_devcontainer.py",
       "source_location": "L209",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_sf_devcontainer_rationale_209",
-      "target": "tests_test_sf_devcontainer_test_sudo_available",
-      "confidence_score": 1.0
+      "target": "tests_test_sf_devcontainer_test_sudo_available"
     },
     {
       "relation": "contains",
@@ -5879,9 +5949,9 @@
       "source_file": ".claude/references/devops.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_devops",
-      "target": "references_devops_devops_versioning_tagging_rollback",
-      "confidence_score": 1.0
+      "target": "references_devops_devops_versioning_tagging_rollback"
     },
     {
       "relation": "contains",
@@ -5889,9 +5959,9 @@
       "source_file": ".claude/references/devops.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_devops_devops_versioning_tagging_rollback",
-      "target": "references_devops_release_flow_see_the_releasing_skill_for_the_checklist",
-      "confidence_score": 1.0
+      "target": "references_devops_release_flow_see_the_releasing_skill_for_the_checklist"
     },
     {
       "relation": "contains",
@@ -5899,9 +5969,9 @@
       "source_file": ".claude/references/devops.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_devops_devops_versioning_tagging_rollback",
-      "target": "references_devops_rollback",
-      "confidence_score": 1.0
+      "target": "references_devops_rollback"
     },
     {
       "relation": "contains",
@@ -5909,9 +5979,9 @@
       "source_file": ".claude/references/devops.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_devops_devops_versioning_tagging_rollback",
-      "target": "references_devops_semver",
-      "confidence_score": 1.0
+      "target": "references_devops_semver"
     },
     {
       "relation": "contains",
@@ -5919,9 +5989,9 @@
       "source_file": ".claude/references/docker-best-practices.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_docker_best_practices",
-      "target": "references_docker_best_practices_docker_best_practices_repo_rules",
-      "confidence_score": 1.0
+      "target": "references_docker_best_practices_docker_best_practices_repo_rules"
     },
     {
       "relation": "contains",
@@ -5929,9 +5999,9 @@
       "source_file": ".claude/references/docker-best-practices.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_docker_best_practices_docker_best_practices_repo_rules",
-      "target": "references_docker_best_practices_multi_stage_builds",
-      "confidence_score": 1.0
+      "target": "references_docker_best_practices_multi_stage_builds"
     },
     {
       "relation": "contains",
@@ -5939,9 +6009,9 @@
       "source_file": ".claude/references/docker-best-practices.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_docker_best_practices_docker_best_practices_repo_rules",
-      "target": "references_docker_best_practices_non_negotiable_rules_here",
-      "confidence_score": 1.0
+      "target": "references_docker_best_practices_non_negotiable_rules_here"
     },
     {
       "relation": "contains",
@@ -5949,9 +6019,9 @@
       "source_file": ".claude/references/docker-best-practices.md",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_docker_best_practices_docker_best_practices_repo_rules",
-      "target": "references_docker_best_practices_sf_cli_plugin_install_pattern_all_images",
-      "confidence_score": 1.0
+      "target": "references_docker_best_practices_sf_cli_plugin_install_pattern_all_images"
     },
     {
       "relation": "contains",
@@ -5959,9 +6029,9 @@
       "source_file": ".claude/references/github-actions.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_github_actions",
-      "target": "references_github_actions_github_actions_release_conventions_repo_rules",
-      "confidence_score": 1.0
+      "target": "references_github_actions_github_actions_release_conventions_repo_rules"
     },
     {
       "relation": "contains",
@@ -5969,9 +6039,9 @@
       "source_file": ".claude/references/github-actions.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_github_actions_github_actions_release_conventions_repo_rules",
-      "target": "references_github_actions_release_job",
-      "confidence_score": 1.0
+      "target": "references_github_actions_release_job"
     },
     {
       "relation": "contains",
@@ -5979,9 +6049,9 @@
       "source_file": ".claude/references/github-actions.md",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_github_actions_github_actions_release_conventions_repo_rules",
-      "target": "references_github_actions_rules_when_editing_the_workflow",
-      "confidence_score": 1.0
+      "target": "references_github_actions_rules_when_editing_the_workflow"
     },
     {
       "relation": "contains",
@@ -5989,8 +6059,58 @@
       "source_file": ".claude/references/github-actions.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_github_actions_github_actions_release_conventions_repo_rules",
-      "target": "references_github_actions_the_one_workflow_github_workflows_build_and_push_yml",
+      "target": "references_github_actions_the_one_workflow_github_workflows_build_and_push_yml"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "references_graphify",
+      "target": "references_graphify_graphify_knowledge_graph_for_token_efficient_navigation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "references_graphify_graphify_knowledge_graph_for_token_efficient_navigation",
+      "target": "references_graphify_keeping_it_current",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "references_graphify_graphify_knowledge_graph_for_token_efficient_navigation",
+      "target": "references_graphify_local_setup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "references_graphify_graphify_knowledge_graph_for_token_efficient_navigation",
+      "target": "references_graphify_what_is_committed_vs_ignored",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/references/graphify.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "references_graphify_graphify_knowledge_graph_for_token_efficient_navigation",
+      "target": "references_graphify_when_to_use_it_before_reaching_for_grep_full_file_reads",
       "confidence_score": 1.0
     },
     {
@@ -5999,9 +6119,9 @@
       "source_file": ".claude/references/image-conventions.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_image_conventions",
-      "target": "references_image_conventions_per_image_conventions",
-      "confidence_score": 1.0
+      "target": "references_image_conventions_per_image_conventions"
     },
     {
       "relation": "contains",
@@ -6009,9 +6129,9 @@
       "source_file": ".claude/references/image-conventions.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_image_conventions_per_image_conventions",
-      "target": "references_image_conventions_sf_bulk_ultralight_alpine_image",
-      "confidence_score": 1.0
+      "target": "references_image_conventions_sf_bulk_ultralight_alpine_image"
     },
     {
       "relation": "contains",
@@ -6019,9 +6139,9 @@
       "source_file": ".claude/references/image-conventions.md",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_image_conventions_per_image_conventions",
-      "target": "references_image_conventions_sf_ci_thin_ci_image",
-      "confidence_score": 1.0
+      "target": "references_image_conventions_sf_ci_thin_ci_image"
     },
     {
       "relation": "contains",
@@ -6029,9 +6149,9 @@
       "source_file": ".claude/references/image-conventions.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_image_conventions_per_image_conventions",
-      "target": "references_image_conventions_sf_devcontainer_rich_vs_code_dev_image",
-      "confidence_score": 1.0
+      "target": "references_image_conventions_sf_devcontainer_rich_vs_code_dev_image"
     },
     {
       "relation": "contains",
@@ -6039,9 +6159,9 @@
       "source_file": ".claude/references/image-conventions.md",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "references_image_conventions_per_image_conventions",
-      "target": "references_image_conventions_size_budgets",
-      "confidence_score": 1.0
+      "target": "references_image_conventions_size_budgets"
     },
     {
       "relation": "contains",
@@ -6049,9 +6169,9 @@
       "source_file": ".claude/skills/building-a-docker-image/SKILL.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "building_a_docker_image_skill",
-      "target": "building_a_docker_image_skill_building_modifying_a_docker_image",
-      "confidence_score": 1.0
+      "target": "building_a_docker_image_skill_building_modifying_a_docker_image"
     },
     {
       "relation": "contains",
@@ -6059,9 +6179,9 @@
       "source_file": ".claude/skills/building-a-docker-image/SKILL.md",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "building_a_docker_image_skill_building_modifying_a_docker_image",
-      "target": "building_a_docker_image_skill_before_you_touch_anything",
-      "confidence_score": 1.0
+      "target": "building_a_docker_image_skill_before_you_touch_anything"
     },
     {
       "relation": "contains",
@@ -6069,9 +6189,9 @@
       "source_file": ".claude/skills/building-a-docker-image/SKILL.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "building_a_docker_image_skill_building_modifying_a_docker_image",
-      "target": "building_a_docker_image_skill_guardrails_per_image",
-      "confidence_score": 1.0
+      "target": "building_a_docker_image_skill_guardrails_per_image"
     },
     {
       "relation": "contains",
@@ -6079,9 +6199,9 @@
       "source_file": ".claude/skills/building-a-docker-image/SKILL.md",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "building_a_docker_image_skill_building_modifying_a_docker_image",
-      "target": "building_a_docker_image_skill_new_image_checklist",
-      "confidence_score": 1.0
+      "target": "building_a_docker_image_skill_new_image_checklist"
     },
     {
       "relation": "contains",
@@ -6089,9 +6209,9 @@
       "source_file": ".claude/skills/building-a-docker-image/SKILL.md",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "building_a_docker_image_skill_building_modifying_a_docker_image",
-      "target": "building_a_docker_image_skill_the_change_is_not_done_until_you_update_all_four",
-      "confidence_score": 1.0
+      "target": "building_a_docker_image_skill_the_change_is_not_done_until_you_update_all_four"
     },
     {
       "relation": "contains",
@@ -6099,9 +6219,9 @@
       "source_file": ".claude/skills/building-a-docker-image/SKILL.md",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "building_a_docker_image_skill_building_modifying_a_docker_image",
-      "target": "building_a_docker_image_skill_verify",
-      "confidence_score": 1.0
+      "target": "building_a_docker_image_skill_verify"
     },
     {
       "relation": "contains",
@@ -6109,9 +6229,9 @@
       "source_file": ".claude/skills/releasing/SKILL.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "releasing_skill",
-      "target": "releasing_skill_releasing",
-      "confidence_score": 1.0
+      "target": "releasing_skill_releasing"
     },
     {
       "relation": "contains",
@@ -6119,9 +6239,9 @@
       "source_file": ".claude/skills/releasing/SKILL.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "releasing_skill_releasing",
-      "target": "releasing_skill_pre_flight",
-      "confidence_score": 1.0
+      "target": "releasing_skill_pre_flight"
     },
     {
       "relation": "contains",
@@ -6129,9 +6249,9 @@
       "source_file": ".claude/skills/releasing/SKILL.md",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "releasing_skill_releasing",
-      "target": "releasing_skill_rules",
-      "confidence_score": 1.0
+      "target": "releasing_skill_rules"
     },
     {
       "relation": "contains",
@@ -6139,9 +6259,9 @@
       "source_file": ".claude/skills/releasing/SKILL.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "releasing_skill_releasing",
-      "target": "releasing_skill_steps",
-      "confidence_score": 1.0
+      "target": "releasing_skill_steps"
     },
     {
       "relation": "contains",
@@ -6149,9 +6269,9 @@
       "source_file": ".claude/skills/releasing/SKILL.md",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "releasing_skill_releasing",
-      "target": "releasing_skill_verify_after_the_run",
-      "confidence_score": 1.0
+      "target": "releasing_skill_verify_after_the_run"
     },
     {
       "relation": "contains",
@@ -6159,9 +6279,9 @@
       "source_file": ".claude/skills/testing-images/SKILL.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "testing_images_skill",
-      "target": "testing_images_skill_testing_the_images",
-      "confidence_score": 1.0
+      "target": "testing_images_skill_testing_the_images"
     },
     {
       "relation": "contains",
@@ -6169,9 +6289,9 @@
       "source_file": ".claude/skills/testing-images/SKILL.md",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "testing_images_skill_testing_the_images",
-      "target": "testing_images_skill_adding_an_assertion",
-      "confidence_score": 1.0
+      "target": "testing_images_skill_adding_an_assertion"
     },
     {
       "relation": "contains",
@@ -6179,9 +6299,9 @@
       "source_file": ".claude/skills/testing-images/SKILL.md",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "testing_images_skill_testing_the_images",
-      "target": "testing_images_skill_how_it_works",
-      "confidence_score": 1.0
+      "target": "testing_images_skill_how_it_works"
     },
     {
       "relation": "contains",
@@ -6189,9 +6309,9 @@
       "source_file": ".claude/skills/testing-images/SKILL.md",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "testing_images_skill_testing_the_images",
-      "target": "testing_images_skill_interpreting_failures",
-      "confidence_score": 1.0
+      "target": "testing_images_skill_interpreting_failures"
     },
     {
       "relation": "contains",
@@ -6199,9 +6319,9 @@
       "source_file": ".claude/skills/testing-images/SKILL.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "testing_images_skill_testing_the_images",
-      "target": "testing_images_skill_run",
-      "confidence_score": 1.0
+      "target": "testing_images_skill_run"
     },
     {
       "relation": "contains",
@@ -6209,9 +6329,9 @@
       "source_file": ".claude/skills/working-in-the-devcontainer/ATTRIBUTION.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "working_in_the_devcontainer_attribution",
-      "target": "working_in_the_devcontainer_attribution_attribution",
-      "confidence_score": 1.0
+      "target": "working_in_the_devcontainer_attribution_attribution"
     },
     {
       "relation": "contains",
@@ -6219,9 +6339,9 @@
       "source_file": ".claude/skills/working-in-the-devcontainer/SKILL.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "working_in_the_devcontainer_skill",
-      "target": "working_in_the_devcontainer_skill_working_in_the_dev_container",
-      "confidence_score": 1.0
+      "target": "working_in_the_devcontainer_skill_working_in_the_dev_container"
     },
     {
       "relation": "contains",
@@ -6229,9 +6349,9 @@
       "source_file": ".claude/skills/working-in-the-devcontainer/SKILL.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "working_in_the_devcontainer_skill_working_in_the_dev_container",
-      "target": "working_in_the_devcontainer_skill_discover_the_container",
-      "confidence_score": 1.0
+      "target": "working_in_the_devcontainer_skill_discover_the_container"
     },
     {
       "relation": "contains",
@@ -6239,9 +6359,9 @@
       "source_file": ".claude/skills/working-in-the-devcontainer/SKILL.md",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "working_in_the_devcontainer_skill_working_in_the_dev_container",
-      "target": "working_in_the_devcontainer_skill_if_no_container_is_running",
-      "confidence_score": 1.0
+      "target": "working_in_the_devcontainer_skill_if_no_container_is_running"
     },
     {
       "relation": "contains",
@@ -6249,9 +6369,9 @@
       "source_file": ".claude/skills/working-in-the-devcontainer/SKILL.md",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "working_in_the_devcontainer_skill_working_in_the_dev_container",
-      "target": "working_in_the_devcontainer_skill_route_commands_into_it",
-      "confidence_score": 1.0
+      "target": "working_in_the_devcontainer_skill_route_commands_into_it"
     },
     {
       "relation": "contains",
@@ -6259,9 +6379,9 @@
       "source_file": ".claude/skills/working-in-the-devcontainer/SKILL.md",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "working_in_the_devcontainer_skill_working_in_the_dev_container",
-      "target": "working_in_the_devcontainer_skill_rules",
-      "confidence_score": 1.0
+      "target": "working_in_the_devcontainer_skill_rules"
     },
     {
       "relation": "contains",
@@ -6269,9 +6389,9 @@
       "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "github_pull_request_template",
-      "target": "github_pull_request_template_pull_request",
-      "confidence_score": 1.0
+      "target": "github_pull_request_template_pull_request"
     },
     {
       "relation": "contains",
@@ -6279,9 +6399,9 @@
       "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "github_pull_request_template_pull_request",
-      "target": "github_pull_request_template_affected_image_s",
-      "confidence_score": 1.0
+      "target": "github_pull_request_template_affected_image_s"
     },
     {
       "relation": "contains",
@@ -6289,9 +6409,9 @@
       "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "github_pull_request_template_pull_request",
-      "target": "github_pull_request_template_checklist",
-      "confidence_score": 1.0
+      "target": "github_pull_request_template_checklist"
     },
     {
       "relation": "contains",
@@ -6299,9 +6419,9 @@
       "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "github_pull_request_template_pull_request",
-      "target": "github_pull_request_template_type_of_change",
-      "confidence_score": 1.0
+      "target": "github_pull_request_template_type_of_change"
     },
     {
       "relation": "contains",
@@ -6309,9 +6429,9 @@
       "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "github_pull_request_template_pull_request",
-      "target": "github_pull_request_template_what_why",
-      "confidence_score": 1.0
+      "target": "github_pull_request_template_what_why"
     },
     {
       "relation": "contains",
@@ -6319,9 +6439,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions",
-      "target": "instructions_containerization_docker_best_practices_instructions_containerization_docker_best_practices",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_containerization_docker_best_practices"
     },
     {
       "relation": "contains",
@@ -6329,9 +6449,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L675",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_containerization_docker_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_conclusion",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_conclusion"
     },
     {
       "relation": "contains",
@@ -6339,9 +6459,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L482",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_containerization_docker_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_container_runtime_orchestration_best_practices",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_container_runtime_orchestration_best_practices"
     },
     {
       "relation": "contains",
@@ -6349,9 +6469,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L316",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_containerization_docker_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_container_security_best_practices",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_container_security_best_practices"
     },
     {
       "relation": "contains",
@@ -6359,9 +6479,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_containerization_docker_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_core_principles_of_containerization",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_core_principles_of_containerization"
     },
     {
       "relation": "contains",
@@ -6369,9 +6489,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L70",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_containerization_docker_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices"
     },
     {
       "relation": "contains",
@@ -6379,9 +6499,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L631",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_containerization_docker_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_dockerfile_review_checklist",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_dockerfile_review_checklist"
     },
     {
       "relation": "contains",
@@ -6389,9 +6509,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L646",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_containerization_docker_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_troubleshooting_docker_builds_runtime",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_troubleshooting_docker_builds_runtime"
     },
     {
       "relation": "contains",
@@ -6399,9 +6519,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_containerization_docker_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_your_mission",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_your_mission"
     },
     {
       "relation": "contains",
@@ -6409,9 +6529,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_core_principles_of_containerization",
-      "target": "instructions_containerization_docker_best_practices_instructions_1_immutability",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_1_immutability"
     },
     {
       "relation": "contains",
@@ -6419,9 +6539,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_core_principles_of_containerization",
-      "target": "instructions_containerization_docker_best_practices_instructions_2_portability",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_2_portability"
     },
     {
       "relation": "contains",
@@ -6429,9 +6549,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_core_principles_of_containerization",
-      "target": "instructions_containerization_docker_best_practices_instructions_3_isolation",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_3_isolation"
     },
     {
       "relation": "contains",
@@ -6439,9 +6559,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_core_principles_of_containerization",
-      "target": "instructions_containerization_docker_best_practices_instructions_4_efficiency_small_images",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_4_efficiency_small_images"
     },
     {
       "relation": "contains",
@@ -6449,9 +6569,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_1_multi_stage_builds_the_golden_rule",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_1_multi_stage_builds_the_golden_rule"
     },
     {
       "relation": "contains",
@@ -6459,9 +6579,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L117",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_2_choose_the_right_base_image",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_2_choose_the_right_base_image"
     },
     {
       "relation": "contains",
@@ -6469,9 +6589,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L131",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_3_optimize_image_layers",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_3_optimize_image_layers"
     },
     {
       "relation": "contains",
@@ -6479,9 +6599,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L162",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_4_use_dockerignore_effectively",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_4_use_dockerignore_effectively"
     },
     {
       "relation": "contains",
@@ -6489,9 +6609,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L217",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_5_minimize_copy_instructions",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_5_minimize_copy_instructions"
     },
     {
       "relation": "contains",
@@ -6499,9 +6619,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L245",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_6_define_default_user_and_port",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_6_define_default_user_and_port"
     },
     {
       "relation": "contains",
@@ -6509,9 +6629,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L275",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_7_use_cmd_and_entrypoint_correctly",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_7_use_cmd_and_entrypoint_correctly"
     },
     {
       "relation": "contains",
@@ -6519,9 +6639,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L289",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_dockerfile_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_8_environment_variables_for_configuration",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_8_environment_variables_for_configuration"
     },
     {
       "relation": "contains",
@@ -6529,9 +6649,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L318",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_security_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_1_non_root_user",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_1_non_root_user"
     },
     {
       "relation": "contains",
@@ -6539,9 +6659,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L345",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_security_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_2_minimal_base_images",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_2_minimal_base_images"
     },
     {
       "relation": "contains",
@@ -6549,9 +6669,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L369",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_security_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_3_static_analysis_security_testing_sast_for_dockerfiles",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_3_static_analysis_security_testing_sast_for_dockerfiles"
     },
     {
       "relation": "contains",
@@ -6559,9 +6679,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L394",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_security_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_4_image_signing_verification",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_4_image_signing_verification"
     },
     {
       "relation": "contains",
@@ -6569,9 +6689,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L415",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_security_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_5_limit_capabilities_read_only_filesystems",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_5_limit_capabilities_read_only_filesystems"
     },
     {
       "relation": "contains",
@@ -6579,9 +6699,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L436",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_security_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_6_no_sensitive_data_in_image_layers",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_6_no_sensitive_data_in_image_layers"
     },
     {
       "relation": "contains",
@@ -6589,9 +6709,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L459",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_security_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_7_health_checks_liveness_readiness_probes",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_7_health_checks_liveness_readiness_probes"
     },
     {
       "relation": "contains",
@@ -6599,9 +6719,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L484",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_runtime_orchestration_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_1_resource_limits",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_1_resource_limits"
     },
     {
       "relation": "contains",
@@ -6609,9 +6729,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L511",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_runtime_orchestration_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_2_logging_monitoring",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_2_logging_monitoring"
     },
     {
       "relation": "contains",
@@ -6619,9 +6739,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L533",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_runtime_orchestration_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_3_persistent_storage",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_3_persistent_storage"
     },
     {
       "relation": "contains",
@@ -6629,9 +6749,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L559",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_runtime_orchestration_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_4_networking",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_4_networking"
     },
     {
       "relation": "contains",
@@ -6639,9 +6759,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L591",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_container_runtime_orchestration_best_practices",
-      "target": "instructions_containerization_docker_best_practices_instructions_5_orchestration_kubernetes_docker_swarm",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_5_orchestration_kubernetes_docker_swarm"
     },
     {
       "relation": "contains",
@@ -6649,9 +6769,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L648",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_troubleshooting_docker_builds_runtime",
-      "target": "instructions_containerization_docker_best_practices_instructions_1_large_image_size",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_1_large_image_size"
     },
     {
       "relation": "contains",
@@ -6659,9 +6779,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L654",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_troubleshooting_docker_builds_runtime",
-      "target": "instructions_containerization_docker_best_practices_instructions_2_slow_builds",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_2_slow_builds"
     },
     {
       "relation": "contains",
@@ -6669,9 +6789,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L659",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_troubleshooting_docker_builds_runtime",
-      "target": "instructions_containerization_docker_best_practices_instructions_3_container_not_starting_crashing",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_3_container_not_starting_crashing"
     },
     {
       "relation": "contains",
@@ -6679,9 +6799,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L665",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_troubleshooting_docker_builds_runtime",
-      "target": "instructions_containerization_docker_best_practices_instructions_4_permissions_issues_inside_container",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_4_permissions_issues_inside_container"
     },
     {
       "relation": "contains",
@@ -6689,9 +6809,9 @@
       "source_file": ".github/instructions/containerization-docker-best-practices.instructions.md",
       "source_location": "L670",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_containerization_docker_best_practices_instructions_troubleshooting_docker_builds_runtime",
-      "target": "instructions_containerization_docker_best_practices_instructions_5_network_connectivity_issues",
-      "confidence_score": 1.0
+      "target": "instructions_containerization_docker_best_practices_instructions_5_network_connectivity_issues"
     },
     {
       "relation": "contains",
@@ -6699,9 +6819,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices"
     },
     {
       "relation": "contains",
@@ -6709,9 +6829,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L379",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_advanced_deployment_strategies_expanded",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_advanced_deployment_strategies_expanded"
     },
     {
       "relation": "contains",
@@ -6719,9 +6839,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L311",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_comprehensive_testing_in_ci_cd_expanded",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_comprehensive_testing_in_ci_cd_expanded"
     },
     {
       "relation": "contains",
@@ -6729,9 +6849,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L601",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_conclusion",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_conclusion"
     },
     {
       "relation": "contains",
@@ -6739,9 +6859,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_core_concepts_and_structure",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_core_concepts_and_structure"
     },
     {
       "relation": "contains",
@@ -6749,9 +6869,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L438",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_workflow_review_checklist_comprehensive",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_workflow_review_checklist_comprehensive"
     },
     {
       "relation": "contains",
@@ -6759,9 +6879,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L212",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_optimization_and_performance",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_optimization_and_performance"
     },
     {
       "relation": "contains",
@@ -6769,9 +6889,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_security_best_practices_in_github_actions",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_security_best_practices_in_github_actions"
     },
     {
       "relation": "contains",
@@ -6779,9 +6899,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L501",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_troubleshooting_common_github_actions_issues_deep_dive",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_troubleshooting_common_github_actions_issues_deep_dive"
     },
     {
       "relation": "contains",
@@ -6789,9 +6909,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_github_actions_ci_cd_best_practices",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_your_mission",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_your_mission"
     },
     {
       "relation": "contains",
@@ -6799,9 +6919,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_core_concepts_and_structure",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_workflow_structure_github_workflows_yml",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_workflow_structure_github_workflows_yml"
     },
     {
       "relation": "contains",
@@ -6809,9 +6929,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_core_concepts_and_structure",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_jobs",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_jobs"
     },
     {
       "relation": "contains",
@@ -6819,9 +6939,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L87",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_core_concepts_and_structure",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_steps_and_actions",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_steps_and_actions"
     },
     {
       "relation": "contains",
@@ -6829,9 +6949,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_security_best_practices_in_github_actions",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_secret_management",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_secret_management"
     },
     {
       "relation": "contains",
@@ -6839,9 +6959,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L131",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_security_best_practices_in_github_actions",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_openid_connect_oidc_for_cloud_authentication",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_openid_connect_oidc_for_cloud_authentication"
     },
     {
       "relation": "contains",
@@ -6849,9 +6969,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_security_best_practices_in_github_actions",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_least_privilege_for_github_token",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_least_privilege_for_github_token"
     },
     {
       "relation": "contains",
@@ -6859,9 +6979,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_security_best_practices_in_github_actions",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_4_dependency_review_and_software_composition_analysis_sca",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_4_dependency_review_and_software_composition_analysis_sca"
     },
     {
       "relation": "contains",
@@ -6869,9 +6989,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_security_best_practices_in_github_actions",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_5_static_application_security_testing_sast",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_5_static_application_security_testing_sast"
     },
     {
       "relation": "contains",
@@ -6879,9 +6999,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L191",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_security_best_practices_in_github_actions",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_6_secret_scanning_and_credential_leak_prevention",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_6_secret_scanning_and_credential_leak_prevention"
     },
     {
       "relation": "contains",
@@ -6889,9 +7009,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L202",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_security_best_practices_in_github_actions",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_7_immutable_infrastructure_image_signing",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_7_immutable_infrastructure_image_signing"
     },
     {
       "relation": "contains",
@@ -6899,9 +7019,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L214",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_optimization_and_performance",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_caching_github_actions",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_caching_github_actions"
     },
     {
       "relation": "contains",
@@ -6909,9 +7029,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L239",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_optimization_and_performance",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_matrix_strategies_for_parallelization",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_matrix_strategies_for_parallelization"
     },
     {
       "relation": "contains",
@@ -6919,9 +7039,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L272",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_optimization_and_performance",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_self_hosted_runners",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_self_hosted_runners"
     },
     {
       "relation": "contains",
@@ -6929,9 +7049,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L284",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_optimization_and_performance",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_4_fast_checkout_and_shallow_clones",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_4_fast_checkout_and_shallow_clones"
     },
     {
       "relation": "contains",
@@ -6939,9 +7059,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L297",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_optimization_and_performance",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_5_artifacts_for_inter_job_and_inter_workflow_communication",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_5_artifacts_for_inter_job_and_inter_workflow_communication"
     },
     {
       "relation": "contains",
@@ -6949,9 +7069,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L313",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_comprehensive_testing_in_ci_cd_expanded",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_unit_tests",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_unit_tests"
     },
     {
       "relation": "contains",
@@ -6959,9 +7079,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L326",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_comprehensive_testing_in_ci_cd_expanded",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_integration_tests",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_integration_tests"
     },
     {
       "relation": "contains",
@@ -6969,9 +7089,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L339",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_comprehensive_testing_in_ci_cd_expanded",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_end_to_end_e2e_tests",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_end_to_end_e2e_tests"
     },
     {
       "relation": "contains",
@@ -6979,9 +7099,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L353",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_comprehensive_testing_in_ci_cd_expanded",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_4_performance_and_load_testing",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_4_performance_and_load_testing"
     },
     {
       "relation": "contains",
@@ -6989,9 +7109,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L366",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_comprehensive_testing_in_ci_cd_expanded",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_5_test_reporting_and_visibility",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_5_test_reporting_and_visibility"
     },
     {
       "relation": "contains",
@@ -6999,9 +7119,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L381",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_advanced_deployment_strategies_expanded",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_staging_environment_deployment",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_staging_environment_deployment"
     },
     {
       "relation": "contains",
@@ -7009,9 +7129,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L394",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_advanced_deployment_strategies_expanded",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_production_environment_deployment",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_production_environment_deployment"
     },
     {
       "relation": "contains",
@@ -7019,9 +7139,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L408",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_advanced_deployment_strategies_expanded",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_deployment_types_beyond_basic_rolling_update",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_deployment_types_beyond_basic_rolling_update"
     },
     {
       "relation": "contains",
@@ -7029,9 +7149,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L423",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_advanced_deployment_strategies_expanded",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_4_rollback_strategies_and_incident_response",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_4_rollback_strategies_and_incident_response"
     },
     {
       "relation": "contains",
@@ -7039,9 +7159,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L505",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_troubleshooting_common_github_actions_issues_deep_dive",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_workflow_not_triggering_or_jobs_steps_skipping_unexpectedly",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_1_workflow_not_triggering_or_jobs_steps_skipping_unexpectedly"
     },
     {
       "relation": "contains",
@@ -7049,9 +7169,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L520",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_troubleshooting_common_github_actions_issues_deep_dive",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_permissions_errors_resource_not_accessible_by_integration_permission_denied",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_2_permissions_errors_resource_not_accessible_by_integration_permission_denied"
     },
     {
       "relation": "contains",
@@ -7059,9 +7179,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L534",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_troubleshooting_common_github_actions_issues_deep_dive",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_caching_issues_cache_not_found_cache_miss_cache_creation_failed",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_3_caching_issues_cache_not_found_cache_miss_cache_creation_failed"
     },
     {
       "relation": "contains",
@@ -7069,9 +7189,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L548",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_troubleshooting_common_github_actions_issues_deep_dive",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_4_long_running_workflows_or_timeouts",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_4_long_running_workflows_or_timeouts"
     },
     {
       "relation": "contains",
@@ -7079,9 +7199,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L566",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_troubleshooting_common_github_actions_issues_deep_dive",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_5_flaky_tests_in_ci_random_failures_passes_locally_fails_in_ci",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_5_flaky_tests_in_ci_random_failures_passes_locally_fails_in_ci"
     },
     {
       "relation": "contains",
@@ -7089,9 +7209,9 @@
       "source_file": ".github/instructions/github-actions-ci-cd-best-practices.instructions.md",
       "source_location": "L584",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "instructions_github_actions_ci_cd_best_practices_instructions_troubleshooting_common_github_actions_issues_deep_dive",
-      "target": "instructions_github_actions_ci_cd_best_practices_instructions_6_deployment_failures_application_not_working_after_deploy",
-      "confidence_score": 1.0
+      "target": "instructions_github_actions_ci_cd_best_practices_instructions_6_deployment_failures_application_not_working_after_deploy"
     },
     {
       "relation": "contains",
@@ -7099,9 +7219,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents",
-      "target": "agents_ai_assistant_instructions_copilot_optimized",
-      "confidence_score": 1.0
+      "target": "agents_ai_assistant_instructions_copilot_optimized"
     },
     {
       "relation": "contains",
@@ -7109,9 +7229,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_ai_assistant_instructions_copilot_optimized",
-      "target": "agents_change_rules_critical",
-      "confidence_score": 1.0
+      "target": "agents_change_rules_critical"
     },
     {
       "relation": "contains",
@@ -7119,9 +7239,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_ai_assistant_instructions_copilot_optimized",
-      "target": "agents_copilot_guidance_how_to_be_killer",
-      "confidence_score": 1.0
+      "target": "agents_copilot_guidance_how_to_be_killer"
     },
     {
       "relation": "contains",
@@ -7129,9 +7249,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_ai_assistant_instructions_copilot_optimized",
-      "target": "agents_local_commands",
-      "confidence_score": 1.0
+      "target": "agents_local_commands"
     },
     {
       "relation": "contains",
@@ -7139,9 +7259,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_ai_assistant_instructions_copilot_optimized",
-      "target": "agents_project_summary",
-      "confidence_score": 1.0
+      "target": "agents_project_summary"
     },
     {
       "relation": "contains",
@@ -7149,9 +7269,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_ai_assistant_instructions_copilot_optimized",
-      "target": "agents_quick_context_for_tests",
-      "confidence_score": 1.0
+      "target": "agents_quick_context_for_tests"
     },
     {
       "relation": "contains",
@@ -7159,9 +7279,9 @@
       "source_file": "AGENTS.md",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agents_ai_assistant_instructions_copilot_optimized",
-      "target": "agents_repo_layout",
-      "confidence_score": 1.0
+      "target": "agents_repo_layout"
     },
     {
       "relation": "contains",
@@ -7169,9 +7289,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog",
-      "target": "changelog_changelog",
-      "confidence_score": 1.0
+      "target": "changelog_changelog"
     },
     {
       "relation": "contains",
@@ -7179,9 +7299,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_changelog",
-      "target": "changelog_1_0_0_2025_12_04",
-      "confidence_score": 1.0
+      "target": "changelog_1_0_0_2025_12_04"
     },
     {
       "relation": "contains",
@@ -7189,9 +7309,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_changelog",
-      "target": "changelog_1_1_0_2026_02_03",
-      "confidence_score": 1.0
+      "target": "changelog_1_1_0_2026_02_03"
     },
     {
       "relation": "contains",
@@ -7199,9 +7319,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_changelog",
-      "target": "changelog_1_3_0_2026_02_03",
-      "confidence_score": 1.0
+      "target": "changelog_1_3_0_2026_02_03"
     },
     {
       "relation": "contains",
@@ -7209,9 +7329,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_changelog",
-      "target": "changelog_1_4_0_2026_02_12",
-      "confidence_score": 1.0
+      "target": "changelog_1_4_0_2026_02_12"
     },
     {
       "relation": "contains",
@@ -7219,9 +7339,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_changelog",
-      "target": "changelog_1_5_0_2026_07_01",
-      "confidence_score": 1.0
+      "target": "changelog_1_5_0_2026_07_01"
     },
     {
       "relation": "contains",
@@ -7229,9 +7349,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_changelog",
-      "target": "changelog_unreleased",
-      "confidence_score": 1.0
+      "target": "changelog_unreleased"
     },
     {
       "relation": "contains",
@@ -7239,9 +7359,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_unreleased",
-      "target": "changelog_added",
-      "confidence_score": 1.0
+      "target": "changelog_added"
     },
     {
       "relation": "contains",
@@ -7249,9 +7369,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_5_0_2026_07_01",
-      "target": "changelog_added_18",
-      "confidence_score": 1.0
+      "target": "changelog_added_18"
     },
     {
       "relation": "contains",
@@ -7259,9 +7379,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_5_0_2026_07_01",
-      "target": "changelog_changed",
-      "confidence_score": 1.0
+      "target": "changelog_changed"
     },
     {
       "relation": "contains",
@@ -7269,9 +7389,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_5_0_2026_07_01",
-      "target": "changelog_fixed",
-      "confidence_score": 1.0
+      "target": "changelog_fixed"
     },
     {
       "relation": "contains",
@@ -7279,9 +7399,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_4_0_2026_02_12",
-      "target": "changelog_changed_36",
-      "confidence_score": 1.0
+      "target": "changelog_changed_36"
     },
     {
       "relation": "contains",
@@ -7289,9 +7409,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_4_0_2026_02_12",
-      "target": "changelog_fixed_40",
-      "confidence_score": 1.0
+      "target": "changelog_fixed_40"
     },
     {
       "relation": "contains",
@@ -7299,9 +7419,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_3_0_2026_02_03",
-      "target": "changelog_added_46",
-      "confidence_score": 1.0
+      "target": "changelog_added_46"
     },
     {
       "relation": "contains",
@@ -7309,9 +7429,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_3_0_2026_02_03",
-      "target": "changelog_changed_49",
-      "confidence_score": 1.0
+      "target": "changelog_changed_49"
     },
     {
       "relation": "contains",
@@ -7319,9 +7439,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_1_0_2026_02_03",
-      "target": "changelog_added_54",
-      "confidence_score": 1.0
+      "target": "changelog_added_54"
     },
     {
       "relation": "contains",
@@ -7329,9 +7449,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_1_0_2026_02_03",
-      "target": "changelog_changed_60",
-      "confidence_score": 1.0
+      "target": "changelog_changed_60"
     },
     {
       "relation": "contains",
@@ -7339,9 +7459,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_1_0_2026_02_03",
-      "target": "changelog_fixed_63",
-      "confidence_score": 1.0
+      "target": "changelog_fixed_63"
     },
     {
       "relation": "contains",
@@ -7349,9 +7469,9 @@
       "source_file": "CHANGELOG.md",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "changelog_1_0_0_2025_12_04",
-      "target": "changelog_added_69",
-      "confidence_score": 1.0
+      "target": "changelog_added_69"
     },
     {
       "relation": "contains",
@@ -7359,9 +7479,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude",
-      "target": "claude_claude_md",
-      "confidence_score": 1.0
+      "target": "claude_claude_md"
     },
     {
       "relation": "contains",
@@ -7369,9 +7489,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L91",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_claude_md",
-      "target": "claude_ai_pair_development_layer",
-      "confidence_score": 1.0
+      "target": "claude_ai_pair_development_layer"
     },
     {
       "relation": "contains",
@@ -7379,9 +7499,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_claude_md",
-      "target": "claude_change_rules",
-      "confidence_score": 1.0
+      "target": "claude_change_rules"
     },
     {
       "relation": "contains",
@@ -7389,9 +7509,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_claude_md",
-      "target": "claude_ci_cd_workflows",
-      "confidence_score": 1.0
+      "target": "claude_ci_cd_workflows"
     },
     {
       "relation": "contains",
@@ -7399,9 +7519,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_claude_md",
-      "target": "claude_images",
-      "confidence_score": 1.0
+      "target": "claude_images"
     },
     {
       "relation": "contains",
@@ -7409,8 +7529,18 @@
       "source_file": "CLAUDE.md",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_claude_md",
-      "target": "claude_key_commands",
+      "target": "claude_key_commands"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L108",
+      "weight": 1.0,
+      "source": "claude_claude_md",
+      "target": "claude_knowledge_graph_graphify",
       "confidence_score": 1.0
     },
     {
@@ -7419,9 +7549,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_claude_md",
-      "target": "claude_project_overview",
-      "confidence_score": 1.0
+      "target": "claude_project_overview"
     },
     {
       "relation": "contains",
@@ -7429,9 +7559,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_claude_md",
-      "target": "claude_testing",
-      "confidence_score": 1.0
+      "target": "claude_testing"
     },
     {
       "relation": "contains",
@@ -7439,9 +7569,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_images",
-      "target": "claude_sf_bulk",
-      "confidence_score": 1.0
+      "target": "claude_sf_bulk"
     },
     {
       "relation": "contains",
@@ -7449,9 +7579,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_images",
-      "target": "claude_sf_ci",
-      "confidence_score": 1.0
+      "target": "claude_sf_ci"
     },
     {
       "relation": "contains",
@@ -7459,9 +7589,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_images",
-      "target": "claude_sf_devcontainer",
-      "confidence_score": 1.0
+      "target": "claude_sf_devcontainer"
     },
     {
       "relation": "contains",
@@ -7469,9 +7599,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_ci_cd_workflows",
-      "target": "claude_github_workflows_build_and_push_yml_build_and_push",
-      "confidence_score": 1.0
+      "target": "claude_github_workflows_build_and_push_yml_build_and_push"
     },
     {
       "relation": "contains",
@@ -7479,9 +7609,9 @@
       "source_file": "CLAUDE.md",
       "source_location": "L68",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "claude_ci_cd_workflows",
-      "target": "claude_release_process",
-      "confidence_score": 1.0
+      "target": "claude_release_process"
     },
     {
       "relation": "contains",
@@ -7489,9 +7619,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct",
-      "target": "code_of_conduct_contributor_covenant_code_of_conduct",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_contributor_covenant_code_of_conduct"
     },
     {
       "relation": "contains",
@@ -7499,9 +7629,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_contributor_covenant_code_of_conduct",
-      "target": "code_of_conduct_attribution",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_attribution"
     },
     {
       "relation": "contains",
@@ -7509,9 +7639,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_contributor_covenant_code_of_conduct",
-      "target": "code_of_conduct_enforcement",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_enforcement"
     },
     {
       "relation": "contains",
@@ -7519,9 +7649,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_contributor_covenant_code_of_conduct",
-      "target": "code_of_conduct_enforcement_guidelines",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_enforcement_guidelines"
     },
     {
       "relation": "contains",
@@ -7529,9 +7659,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_contributor_covenant_code_of_conduct",
-      "target": "code_of_conduct_enforcement_responsibilities",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_enforcement_responsibilities"
     },
     {
       "relation": "contains",
@@ -7539,9 +7669,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_contributor_covenant_code_of_conduct",
-      "target": "code_of_conduct_our_pledge",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_our_pledge"
     },
     {
       "relation": "contains",
@@ -7549,9 +7679,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_contributor_covenant_code_of_conduct",
-      "target": "code_of_conduct_our_standards",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_our_standards"
     },
     {
       "relation": "contains",
@@ -7559,9 +7689,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_contributor_covenant_code_of_conduct",
-      "target": "code_of_conduct_scope",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_scope"
     },
     {
       "relation": "contains",
@@ -7569,9 +7699,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_enforcement_guidelines",
-      "target": "code_of_conduct_1_correction",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_1_correction"
     },
     {
       "relation": "contains",
@@ -7579,9 +7709,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_enforcement_guidelines",
-      "target": "code_of_conduct_2_warning",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_2_warning"
     },
     {
       "relation": "contains",
@@ -7589,9 +7719,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_enforcement_guidelines",
-      "target": "code_of_conduct_3_temporary_ban",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_3_temporary_ban"
     },
     {
       "relation": "contains",
@@ -7599,9 +7729,9 @@
       "source_file": "CODE_OF_CONDUCT.md",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "code_of_conduct_enforcement_guidelines",
-      "target": "code_of_conduct_4_permanent_ban",
-      "confidence_score": 1.0
+      "target": "code_of_conduct_4_permanent_ban"
     },
     {
       "relation": "contains",
@@ -7609,9 +7739,9 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "contributing",
-      "target": "contributing_contributing",
-      "confidence_score": 1.0
+      "target": "contributing_contributing"
     },
     {
       "relation": "contains",
@@ -7619,9 +7749,9 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "contributing_contributing",
-      "target": "contributing_adding_or_modifying_an_image",
-      "confidence_score": 1.0
+      "target": "contributing_adding_or_modifying_an_image"
     },
     {
       "relation": "contains",
@@ -7629,9 +7759,9 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "contributing_contributing",
-      "target": "contributing_commit_pr_conventions",
-      "confidence_score": 1.0
+      "target": "contributing_commit_pr_conventions"
     },
     {
       "relation": "contains",
@@ -7639,9 +7769,9 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "contributing_contributing",
-      "target": "contributing_development_setup",
-      "confidence_score": 1.0
+      "target": "contributing_development_setup"
     },
     {
       "relation": "contains",
@@ -7649,9 +7779,9 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L95",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "contributing_contributing",
-      "target": "contributing_questions",
-      "confidence_score": 1.0
+      "target": "contributing_questions"
     },
     {
       "relation": "contains",
@@ -7659,9 +7789,9 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "contributing_contributing",
-      "target": "contributing_release_process",
-      "confidence_score": 1.0
+      "target": "contributing_release_process"
     },
     {
       "relation": "contains",
@@ -7669,9 +7799,9 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "contributing_contributing",
-      "target": "contributing_testing",
-      "confidence_score": 1.0
+      "target": "contributing_testing"
     },
     {
       "relation": "contains",
@@ -7679,9 +7809,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_salesforce_docker_images",
-      "confidence_score": 1.0
+      "target": "readme_salesforce_docker_images"
     },
     {
       "relation": "contains",
@@ -7689,9 +7819,9 @@
       "source_file": "README.md",
       "source_location": "L156",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_salesforce_docker_images",
-      "target": "readme_ai_assisted_development",
-      "confidence_score": 1.0
+      "target": "readme_ai_assisted_development"
     },
     {
       "relation": "contains",
@@ -7699,9 +7829,9 @@
       "source_file": "README.md",
       "source_location": "L172",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_salesforce_docker_images",
-      "target": "readme_contributing",
-      "confidence_score": 1.0
+      "target": "readme_contributing"
     },
     {
       "relation": "contains",
@@ -7709,9 +7839,9 @@
       "source_file": "README.md",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_salesforce_docker_images",
-      "target": "readme_design_principles",
-      "confidence_score": 1.0
+      "target": "readme_design_principles"
     },
     {
       "relation": "contains",
@@ -7719,9 +7849,9 @@
       "source_file": "README.md",
       "source_location": "L120",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_salesforce_docker_images",
-      "target": "readme_development",
-      "confidence_score": 1.0
+      "target": "readme_development"
     },
     {
       "relation": "contains",
@@ -7729,9 +7859,9 @@
       "source_file": "README.md",
       "source_location": "L178",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_salesforce_docker_images",
-      "target": "readme_license",
-      "confidence_score": 1.0
+      "target": "readme_license"
     },
     {
       "relation": "contains",
@@ -7739,9 +7869,9 @@
       "source_file": "README.md",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_salesforce_docker_images",
-      "target": "readme_quick_start",
-      "confidence_score": 1.0
+      "target": "readme_quick_start"
     },
     {
       "relation": "contains",
@@ -7749,9 +7879,9 @@
       "source_file": "README.md",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_salesforce_docker_images",
-      "target": "readme_security_provenance",
-      "confidence_score": 1.0
+      "target": "readme_security_provenance"
     },
     {
       "relation": "contains",
@@ -7759,9 +7889,9 @@
       "source_file": "README.md",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_salesforce_docker_images",
-      "target": "readme_supported_tags",
-      "confidence_score": 1.0
+      "target": "readme_supported_tags"
     },
     {
       "relation": "contains",
@@ -7769,9 +7899,9 @@
       "source_file": "README.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_salesforce_docker_images",
-      "target": "readme_what_s_inside",
-      "confidence_score": 1.0
+      "target": "readme_what_s_inside"
     },
     {
       "relation": "contains",
@@ -7779,9 +7909,9 @@
       "source_file": "README.md",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_quick_start",
-      "target": "readme_sf_bulk_one_liner",
-      "confidence_score": 1.0
+      "target": "readme_sf_bulk_one_liner"
     },
     {
       "relation": "contains",
@@ -7789,9 +7919,9 @@
       "source_file": "README.md",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_quick_start",
-      "target": "readme_sf_ci_in_a_github_actions_job",
-      "confidence_score": 1.0
+      "target": "readme_sf_ci_in_a_github_actions_job"
     },
     {
       "relation": "contains",
@@ -7799,9 +7929,9 @@
       "source_file": "README.md",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_quick_start",
-      "target": "readme_sf_devcontainer_in_vs_code",
-      "confidence_score": 1.0
+      "target": "readme_sf_devcontainer_in_vs_code"
     },
     {
       "relation": "contains",
@@ -7809,9 +7939,9 @@
       "source_file": "README.md",
       "source_location": "L145",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_development",
-      "target": "readme_releasing",
-      "confidence_score": 1.0
+      "target": "readme_releasing"
     },
     {
       "relation": "contains",
@@ -7819,9 +7949,9 @@
       "source_file": "SECURITY.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "security",
-      "target": "security_security_policy",
-      "confidence_score": 1.0
+      "target": "security_security_policy"
     },
     {
       "relation": "contains",
@@ -7829,9 +7959,9 @@
       "source_file": "SECURITY.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "security_security_policy",
-      "target": "security_reporting_a_vulnerability",
-      "confidence_score": 1.0
+      "target": "security_reporting_a_vulnerability"
     },
     {
       "relation": "contains",
@@ -7839,9 +7969,9 @@
       "source_file": "SECURITY.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "security_security_policy",
-      "target": "security_scanning_provenance",
-      "confidence_score": 1.0
+      "target": "security_scanning_provenance"
     },
     {
       "relation": "contains",
@@ -7849,9 +7979,9 @@
       "source_file": "SECURITY.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "security_security_policy",
-      "target": "security_supported_versions",
-      "confidence_score": 1.0
+      "target": "security_supported_versions"
     },
     {
       "relation": "contains",
@@ -7859,9 +7989,9 @@
       "source_file": "SETUP.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup",
-      "target": "setup_salesforce_docker_images_setup_guide",
-      "confidence_score": 1.0
+      "target": "setup_salesforce_docker_images_setup_guide"
     },
     {
       "relation": "contains",
@@ -7869,9 +7999,9 @@
       "source_file": "SETUP.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_salesforce_docker_images_setup_guide",
-      "target": "setup_initial_setup",
-      "confidence_score": 1.0
+      "target": "setup_initial_setup"
     },
     {
       "relation": "contains",
@@ -7879,9 +8009,9 @@
       "source_file": "SETUP.md",
       "source_location": "L112",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_salesforce_docker_images_setup_guide",
-      "target": "setup_next_steps",
-      "confidence_score": 1.0
+      "target": "setup_next_steps"
     },
     {
       "relation": "contains",
@@ -7889,9 +8019,9 @@
       "source_file": "SETUP.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_salesforce_docker_images_setup_guide",
-      "target": "setup_prerequisites",
-      "confidence_score": 1.0
+      "target": "setup_prerequisites"
     },
     {
       "relation": "contains",
@@ -7899,9 +8029,9 @@
       "source_file": "SETUP.md",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_salesforce_docker_images_setup_guide",
-      "target": "setup_troubleshooting",
-      "confidence_score": 1.0
+      "target": "setup_troubleshooting"
     },
     {
       "relation": "contains",
@@ -7909,9 +8039,9 @@
       "source_file": "SETUP.md",
       "source_location": "L87",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_salesforce_docker_images_setup_guide",
-      "target": "setup_using_the_images",
-      "confidence_score": 1.0
+      "target": "setup_using_the_images"
     },
     {
       "relation": "contains",
@@ -7919,9 +8049,9 @@
       "source_file": "SETUP.md",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_salesforce_docker_images_setup_guide",
-      "target": "setup_verifying_the_setup",
-      "confidence_score": 1.0
+      "target": "setup_verifying_the_setup"
     },
     {
       "relation": "contains",
@@ -7929,9 +8059,9 @@
       "source_file": "SETUP.md",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_initial_setup",
-      "target": "setup_1_create_github_repository",
-      "confidence_score": 1.0
+      "target": "setup_1_create_github_repository"
     },
     {
       "relation": "contains",
@@ -7939,9 +8069,9 @@
       "source_file": "SETUP.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_initial_setup",
-      "target": "setup_2_set_up_docker_hub",
-      "confidence_score": 1.0
+      "target": "setup_2_set_up_docker_hub"
     },
     {
       "relation": "contains",
@@ -7949,9 +8079,9 @@
       "source_file": "SETUP.md",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_initial_setup",
-      "target": "setup_3_configure_github_secrets",
-      "confidence_score": 1.0
+      "target": "setup_3_configure_github_secrets"
     },
     {
       "relation": "contains",
@@ -7959,9 +8089,9 @@
       "source_file": "SETUP.md",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_initial_setup",
-      "target": "setup_4_test_locally",
-      "confidence_score": 1.0
+      "target": "setup_4_test_locally"
     },
     {
       "relation": "contains",
@@ -7969,9 +8099,9 @@
       "source_file": "SETUP.md",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_initial_setup",
-      "target": "setup_5_create_your_first_release",
-      "confidence_score": 1.0
+      "target": "setup_5_create_your_first_release"
     },
     {
       "relation": "contains",
@@ -7979,9 +8109,9 @@
       "source_file": "SETUP.md",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_troubleshooting",
-      "target": "setup_images_not_pushed_to_docker_hub",
-      "confidence_score": 1.0
+      "target": "setup_images_not_pushed_to_docker_hub"
     },
     {
       "relation": "contains",
@@ -7989,9 +8119,9 @@
       "source_file": "SETUP.md",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_troubleshooting",
-      "target": "setup_tests_fail",
-      "confidence_score": 1.0
+      "target": "setup_tests_fail"
     },
     {
       "relation": "contains",
@@ -7999,9 +8129,9 @@
       "source_file": "SETUP.md",
       "source_location": "L98",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "setup_troubleshooting",
-      "target": "setup_workflow_fails_at_docker_login",
-      "confidence_score": 1.0
+      "target": "setup_workflow_fails_at_docker_login"
     },
     {
       "relation": "contains",
@@ -8009,9 +8139,9 @@
       "source_file": "docs/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_readme",
-      "target": "docs_readme_which_image_should_i_use",
-      "confidence_score": 1.0
+      "target": "docs_readme_which_image_should_i_use"
     },
     {
       "relation": "contains",
@@ -8019,9 +8149,9 @@
       "source_file": "docs/README.md",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_readme_which_image_should_i_use",
-      "target": "docs_readme_media",
-      "confidence_score": 1.0
+      "target": "docs_readme_media"
     },
     {
       "relation": "contains",
@@ -8029,9 +8159,9 @@
       "source_file": "docs/README.md",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "docs_readme_which_image_should_i_use",
-      "target": "docs_readme_social_preview",
-      "confidence_score": 1.0
+      "target": "docs_readme_social_preview"
     },
     {
       "relation": "contains",
@@ -8039,9 +8169,9 @@
       "source_file": "sf-bulk/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_bulk_readme",
-      "target": "sf_bulk_readme_sf_bulk",
-      "confidence_score": 1.0
+      "target": "sf_bulk_readme_sf_bulk"
     },
     {
       "relation": "contains",
@@ -8049,9 +8179,9 @@
       "source_file": "sf-bulk/README.md",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_bulk_readme_sf_bulk",
-      "target": "sf_bulk_readme_building_locally",
-      "confidence_score": 1.0
+      "target": "sf_bulk_readme_building_locally"
     },
     {
       "relation": "contains",
@@ -8059,9 +8189,9 @@
       "source_file": "sf-bulk/README.md",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_bulk_readme_sf_bulk",
-      "target": "sf_bulk_readme_features",
-      "confidence_score": 1.0
+      "target": "sf_bulk_readme_features"
     },
     {
       "relation": "contains",
@@ -8069,9 +8199,9 @@
       "source_file": "sf-bulk/README.md",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_bulk_readme_sf_bulk",
-      "target": "sf_bulk_readme_image_size",
-      "confidence_score": 1.0
+      "target": "sf_bulk_readme_image_size"
     },
     {
       "relation": "contains",
@@ -8079,9 +8209,9 @@
       "source_file": "sf-bulk/README.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_bulk_readme_sf_bulk",
-      "target": "sf_bulk_readme_usage",
-      "confidence_score": 1.0
+      "target": "sf_bulk_readme_usage"
     },
     {
       "relation": "contains",
@@ -8089,9 +8219,9 @@
       "source_file": "sf-bulk/README.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_bulk_readme_sf_bulk",
-      "target": "sf_bulk_readme_when_to_use",
-      "confidence_score": 1.0
+      "target": "sf_bulk_readme_when_to_use"
     },
     {
       "relation": "contains",
@@ -8099,9 +8229,9 @@
       "source_file": "sf-bulk/README.md",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_bulk_readme_usage",
-      "target": "sf_bulk_readme_docker",
-      "confidence_score": 1.0
+      "target": "sf_bulk_readme_docker"
     },
     {
       "relation": "contains",
@@ -8109,9 +8239,9 @@
       "source_file": "sf-bulk/README.md",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_bulk_readme_usage",
-      "target": "sf_bulk_readme_github_actions",
-      "confidence_score": 1.0
+      "target": "sf_bulk_readme_github_actions"
     },
     {
       "relation": "contains",
@@ -8119,9 +8249,9 @@
       "source_file": "sf-ci/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_ci_readme",
-      "target": "sf_ci_readme_sf_ci",
-      "confidence_score": 1.0
+      "target": "sf_ci_readme_sf_ci"
     },
     {
       "relation": "contains",
@@ -8129,9 +8259,9 @@
       "source_file": "sf-ci/README.md",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_ci_readme_sf_ci",
-      "target": "sf_ci_readme_building_locally",
-      "confidence_score": 1.0
+      "target": "sf_ci_readme_building_locally"
     },
     {
       "relation": "contains",
@@ -8139,9 +8269,9 @@
       "source_file": "sf-ci/README.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_ci_readme_sf_ci",
-      "target": "sf_ci_readme_usage",
-      "confidence_score": 1.0
+      "target": "sf_ci_readme_usage"
     },
     {
       "relation": "contains",
@@ -8149,9 +8279,9 @@
       "source_file": "sf-ci/README.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_ci_readme_sf_ci",
-      "target": "sf_ci_readme_what_s_inside",
-      "confidence_score": 1.0
+      "target": "sf_ci_readme_what_s_inside"
     },
     {
       "relation": "contains",
@@ -8159,9 +8289,9 @@
       "source_file": "sf-ci/README.md",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_ci_readme_sf_ci",
-      "target": "sf_ci_readme_why_it_s_small",
-      "confidence_score": 1.0
+      "target": "sf_ci_readme_why_it_s_small"
     },
     {
       "relation": "contains",
@@ -8169,9 +8299,9 @@
       "source_file": "sf-ci/README.md",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_ci_readme_usage",
-      "target": "sf_ci_readme_docker",
-      "confidence_score": 1.0
+      "target": "sf_ci_readme_docker"
     },
     {
       "relation": "contains",
@@ -8179,9 +8309,9 @@
       "source_file": "sf-ci/README.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_ci_readme_usage",
-      "target": "sf_ci_readme_github_actions",
-      "confidence_score": 1.0
+      "target": "sf_ci_readme_github_actions"
     },
     {
       "relation": "contains",
@@ -8189,9 +8319,9 @@
       "source_file": "sf-ci/README.md",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_ci_readme_usage",
-      "target": "sf_ci_readme_gitlab_ci",
-      "confidence_score": 1.0
+      "target": "sf_ci_readme_gitlab_ci"
     },
     {
       "relation": "contains",
@@ -8199,9 +8329,9 @@
       "source_file": "sf-devcontainer/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_devcontainer_readme",
-      "target": "sf_devcontainer_readme_sf_devcontainer",
-      "confidence_score": 1.0
+      "target": "sf_devcontainer_readme_sf_devcontainer"
     },
     {
       "relation": "contains",
@@ -8209,9 +8339,9 @@
       "source_file": "sf-devcontainer/README.md",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_devcontainer_readme_sf_devcontainer",
-      "target": "sf_devcontainer_readme_building_locally",
-      "confidence_score": 1.0
+      "target": "sf_devcontainer_readme_building_locally"
     },
     {
       "relation": "contains",
@@ -8219,9 +8349,9 @@
       "source_file": "sf-devcontainer/README.md",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_devcontainer_readme_sf_devcontainer",
-      "target": "sf_devcontainer_readme_usage",
-      "confidence_score": 1.0
+      "target": "sf_devcontainer_readme_usage"
     },
     {
       "relation": "contains",
@@ -8229,9 +8359,9 @@
       "source_file": "sf-devcontainer/README.md",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_devcontainer_readme_sf_devcontainer",
-      "target": "sf_devcontainer_readme_what_s_inside",
-      "confidence_score": 1.0
+      "target": "sf_devcontainer_readme_what_s_inside"
     },
     {
       "relation": "contains",
@@ -8239,9 +8369,9 @@
       "source_file": "sf-devcontainer/README.md",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_devcontainer_readme_sf_devcontainer",
-      "target": "sf_devcontainer_readme_when_to_use",
-      "confidence_score": 1.0
+      "target": "sf_devcontainer_readme_when_to_use"
     },
     {
       "relation": "contains",
@@ -8249,9 +8379,9 @@
       "source_file": "sf-devcontainer/README.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_devcontainer_readme_usage",
-      "target": "sf_devcontainer_readme_docker",
-      "confidence_score": 1.0
+      "target": "sf_devcontainer_readme_docker"
     },
     {
       "relation": "contains",
@@ -8259,9 +8389,9 @@
       "source_file": "sf-devcontainer/README.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "sf_devcontainer_readme_usage",
-      "target": "sf_devcontainer_readme_vs_code_dev_containers",
-      "confidence_score": 1.0
+      "target": "sf_devcontainer_readme_vs_code_dev_containers"
     },
     {
       "relation": "contains",
@@ -8269,9 +8399,9 @@
       "source_file": "tests/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme",
-      "target": "tests_readme_testing_docker_images_with_pytest_testinfra",
-      "confidence_score": 1.0
+      "target": "tests_readme_testing_docker_images_with_pytest_testinfra"
     },
     {
       "relation": "contains",
@@ -8279,9 +8409,9 @@
       "source_file": "tests/README.md",
       "source_location": "L121",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_testing_docker_images_with_pytest_testinfra",
-      "target": "tests_readme_ci_integration",
-      "confidence_score": 1.0
+      "target": "tests_readme_ci_integration"
     },
     {
       "relation": "contains",
@@ -8289,9 +8419,9 @@
       "source_file": "tests/README.md",
       "source_location": "L156",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_testing_docker_images_with_pytest_testinfra",
-      "target": "tests_readme_resources",
-      "confidence_score": 1.0
+      "target": "tests_readme_resources"
     },
     {
       "relation": "contains",
@@ -8299,9 +8429,9 @@
       "source_file": "tests/README.md",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_testing_docker_images_with_pytest_testinfra",
-      "target": "tests_readme_running_tests_locally",
-      "confidence_score": 1.0
+      "target": "tests_readme_running_tests_locally"
     },
     {
       "relation": "contains",
@@ -8309,9 +8439,9 @@
       "source_file": "tests/README.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_testing_docker_images_with_pytest_testinfra",
-      "target": "tests_readme_setup",
-      "confidence_score": 1.0
+      "target": "tests_readme_setup"
     },
     {
       "relation": "contains",
@@ -8319,9 +8449,9 @@
       "source_file": "tests/README.md",
       "source_location": "L94",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_testing_docker_images_with_pytest_testinfra",
-      "target": "tests_readme_test_options",
-      "confidence_score": 1.0
+      "target": "tests_readme_test_options"
     },
     {
       "relation": "contains",
@@ -8329,9 +8459,9 @@
       "source_file": "tests/README.md",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_testing_docker_images_with_pytest_testinfra",
-      "target": "tests_readme_test_structure",
-      "confidence_score": 1.0
+      "target": "tests_readme_test_structure"
     },
     {
       "relation": "contains",
@@ -8339,9 +8469,9 @@
       "source_file": "tests/README.md",
       "source_location": "L145",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_testing_docker_images_with_pytest_testinfra",
-      "target": "tests_readme_troubleshooting",
-      "confidence_score": 1.0
+      "target": "tests_readme_troubleshooting"
     },
     {
       "relation": "contains",
@@ -8349,9 +8479,9 @@
       "source_file": "tests/README.md",
       "source_location": "L133",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_testing_docker_images_with_pytest_testinfra",
-      "target": "tests_readme_writing_new_tests",
-      "confidence_score": 1.0
+      "target": "tests_readme_writing_new_tests"
     },
     {
       "relation": "contains",
@@ -8359,9 +8489,9 @@
       "source_file": "tests/README.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_setup",
-      "target": "tests_readme_installation",
-      "confidence_score": 1.0
+      "target": "tests_readme_installation"
     },
     {
       "relation": "contains",
@@ -8369,9 +8499,9 @@
       "source_file": "tests/README.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_setup",
-      "target": "tests_readme_prerequisites",
-      "confidence_score": 1.0
+      "target": "tests_readme_prerequisites"
     },
     {
       "relation": "contains",
@@ -8379,9 +8509,9 @@
       "source_file": "tests/README.md",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_running_tests_locally",
-      "target": "tests_readme_run_all_tests",
-      "confidence_score": 1.0
+      "target": "tests_readme_run_all_tests"
     },
     {
       "relation": "contains",
@@ -8389,9 +8519,9 @@
       "source_file": "tests/README.md",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_running_tests_locally",
-      "target": "tests_readme_test_sf_bulk",
-      "confidence_score": 1.0
+      "target": "tests_readme_test_sf_bulk"
     },
     {
       "relation": "contains",
@@ -8399,9 +8529,9 @@
       "source_file": "tests/README.md",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_running_tests_locally",
-      "target": "tests_readme_test_sf_ci",
-      "confidence_score": 1.0
+      "target": "tests_readme_test_sf_ci"
     },
     {
       "relation": "contains",
@@ -8409,9 +8539,9 @@
       "source_file": "tests/README.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_running_tests_locally",
-      "target": "tests_readme_test_sf_devcontainer",
-      "confidence_score": 1.0
+      "target": "tests_readme_test_sf_devcontainer"
     },
     {
       "relation": "contains",
@@ -8419,9 +8549,9 @@
       "source_file": "tests/README.md",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_test_structure",
-      "target": "tests_readme_test_sf_bulk_py",
-      "confidence_score": 1.0
+      "target": "tests_readme_test_sf_bulk_py"
     },
     {
       "relation": "contains",
@@ -8429,9 +8559,9 @@
       "source_file": "tests/README.md",
       "source_location": "L70",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_test_structure",
-      "target": "tests_readme_test_sf_ci_py",
-      "confidence_score": 1.0
+      "target": "tests_readme_test_sf_ci_py"
     },
     {
       "relation": "contains",
@@ -8439,9 +8569,9 @@
       "source_file": "tests/README.md",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_test_structure",
-      "target": "tests_readme_test_sf_devcontainer_py",
-      "confidence_score": 1.0
+      "target": "tests_readme_test_sf_devcontainer_py"
     },
     {
       "relation": "contains",
@@ -8449,9 +8579,9 @@
       "source_file": "tests/README.md",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_test_options",
-      "target": "tests_readme_run_specific_test",
-      "confidence_score": 1.0
+      "target": "tests_readme_run_specific_test"
     },
     {
       "relation": "contains",
@@ -8459,9 +8589,9 @@
       "source_file": "tests/README.md",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_test_options",
-      "target": "tests_readme_show_print_statements",
-      "confidence_score": 1.0
+      "target": "tests_readme_show_print_statements"
     },
     {
       "relation": "contains",
@@ -8469,9 +8599,9 @@
       "source_file": "tests/README.md",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_test_options",
-      "target": "tests_readme_show_test_coverage",
-      "confidence_score": 1.0
+      "target": "tests_readme_show_test_coverage"
     },
     {
       "relation": "contains",
@@ -8479,9 +8609,9 @@
       "source_file": "tests/README.md",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_test_options",
-      "target": "tests_readme_stop_on_first_failure",
-      "confidence_score": 1.0
+      "target": "tests_readme_stop_on_first_failure"
     },
     {
       "relation": "contains",
@@ -8489,9 +8619,9 @@
       "source_file": "tests/README.md",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_test_options",
-      "target": "tests_readme_verbose_output",
-      "confidence_score": 1.0
+      "target": "tests_readme_verbose_output"
     },
     {
       "relation": "contains",
@@ -8499,9 +8629,9 @@
       "source_file": "tests/README.md",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_troubleshooting",
-      "target": "tests_readme_permission_errors",
-      "confidence_score": 1.0
+      "target": "tests_readme_permission_errors"
     },
     {
       "relation": "contains",
@@ -8509,9 +8639,9 @@
       "source_file": "tests/README.md",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_troubleshooting",
-      "target": "tests_readme_tests_fail_with_connection_refused",
-      "confidence_score": 1.0
+      "target": "tests_readme_tests_fail_with_connection_refused"
     },
     {
       "relation": "contains",
@@ -8519,11 +8649,11 @@
       "source_file": "tests/README.md",
       "source_location": "L150",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_readme_troubleshooting",
-      "target": "tests_readme_tests_fail_with_image_not_found",
-      "confidence_score": 1.0
+      "target": "tests_readme_tests_fail_with_image_not_found"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "2038c174e9be6cde60182caaceca04374481a33d"
+  "built_at_commit": "f749cba91ff3710753ab5def4b1e3427fb339687"
 }

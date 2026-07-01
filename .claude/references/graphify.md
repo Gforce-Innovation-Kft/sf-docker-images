@@ -35,7 +35,11 @@ lacks the detail you need.
 
 ## Local setup
 
-`scripts/setup.sh` installs the graphify Claude skill (`graphify install --platform claude`) and
-builds the graph (`graphify update .`) if the `graphify` CLI is on PATH. Install it from its
-distribution if missing; the committed `graph.json` still works for `query`/`explain`/`path`
-without a local rebuild.
+`scripts/setup.sh` installs the graphify Claude skill (`graphify install --platform claude`),
+builds the graph (`graphify update .`), and activates the git hooks (`core.hooksPath` →
+`.github/hooks`) if the `graphify` CLI is on PATH. Install it from its distribution if missing;
+the committed `graph.json` still works for `query`/`explain`/`path` without a local rebuild.
+
+The `.github/hooks/pre-commit` hook re-runs `graphify update .` on every commit and re-stages the
+tracked graph files, so `graphify-out/graph.json` never drifts from the code. It is **non-blocking**:
+if `graphify` is missing or errors, the commit still proceeds.

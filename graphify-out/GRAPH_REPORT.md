@@ -1,16 +1,16 @@
 # Graph Report - sf-docker-images  (2026-07-01)
 
 ## Corpus Check
-- 32 files · ~23,039 words
+- 33 files · ~23,831 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 438 nodes · 411 edges · 32 communities (31 shown, 1 thin omitted)
+- 445 nodes · 417 edges · 33 communities (32 shown, 1 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2038c174`
+- Built from commit: `f749cba9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -47,6 +47,7 @@
 - [[_COMMUNITY_Community 29|Community 29]]
 - [[_COMMUNITY_Community 30|Community 30]]
 - [[_COMMUNITY_Community 31|Community 31]]
+- [[_COMMUNITY_Community 32|Community 32]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `GitHub Actions CI/CD Best Practices` - 10 edges
@@ -66,15 +67,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (32 total, 1 thin omitted)
+## Communities (33 total, 1 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.04
 Nodes (47): host(), Pytest-testinfra tests for sf-devcontainer Docker image Run with: pytest tests/t, Test that jq is installed, Test that xmlstarlet is installed, Test that zsh is installed, Test that Oh My Zsh is installed, Test that Powerlevel10k theme is installed, Test that required Zsh plugins are installed (+39 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.05
-Nodes (40): **1. Caching GitHub Actions**, **1. Secret Management**, **1. Staging Environment Deployment**, **1. Unit Tests**, **1. Workflow Not Triggering or Jobs/Steps Skipping Unexpectedly**, **1. Workflow Structure (`.github/workflows/*.yml`)**, **2. Integration Tests**, **2. Jobs** (+32 more)
+Cohesion: 0.06
+Nodes (32): **1. Caching GitHub Actions**, **1. Staging Environment Deployment**, **1. Unit Tests**, **1. Workflow Not Triggering or Jobs/Steps Skipping Unexpectedly**, **1. Workflow Structure (`.github/workflows/*.yml`)**, **2. Integration Tests**, **2. Jobs**, **2. Matrix Strategies for Parallelization** (+24 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.05
@@ -85,8 +86,8 @@ Cohesion: 0.06
 Nodes (33): host(), Pytest-testinfra tests for sf-ci Docker image Run with: pytest tests/test_sf_ci., Test that jq is installed, Test that xmlstarlet is installed, SF CLI data dirs are pinned to /opt/sf-* (XDG_DATA_HOME/XDG_CONFIG_HOME) and, Test that CI environment variables are set, Build the Docker image, start a container, and return a testinfra host, Test that /workspace directory exists (+25 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.07
-Nodes (29): **1. Immutability**, **1. Large Image Size**, **1. Non-Root User**, **1. Resource Limits**, **2. Logging & Monitoring**, **2. Minimal Base Images**, **2. Portability**, **2. Slow Builds** (+21 more)
+Cohesion: 0.05
+Nodes (38): **1. Immutability**, **1. Large Image Size**, **1. Multi-Stage Builds (The Golden Rule)**, **1. Non-Root User**, **1. Resource Limits**, **2. Choose the Right Base Image**, **2. Logging & Monitoring**, **2. Minimal Base Images** (+30 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.07
@@ -109,16 +110,16 @@ Cohesion: 0.13
 Nodes (14): AI-Assisted Development, Contributing, Design principles, Development, License, Quick start, Releasing, Salesforce Docker Images (+6 more)
 
 ### Community 10 - "Community 10"
-Cohesion: 0.14
-Nodes (12): AI Pair-Development Layer, Change Rules, CI/CD Workflows, `.github/workflows/build-and-push.yml` -- Build and Push, Images, Key Commands, Project Overview, Release Process (+4 more)
+Cohesion: 0.13
+Nodes (13): AI Pair-Development Layer, Change Rules, CI/CD Workflows, `.github/workflows/build-and-push.yml` -- Build and Push, Images, Key Commands, Knowledge Graph (graphify), Project Overview (+5 more)
 
 ### Community 11 - "Community 11"
 Cohesion: 0.15
 Nodes (12): 1. Correction, 2. Warning, 3. Temporary Ban, 4. Permanent Ban, Attribution, Contributor Covenant Code of Conduct, Enforcement, Enforcement Guidelines (+4 more)
 
 ### Community 12 - "Community 12"
-Cohesion: 0.22
-Nodes (9): **1. Multi-Stage Builds (The Golden Rule)**, **2. Choose the Right Base Image**, **3. Optimize Image Layers**, **4. Use `.dockerignore` Effectively**, **5. Minimize `COPY` Instructions**, **6. Define Default User and Port**, **7. Use `CMD` and `ENTRYPOINT` Correctly**, **8. Environment Variables for Configuration** (+1 more)
+Cohesion: 0.25
+Nodes (8): **1. Secret Management**, **2. OpenID Connect (OIDC) for Cloud Authentication**, **3. Least Privilege for `GITHUB_TOKEN`**, **4. Dependency Review and Software Composition Analysis (SCA)**, **5. Static Application Security Testing (SAST)**, **6. Secret Scanning and Credential Leak Prevention**, **7. Immutable Infrastructure & Image Signing**, Security Best Practices in GitHub Actions
 
 ### Community 13 - "Community 13"
 Cohesion: 0.22
@@ -192,25 +193,29 @@ Nodes (3): permissions, allow, $schema
 Cohesion: 0.50
 Nodes (3): Media, Social preview, Which image should I use?
 
+### Community 32 - "Community 32"
+Cohesion: 0.33
+Nodes (5): graphify — knowledge graph for token-efficient navigation, Keeping it current, Local setup, What is committed vs ignored, When to use it (before reaching for grep / full-file reads)
+
 ## Knowledge Gaps
-- **223 isolated node(s):** `$schema`, `allow`, `name`, `image`, `workspaceFolder` (+218 more)
+- **228 isolated node(s):** `$schema`, `allow`, `name`, `image`, `workspaceFolder` (+223 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Containerization & Docker Best Practices` connect `Community 4` to `Community 12`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **Why does `GitHub Actions CI/CD Best Practices` connect `Community 1` to `Community 12`?**
+  _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **What connects `$schema`, `allow`, `name` to the rest of the system?**
-  _281 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _286 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.041666666666666664 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.04878048780487805 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.05263157894736842 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
 - **Should `Community 4` be split into smaller, more focused modules?**
-  _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
