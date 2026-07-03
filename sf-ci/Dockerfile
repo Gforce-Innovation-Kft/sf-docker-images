@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 
 # Metadata labels
-LABEL maintainer="GForce Innovation"
+LABEL org.opencontainers.image.authors="GForce Innovation"
 LABEL org.opencontainers.image.title="Salesforce CI"
 LABEL org.opencontainers.image.description="Lightweight Salesforce CI/CD image with SF CLI, Node.js, and Java"
 LABEL org.opencontainers.image.source="https://github.com/gforceinnovation/sf-docker-images"
@@ -11,9 +11,8 @@ LABEL org.opencontainers.image.base.name="ubuntu:22.04"
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install all system packages, Node.js, Java, and SF CLI in optimized layers
-# Note: Using --allow-unauthenticated temporarily to work around ARM64 GPG signature issues
-RUN apt-get update --allow-insecure-repositories || apt-get update \
-    && apt-get -y install --no-install-recommends --allow-unauthenticated \
+RUN apt-get update \
+    && apt-get -y install --no-install-recommends \
     ca-certificates \
     curl \
     git \
