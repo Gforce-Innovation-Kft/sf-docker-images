@@ -1,7 +1,7 @@
 FROM node:24-alpine
 
 # Metadata labels
-LABEL maintainer="GForce Innovation"
+LABEL org.opencontainers.image.authors="GForce Innovation"
 LABEL org.opencontainers.image.title="Salesforce Bulk Runner"
 LABEL org.opencontainers.image.description="Lightweight SF CLI image for bulk org operations. Alpine-based, no Java."
 LABEL org.opencontainers.image.source="https://github.com/gforceinnovation/sf-docker-images"

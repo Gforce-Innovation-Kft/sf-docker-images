@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 
 # Metadata labels
-LABEL maintainer="GForce Innovation"
+LABEL org.opencontainers.image.authors="GForce Innovation"
 LABEL org.opencontainers.image.title="Salesforce DevContainer"
 LABEL org.opencontainers.image.description="Full-featured Salesforce development environment with SF CLI, Node.js, Java, and Zsh"
 LABEL org.opencontainers.image.source="https://github.com/gforceinnovation/sf-docker-images"
@@ -78,25 +78,17 @@ RUN echo y | sf plugins install code-analyzer && \
     echo y | sf plugins install sfdx-git-delta && \
     echo y | sf plugins install sfdx-browserforce-plugin
 
-# Install Oh My Zsh
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-
-# Install Powerlevel10k theme
-RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
-
-# Install Zsh plugins
-RUN git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" \
+# Install Oh My Zsh, Powerlevel10k theme, and Zsh plugins in one layer
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended \
+    && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" \
+    && git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" \
     && git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" \
     && git clone --depth=1 https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-completions"
 
-# Copy Zsh configuration files
-COPY .zshrc /home/vscode/.zshrc
-COPY .p10k.zsh /home/vscode/.p10k.zsh
-
-# Fix ownership
-USER root
-RUN chown -R vscode:vscode /home/vscode
-USER vscode
+# Copy Zsh configuration files owned by vscode directly — avoids a recursive
+# root chown layer that would duplicate all of /home/vscode in the image
+COPY --chown=vscode:vscode .zshrc /home/vscode/.zshrc
+COPY --chown=vscode:vscode .p10k.zsh /home/vscode/.p10k.zsh
 
 # Create directories for Salesforce CLI
 RUN mkdir -p /home/vscode/.sfdx /home/vscode/.sf /home/vscode/.config

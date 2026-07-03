@@ -33,13 +33,14 @@ pytest-testinfra test in `tests/test_sf_*.py` (see
 - **No Java.** **Plugins:** `sfdx-git-delta`. **Tools:** bash, curl, git, jq, unzip, libc6-compat.
 - **User:** `ci` (UID 1000, `/bin/bash`) created after `deluser node` (base ships `node` at UID 1000).
   **Runtime user: root.** XDG dirs pinned like sf-ci.
-- **HARD LIMIT:** image must stay **under 500 MB** uncompressed. `tests/test_sf_bulk.py`
-  fails if exceeded. No Java, no editors, no interactive tooling.
+- **HARD LIMIT:** image must stay **under 600 MB** uncompressed (raised from 500 MB for the
+  Node 24-alpine base). `tests/test_sf_bulk.py` fails if exceeded. No Java, no editors,
+  no interactive tooling.
 
 ## Size budgets
 
 | Image | Budget |
 |-------|--------|
-| sf-bulk | **< 500 MB** (hard, asserted in `tests/test_sf_bulk.py`) |
+| sf-bulk | **< 600 MB** (hard, asserted in `tests/test_sf_bulk.py`) |
 | sf-ci | medium (Ubuntu + Java + SF CLI) — keep minimal |
 | sf-devcontainer | largest (full dev env) — no hard cap |
