@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-07-03
+
+### Fixed
+- `sf-ci`: removed the `--allow-unauthenticated` / `--allow-insecure-repositories` apt
+  workaround — GPG signature verification passes cleanly on arm64 again
+
+### Changed
+- `sf-devcontainer`: config files are now copied with `COPY --chown` instead of a recursive
+  root `chown -R /home/vscode`, and the zsh setup (Oh My Zsh, Powerlevel10k, plugins) is
+  consolidated into one layer — image shrinks from ~2.67 GB to ~2.01 GB
+- All images: deprecated `LABEL maintainer` replaced with `org.opencontainers.image.authors`
+- Docs: `CLAUDE.md` and `.claude/references/image-conventions.md` now record the 600 MB
+  sf-bulk budget (raised in 1.6.0) instead of the stale 500 MB figure
+
+### Added
+- Ecosystem skills vendored via the skills CLI into `.agents/skills/` (pinned in
+  `skills-lock.json`): `docker-expert`, `multi-stage-dockerfile`, `devcontainer-setup`
+  (Trail of Bits), `platform-docs-get` (Salesforce official)
+
 ## [1.6.0] - 2026-07-01
 
 ### Added
