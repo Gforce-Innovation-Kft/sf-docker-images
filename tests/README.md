@@ -89,7 +89,7 @@ Tests for the ultra-lightweight Alpine bulk runner:
 - ✅ CI environment variables
 - ✅ Runs as root at runtime
 - ✅ Java NOT installed (intentionally lightweight)
-- ✅ Image smaller than 500MB
+- ✅ Image smaller than 600MB
 
 ## Test Options
 

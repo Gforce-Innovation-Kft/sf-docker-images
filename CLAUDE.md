@@ -60,8 +60,8 @@ docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf
 ## CI/CD Workflows
 
 ### `.github/workflows/build-and-push.yml` -- Build and Push
-- **Triggers:** Push to `main`, PRs to `main`, and version tags (`v*.*.*`).
-- **Jobs:** dependency-review -> build (matrix) -> test (pytest-testinfra + Trivy) -> push (Docker Hub on version tags only) -> release (GitHub Release on version tags only).
+- **Triggers:** PRs to `main` and version tags (`v*.*.*`). Pushes to `main` do not build.
+- **Jobs:** build (matrix) -> test (pytest-testinfra + Trivy) -> push (Docker Hub on version tags only, with Docker Hub README sync) -> release (GitHub Release on version tags only).
 - Pushes with semver tags (e.g., `1.2.3`, `1.2`, `1`, `latest`). Generates SBOM and provenance attestations.
 - Registry is **Docker Hub only** (`gforceinnovation/*`).
 

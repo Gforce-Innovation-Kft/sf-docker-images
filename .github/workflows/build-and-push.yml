@@ -16,7 +16,6 @@ concurrency:
 
 permissions:
   contents: read
-  packages: write
   security-events: write
 
 env:
@@ -144,17 +143,19 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: read
-      packages: write
 
     strategy:
       matrix:
         image:
           - name: sf-devcontainer
             context: ./sf-devcontainer
+            description: Full-featured Salesforce devcontainer — SF CLI v2, Node 24, Java 17, zsh
           - name: sf-ci
             context: ./sf-ci
+            description: Minimal Salesforce CI/CD runner — SF CLI v2, Node 24, Java 17
           - name: sf-bulk
             context: ./sf-bulk
+            description: Ultra-light Alpine SF CLI image for bulk org operations — no Java
 
     steps:
       - name: Checkout code
@@ -201,6 +202,17 @@ jobs:
           cache-to: type=gha,mode=max
           sbom: true
           provenance: true
+
+      # Requires DOCKERHUB_TOKEN to have read/write scope (read-only tokens cannot
+      # update repository descriptions).
+      - name: Sync README to Docker Hub
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.image.name }}
+          short-description: ${{ matrix.image.description }}
+          readme-filepath: ${{ matrix.image.context }}/README.md
 
   release:
     name: Create GitHub Release
