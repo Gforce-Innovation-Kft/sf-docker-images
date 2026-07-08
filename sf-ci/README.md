@@ -8,6 +8,19 @@ Part of [**sf-docker-images**](../README.md). A lean `ubuntu:22.04` runner with 
 and the Salesforce CLI — nothing else. Kept deliberately small (~840 MB); the test suite fails
 the build if editors or interactive shells sneak in.
 
+## Pull
+
+```bash
+docker pull gforceinnovation/sf-ci:1
+```
+
+```dockerfile
+FROM gforceinnovation/sf-ci:1.6.1
+```
+
+Multi-arch: `linux/amd64` + `linux/arm64`. Tags follow the repo-wide
+[semver tag matrix](../README.md#supported-tags) (`1.6.1` immutable; `1.6`, `1`, `latest` moving).
+
 ## What's inside
 
 - **Node.js 24.x** (LTS) and **Java 17** (OpenJDK) — for Apex compile and `code-analyzer`.

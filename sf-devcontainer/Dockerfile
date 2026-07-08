@@ -4,7 +4,7 @@ FROM ubuntu:22.04
 LABEL org.opencontainers.image.authors="GForce Innovation"
 LABEL org.opencontainers.image.title="Salesforce DevContainer"
 LABEL org.opencontainers.image.description="Full-featured Salesforce development environment with SF CLI, Node.js, Java, and Zsh"
-LABEL org.opencontainers.image.source="https://github.com/gforceinnovation/sf-docker-images"
+LABEL org.opencontainers.image.source="https://github.com/Gforce-Innovation-Kft/sf-docker-images"
 LABEL org.opencontainers.image.base.name="ubuntu:22.04"
 
 # Avoid warnings by switching to noninteractive

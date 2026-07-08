@@ -30,7 +30,6 @@ Security is enforced in CI on every build:
 - **Trivy** scans each image; results are uploaded to GitHub code scanning (Security tab).
 - **SBOM** and **provenance attestations** are generated on push, so you can verify image
   contents and build origin.
-- **Dependency review** runs on pull requests.
 
 Because the base images and toolchains are pinned, rebuilding a release picks up upstream
 security patches deterministically. If a scan surfaces a fixable CVE, we cut a patch release.

@@ -46,7 +46,7 @@ and plain `assert`. Keep it aligned with the Dockerfile/README change you made (
 
 ## Interpreting failures
 
-- **sf-bulk size assertion failed** — the image grew past 500 MB; slim the layers, don't
+- **sf-bulk size assertion failed** — the image grew past 600 MB; slim the layers, don't
   raise the cap without a decision.
 - **`test_no_interactive_tools` / `test_minimal_footprint` (sf-ci)** — an editor/zsh leaked
   in; remove it.

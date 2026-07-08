@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Explicit `docker pull` / `FROM` snippets and tag/architecture sections in the root and
+  per-image READMEs
+- `sf-bulk/.dockerignore` (previously missing; sf-ci and sf-devcontainer already had one)
+- CI: Docker Hub README/description sync on release (`peter-evans/dockerhub-description`)
+
+### Changed
+- GitHub repo metadata: description, topics, and Docker Hub homepage link set
+- CI: dropped the unused `packages: write` permission (images push to Docker Hub, not GHCR)
+
+### Fixed
+- All Dockerfiles: `org.opencontainers.image.source` now points to the real repo org
+  (`Gforce-Innovation-Kft`, was `gforceinnovation`)
+- Docs: remaining stale "under 500 MB" sf-bulk claims corrected to the 600 MB budget
+  (root/sf-bulk READMEs, CONTRIBUTING, PR template, tests/README, repo skills, AGENTS.md)
+- Docs: removed stale "dependency review runs on PRs" claims (README, SECURITY.md) and the
+  stale "push to main builds" trigger description (CLAUDE.md, references)
+- CHANGELOG: added the missing `[1.6.1]` compare link; `[Unreleased]` now compares from
+  `v1.6.1`
+
 ## [1.6.1] - 2026-07-03
 
 ### Fixed
@@ -104,7 +124,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-platform build support (`linux/amd64` + `linux/arm64`)
 - GitHub Actions workflow for building and pushing to Docker Hub
 
-[Unreleased]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.3.0...v1.4.0

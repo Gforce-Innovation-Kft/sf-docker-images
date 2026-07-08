@@ -5,7 +5,20 @@
 [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
 Part of [**sf-docker-images**](../README.md). An Alpine-based image for bulk Salesforce org
-operations. No Java, minimal footprint — kept **under 500 MB** uncompressed (~410 MB).
+operations. No Java, minimal footprint — kept **under 600 MB** uncompressed.
+
+## Pull
+
+```bash
+docker pull gforceinnovation/sf-bulk:1
+```
+
+```dockerfile
+FROM gforceinnovation/sf-bulk:1.6.1
+```
+
+Multi-arch: `linux/amd64` + `linux/arm64`. Tags follow the repo-wide
+[semver tag matrix](../README.md#supported-tags) (`1.6.1` immutable; `1.6`, `1`, `latest` moving).
 
 ## Features
 
@@ -51,14 +64,14 @@ docker run -v "$(pwd):/workspace" gforceinnovation/sf-bulk:latest sf org list
 
 ## Image size
 
-Kept under 500 MB by design:
+Kept under 600 MB by design:
 
 - Alpine base instead of Ubuntu
 - **No Java** (no JRE/JDK)
 - Only the `sfdx-git-delta` plugin
 - No editors or interactive tooling
 
-`tests/test_sf_bulk.py` fails the build if the image exceeds 500 MB or if Java is present.
+`tests/test_sf_bulk.py` fails the build if the image exceeds 600 MB or if Java is present.
 
 ## Building locally
 

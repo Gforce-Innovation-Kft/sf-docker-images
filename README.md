@@ -5,8 +5,9 @@
 [![CI](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml)
 [![Release](https://img.shields.io/github/v/release/Gforce-Innovation-Kft/sf-docker-images?sort=semver)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/releases)
 [![License](https://img.shields.io/github/license/Gforce-Innovation-Kft/sf-docker-images)](LICENSE)
+[![sf-ci size](https://img.shields.io/docker/image-size/gforceinnovation/sf-ci/latest?label=sf-ci)](https://hub.docker.com/r/gforceinnovation/sf-ci)
 [![sf-devcontainer size](https://img.shields.io/docker/image-size/gforceinnovation/sf-devcontainer/latest?label=sf-devcontainer)](https://hub.docker.com/r/gforceinnovation/sf-devcontainer)
-[![sf-devcontainer pulls](https://img.shields.io/docker/pulls/gforceinnovation/sf-devcontainer?label=pulls)](https://hub.docker.com/r/gforceinnovation/sf-devcontainer)
+[![sf-bulk size](https://img.shields.io/docker/image-size/gforceinnovation/sf-bulk/latest?label=sf-bulk)](https://hub.docker.com/r/gforceinnovation/sf-bulk)
 [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
 Three purpose-built images for Salesforce work — a minimal CI runner, a full VS Code
@@ -20,11 +21,27 @@ build.
 |-------|------|---------|---------------------|--------------|
 | [`sf-ci`](sf-ci/README.md) | `ubuntu:22.04` | Minimal CI/CD runner (Node 24 + Java 17 + SF CLI) | ~840 MB | you run deploys, Apex tests, or delta packaging in a pipeline |
 | [`sf-devcontainer`](sf-devcontainer/README.md) | `ubuntu:22.04` | Full VS Code dev environment (zsh, editors, extra plugins) | ~2.6 GB | you develop Salesforce locally in VS Code / Dev Containers |
-| [`sf-bulk`](sf-bulk/README.md) | `node:24-alpine` | Ultra-light bulk ops, **no Java** | ~410 MB (< 500 MB) | you do high-volume `sf data` / Bulk API work and don't need Apex |
+| [`sf-bulk`](sf-bulk/README.md) | `node:24-alpine` | Ultra-light bulk ops, **no Java** | ~435 MB (< 600 MB) | you do high-volume `sf data` / Bulk API work and don't need Apex |
 
-> Live pull/size badges are shown for `sf-devcontainer` (published). `sf-ci` and `sf-bulk`
-> sizes above are measured from the current build; their Docker Hub badges will be added once
-> those repositories are published. See [the image decision guide](docs/README.md).
+All three images ship Node.js 24 and [Salesforce CLI v2](https://developer.salesforce.com/tools/salesforcecli)
+(`@salesforce/cli@2.x`, latest at build time) with the `sfdx-git-delta` plugin. See
+[the image decision guide](docs/README.md).
+
+### Pull the images
+
+All three are published to Docker Hub under [`gforceinnovation`](https://hub.docker.com/u/gforceinnovation):
+
+```bash
+docker pull gforceinnovation/sf-ci:1            # minimal CI runner
+docker pull gforceinnovation/sf-devcontainer:1  # VS Code devcontainer
+docker pull gforceinnovation/sf-bulk:1          # Alpine bulk-ops image
+```
+
+Or extend one in your own Dockerfile:
+
+```dockerfile
+FROM gforceinnovation/sf-ci:1.6.1
+```
 
 ```mermaid
 flowchart TD
@@ -101,14 +118,13 @@ Every build in CI:
   to GitHub Security (code scanning).
 - **Generates an SBOM** and **provenance attestations** on push, so consumers can verify how and
   from what each image was built.
-- Runs a **dependency review** on pull requests.
 
 Found a vulnerability? See [`SECURITY.md`](SECURITY.md).
 
 ## Design principles
 
 - **Thin by default** — `sf-ci` stays minimal (no editors, no zsh); tests fail the build if
-  forbidden tools appear. `sf-bulk` is kept under 500 MB with no Java.
+  forbidden tools appear. `sf-bulk` is kept under 600 MB with no Java.
 - **Reproducible** — base images and toolchains are pinned; immutable version tags are published
   alongside moving ones.
 - **Multi-arch** — `linux/amd64` and `linux/arm64` from a single build.

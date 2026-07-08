@@ -36,7 +36,7 @@ Respect each image's role and budget:
 |-------|------|
 | `sf-ci` | Stay minimal. No editors, no zsh, no interactive tools (tests assert vim/nano/zsh are absent). |
 | `sf-devcontainer` | May be feature-rich; optimise for developer experience. |
-| `sf-bulk` | Stay **under 500 MB**, **no Java** (both enforced by tests). |
+| `sf-bulk` | Stay **under 600 MB**, **no Java** (both enforced by tests). |
 
 Dockerfile conventions:
 
