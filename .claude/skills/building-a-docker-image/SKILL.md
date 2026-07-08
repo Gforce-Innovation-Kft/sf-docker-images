@@ -33,7 +33,7 @@ For any tool/plugin/base change to `sf-ci`, `sf-devcontainer`, or `sf-bulk`:
 - **sf-ci** — must stay thin. Never add editors (vim/nano), zsh, or interactive/UI tools;
   tests assert their absence.
 - **sf-devcontainer** — may be feature-rich; keep the `vscode` user + zsh setup intact.
-- **sf-bulk** — **hard < 500 MB, no Java.** After changes, confirm size with
+- **sf-bulk** — **hard < 600 MB, no Java.** After changes, confirm size with
   `docker image inspect sf-bulk:test --format '{{.Size}}'`.
 
 ## New image checklist

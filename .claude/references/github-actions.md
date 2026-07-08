@@ -5,9 +5,9 @@ Short repo-specific rules. Full rationale:
 
 ## The one workflow: `.github/workflows/build-and-push.yml`
 
-- **Triggers:** push to `main`, PRs to `main`, and version tags `v*.*.*`.
-- **Job graph:** `dependency-review` (PR only) → `build` (matrix: sf-ci, sf-devcontainer,
-  sf-bulk) → `test` (pytest-testinfra + Trivy) → `push` (tags only) → `release` (tags only).
+- **Triggers:** PRs to `main` and version tags `v*.*.*` (pushes to `main` do not build).
+- **Job graph:** `build` (matrix: sf-ci, sf-devcontainer, sf-bulk) → `test`
+  (pytest-testinfra + Trivy) → `push` (tags only) → `release` (tags only).
 - **PRs build + test but never push or release.** Push/release run **only** on `v*.*.*` tags.
 
 ## Rules when editing the workflow

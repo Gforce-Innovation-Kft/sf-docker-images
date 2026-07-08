@@ -24,5 +24,5 @@
 - [ ] Tests pass locally (`pytest tests/ -v`)
 - [ ] Updated the image's `Dockerfile`, `README.md`, and test file together (if tools changed)
 - [ ] Updated `CHANGELOG.md` under `[Unreleased]`
-- [ ] Size budget respected (sf-ci minimal; sf-bulk < 500 MB, no Java)
+- [ ] Size budget respected (sf-ci minimal; sf-bulk < 600 MB, no Java)
 - [ ] Commits follow Conventional Commits

@@ -4,7 +4,7 @@ FROM node:24-alpine
 LABEL org.opencontainers.image.authors="GForce Innovation"
 LABEL org.opencontainers.image.title="Salesforce Bulk Runner"
 LABEL org.opencontainers.image.description="Lightweight SF CLI image for bulk org operations. Alpine-based, no Java."
-LABEL org.opencontainers.image.source="https://github.com/gforceinnovation/sf-docker-images"
+LABEL org.opencontainers.image.source="https://github.com/Gforce-Innovation-Kft/sf-docker-images"
 LABEL org.opencontainers.image.base.name="node:24-alpine"
 
 # libc6-compat: glibc compatibility layer for musl Alpine.

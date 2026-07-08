@@ -10,6 +10,19 @@ Part of [**sf-docker-images**](../README.md). An `ubuntu:22.04` image with every
 Salesforce developer needs day to day — a productive zsh shell, editors, and extra SF CLI
 plugins on top of the [`sf-ci`](../sf-ci/README.md) toolchain.
 
+## Pull
+
+```bash
+docker pull gforceinnovation/sf-devcontainer:1
+```
+
+```dockerfile
+FROM gforceinnovation/sf-devcontainer:1.6.1
+```
+
+Multi-arch: `linux/amd64` + `linux/arm64`. Tags follow the repo-wide
+[semver tag matrix](../README.md#supported-tags) (`1.6.1` immutable; `1.6`, `1`, `latest` moving).
+
 ## What's inside
 
 - **Node.js 24.x** (LTS) and **Java 17** (OpenJDK).

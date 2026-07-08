@@ -7,7 +7,7 @@ This file gives concise, high-signal guidance for AI coding assistants working i
 - Images:
   - `sf-devcontainer`: full-featured dev environment (interactive tools, Zsh, plugins).
   - `sf-ci`: lightweight CI image (minimal tools, non-root user, root runtime).
-  - `sf-bulk`: ultralight Alpine image (no Java, must stay under 500MB).
+  - `sf-bulk`: ultralight Alpine image (no Java, must stay under 600MB).
 
 ## Repo Layout
 - `sf-devcontainer/Dockerfile` + `sf-devcontainer/README.md`
@@ -34,7 +34,7 @@ This file gives concise, high-signal guidance for AI coding assistants working i
   - Update the matching image README.
   - Add/adjust tests in `tests/test_sf_*.py`.
   - Update root `README.md` if user-facing features changed.
-- `sf-bulk` must stay under 500MB with no Java.
+- `sf-bulk` must stay under 600MB with no Java.
 - Keep the `vscode`/`ci` users (UID 1000) and existing env vars; `sf-ci`/`sf-bulk` run as root at runtime.
 - Clean apt caches for small images (see `sf-ci/Dockerfile` pattern).
 
