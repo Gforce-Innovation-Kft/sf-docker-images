@@ -63,6 +63,58 @@ jobs:
         run: sf project deploy start
 ```
 
+### GitHub Actions — delta validation on pull requests
+
+The bundled `sfdx-git-delta` plugin turns a git diff into a deploy manifest, so PRs
+validate only what changed:
+
+```yaml
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    container: gforceinnovation/sf-ci:latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # sfdx-git-delta diffs git history
+      - name: Authenticate to Salesforce
+        run: |
+          echo "${{ secrets.SF_AUTH_URL }}" > authfile
+          sf org login sfdx-url --sfdx-url-file authfile --set-default
+      - name: Generate delta package
+        run: |
+          mkdir -p delta
+          sf sgd source delta --from "origin/${{ github.base_ref }}" --to HEAD --output-dir delta
+      - name: Validate delta (check-only)
+        run: |
+          sf project deploy start --manifest delta/package/package.xml \
+            --dry-run --test-level RunLocalTests
+```
+
+### GitHub Actions — matrix over orgs
+
+One job definition, one environment per org (each GitHub Environment holds its own
+`SF_AUTH_URL` secret — add required reviewers on the environment to gate promotion):
+
+```yaml
+jobs:
+  deploy:
+    strategy:
+      matrix:
+        org: [qa, uat]
+    runs-on: ubuntu-latest
+    container: gforceinnovation/sf-ci:latest
+    environment: ${{ matrix.org }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Authenticate to ${{ matrix.org }}
+        run: |
+          echo "${{ secrets.SF_AUTH_URL }}" > authfile
+          sf org login sfdx-url --sfdx-url-file authfile --set-default
+      - name: Deploy
+        run: sf project deploy start
+```
+
 ### GitLab CI
 
 ```yaml
