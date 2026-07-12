@@ -12,10 +12,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   per-image READMEs
 - `sf-bulk/.dockerignore` (previously missing; sf-ci and sf-devcontainer already had one)
 - CI: Docker Hub README/description sync on release (`peter-evans/dockerhub-description`)
+- CI: **keyless cosign signing** (GitHub OIDC) of every pushed image; verification commands
+  documented in the root and per-image READMEs
+- Release notes now include per-image tool-version tables (Node, npm, SF CLI, user plugins)
+  read from the built images
 
 ### Changed
 - GitHub repo metadata: description, topics, and Docker Hub homepage link set
 - CI: dropped the unused `packages: write` permission (images push to Docker Hub, not GHCR)
+- CI: the per-image build → test → push pipeline moved to the shared
+  `docker-build-test-push` reusable workflow in `shared-github-actions`;
+  `build-and-push.yml` is now a thin matrix caller with a local release job
+- **Docker tag scheme: releases publish `X.Y.Z` + `latest` only** — rolling `:1` / `:1.6`
+  tags are no longer pushed (existing ones stay frozen at 1.6.1); pin an exact version or
+  track `latest`
 
 ### Security
 - All Dockerfiles: base images now pinned by tag **plus multi-arch index digest**

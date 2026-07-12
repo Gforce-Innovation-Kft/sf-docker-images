@@ -11,15 +11,28 @@ the build if editors or interactive shells sneak in.
 ## Pull
 
 ```bash
-docker pull gforceinnovation/sf-ci:1
+docker pull gforceinnovation/sf-ci:latest
 ```
 
 ```dockerfile
 FROM gforceinnovation/sf-ci:1.6.1
 ```
 
-Multi-arch: `linux/amd64` + `linux/arm64`. Tags follow the repo-wide
-[semver tag matrix](../README.md#supported-tags) (`1.6.1` immutable; `1.6`, `1`, `latest` moving).
+Multi-arch: `linux/amd64` + `linux/arm64`. Two tags per release
+(see [supported tags](../README.md#supported-tags)): the exact version (`1.6.1`, immutable —
+pin this in production) and `latest` (moving).
+
+### Verify the signature
+
+Every published image is signed with cosign (keyless, GitHub OIDC):
+
+```bash
+cosign verify \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-identity-regexp \
+    '^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$' \
+  gforceinnovation/sf-ci:latest
+```
 
 ## What's inside
 
@@ -39,7 +52,7 @@ Multi-arch: `linux/amd64` + `linux/arm64`. Tags follow the repo-wide
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    container: gforceinnovation/sf-ci:1
+    container: gforceinnovation/sf-ci:latest
     steps:
       - uses: actions/checkout@v4
       - name: Authenticate to Salesforce
@@ -54,7 +67,7 @@ jobs:
 
 ```yaml
 deploy:
-  image: gforceinnovation/sf-ci:1
+  image: gforceinnovation/sf-ci:latest
   script:
     - echo "$SF_AUTH_URL" > authfile
     - sf org login sfdx-url --sfdx-url-file authfile
