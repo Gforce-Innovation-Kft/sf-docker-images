@@ -19,11 +19,11 @@ docker pull gforceinnovation/sf-bulk:latest
 ```
 
 ```dockerfile
-FROM gforceinnovation/sf-bulk:1.6.1
+FROM gforceinnovation/sf-bulk:1.7.0
 ```
 
 Multi-arch: `linux/amd64` + `linux/arm64`. Two tags per release
-(see [supported tags](../README.md#supported-tags)): the exact version (`1.6.1`, immutable —
+(see [supported tags](../README.md#supported-tags)): the exact version (`1.7.0`, immutable —
 pin this in production) and `latest` (moving).
 
 ### Verify the signature

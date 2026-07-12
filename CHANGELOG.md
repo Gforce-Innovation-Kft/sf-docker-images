@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-07-12
+
 ### Added
 - Explicit `docker pull` / `FROM` snippets and tag/architecture sections in the root and
   per-image READMEs
@@ -139,7 +141,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-platform build support (`linux/amd64` + `linux/arm64`)
 - GitHub Actions workflow for building and pushing to Docker Hub
 
-[Unreleased]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.6.1...HEAD
+[Unreleased]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/Gforce-Innovation-Kft/sf-docker-images/compare/v1.4.0...v1.5.0
