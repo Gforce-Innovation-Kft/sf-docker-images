@@ -13,15 +13,28 @@ plugins on top of the [`sf-ci`](../sf-ci/README.md) toolchain.
 ## Pull
 
 ```bash
-docker pull gforceinnovation/sf-devcontainer:1
+docker pull gforceinnovation/sf-devcontainer:latest
 ```
 
 ```dockerfile
 FROM gforceinnovation/sf-devcontainer:1.6.1
 ```
 
-Multi-arch: `linux/amd64` + `linux/arm64`. Tags follow the repo-wide
-[semver tag matrix](../README.md#supported-tags) (`1.6.1` immutable; `1.6`, `1`, `latest` moving).
+Multi-arch: `linux/amd64` + `linux/arm64`. Two tags per release
+(see [supported tags](../README.md#supported-tags)): the exact version (`1.6.1`, immutable —
+pin this in production) and `latest` (moving).
+
+### Verify the signature
+
+Every published image is signed with cosign (keyless, GitHub OIDC):
+
+```bash
+cosign verify \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-identity-regexp \
+    '^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$' \
+  gforceinnovation/sf-devcontainer:latest
+```
 
 ## What's inside
 

@@ -59,11 +59,18 @@ docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf
 
 ## CI/CD Workflows
 
-### `.github/workflows/build-and-push.yml` -- Build and Push
+### `.github/workflows/build-and-push.yml` -- Build and Push (thin caller)
 - **Triggers:** PRs to `main` and version tags (`v*.*.*`). Pushes to `main` do not build.
-- **Jobs:** build (matrix) -> test (pytest-testinfra + Trivy) -> push (Docker Hub on version tags only, with Docker Hub README sync) -> release (GitHub Release on version tags only).
-- Pushes with semver tags (e.g., `1.2.3`, `1.2`, `1`, `latest`). Generates SBOM and provenance attestations.
+- The per-image **build -> test -> push** pipeline lives in the shared reusable workflow
+  `Gforce-Innovation-Kft/shared-github-actions/.github/workflows/docker-build-test-push.yml@v1`;
+  this repo's workflow fans out over the three images with a matrix and keeps only the
+  repo-specific `release` job (CHANGELOG section + per-image tool-version tables assembled from
+  the `version-report-*` artifacts).
+- On version tags: multi-arch push to Docker Hub with **two tags only** (`1.2.3` + `latest` —
+  rolling `1.2`/`1` tags are no longer published), SBOM + provenance attestations, and a
+  **keyless cosign signature** (GitHub OIDC; identity = the shared workflow's path).
 - Registry is **Docker Hub only** (`gforceinnovation/*`).
+- Do not copy per-image pipeline logic back into this repo — change the shared workflow instead.
 
 ### Release Process
 ```bash
