@@ -41,8 +41,8 @@ jobs:
       # id-token is only consumed by the reusable push job (cosign keyless
       # signing), which never runs on pull requests.
       id-token: write
-    # Temporary ref during rollout; flipped to @v1 once the shared PR is released.
-    uses: Gforce-Innovation-Kft/shared-github-actions/.github/workflows/docker-build-test-push.yml@feat/docker-build-test-push-reusable  # yamllint disable-line rule:line-length
+    # @v1 is the shared repo's floating major tag, moved by its release process.
+    uses: Gforce-Innovation-Kft/shared-github-actions/.github/workflows/docker-build-test-push.yml@v1
     with:
       image-name: ${{ matrix.image.name }}
       context: ${{ matrix.image.context }}
