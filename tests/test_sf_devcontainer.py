@@ -209,3 +209,38 @@ def test_sudo_available(host):
     """Test that vscode user has sudo privileges"""
     sudo_check = host.run("sudo -n true")
     assert sudo_check.rc == 0
+
+
+def test_modern_cli_tools_installed(host):
+    """Test that the baked-in CLI productivity tools are installed"""
+    for tool in ["fzf", "zoxide", "eza", "delta", "lazygit", "gh", "rg"]:
+        result = host.run(f"{tool} --version")
+        assert result.rc == 0, f"{tool} is missing or broken"
+
+
+def test_bat_and_fd_symlinks(host):
+    """Test that bat/fd resolve despite Ubuntu's batcat/fdfind naming"""
+    for tool in ["bat", "fd"]:
+        result = host.run(f"{tool} --version")
+        assert result.rc == 0, f"{tool} symlink is missing or broken"
+
+
+def test_npm_global_dev_tools(host):
+    """Test that prettier (+ apex plugin) and eslint are installed globally"""
+    assert host.run("prettier --version").rc == 0
+    assert host.run("eslint --version").rc == 0
+    plugin = host.run("npm ls -g prettier-plugin-apex")
+    assert plugin.rc == 0
+
+
+def test_git_delta_is_system_pager(host):
+    """Test that delta is configured as the system-wide git pager"""
+    pager = host.run("git config --system core.pager")
+    assert pager.stdout.strip() == "delta"
+
+
+def test_zshrc_personalization(host):
+    """Test that .zshrc wires up fzf/zoxide, SF aliases, and the per-dev overlay hook"""
+    zshrc = host.file("/home/vscode/.zshrc").content_string
+    for token in ["fzf --zsh", "zoxide", "alias sfl=", "sfhelp", ".zshrc.local"]:
+        assert token in zshrc, f"expected '{token}' in .zshrc"

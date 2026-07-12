@@ -23,8 +23,11 @@ pytest-testinfra test in `tests/test_sf_*.py` (see
 - **Plugins:** `code-analyzer`, `sfdx-git-delta`, `sfdx-browserforce-plugin`.
 - **User:** `vscode` (UID 1000, `/bin/zsh`, passwordless sudo).
 - **Shell:** Oh My Zsh + Powerlevel10k + zsh-autosuggestions + zsh-syntax-highlighting +
-  zsh-completions; `.zshrc` and `.p10k.zsh` baked in.
-- **Tools:** everything in sf-ci plus vim, nano, wget, htop, tree, less, build-essential, openssl.
+  zsh-completions + fzf keybindings + zoxide + SF aliases; `.zshrc` and `.p10k.zsh` baked
+  in; `~/.zshrc.local` sourced last as the per-developer overlay hook.
+- **Tools:** everything in sf-ci plus vim, nano, wget, htop, tree, less, build-essential,
+  openssl, gh, fzf, zoxide, eza, bat, ripgrep, fd, git-delta (system git pager), lazygit,
+  and global prettier + prettier-plugin-apex + eslint.
 - **Design rule:** can be feature-rich; used via root [`.devcontainer/devcontainer.json`](../../.devcontainer/devcontainer.json).
 
 ## sf-bulk — ultralight Alpine image
