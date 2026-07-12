@@ -2,6 +2,11 @@
 
 > Ultra-light Alpine image for bulk Salesforce org operations — no Java.
 
+[![CI](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml)
+[![Release](https://img.shields.io/github/v/release/Gforce-Innovation-Kft/sf-docker-images?sort=semver)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/releases)
+[![sf-bulk size](https://img.shields.io/docker/image-size/gforceinnovation/sf-bulk/latest?label=size)](https://hub.docker.com/r/gforceinnovation/sf-bulk)
+[![sf-bulk pulls](https://img.shields.io/docker/pulls/gforceinnovation/sf-bulk?label=pulls)](https://hub.docker.com/r/gforceinnovation/sf-bulk)
+[![License](https://img.shields.io/github/license/Gforce-Innovation-Kft/sf-docker-images)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/blob/main/LICENSE)
 [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
 Part of [**sf-docker-images**](../README.md). An Alpine-based image for bulk Salesforce org
