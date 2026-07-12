@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub repo metadata: description, topics, and Docker Hub homepage link set
 - CI: dropped the unused `packages: write` permission (images push to Docker Hub, not GHCR)
 
+### Security
+- All Dockerfiles: base images now pinned by tag **plus multi-arch index digest**
+  (`ubuntu:22.04@sha256:…`, `node:24-alpine@sha256:…`) for reproducible, tamper-evident
+  builds; refresh command documented above each `FROM`
+
 ### Fixed
 - All Dockerfiles: `org.opencontainers.image.source` now points to the real repo org
   (`Gforce-Innovation-Kft`, was `gforceinnovation`)
