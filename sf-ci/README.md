@@ -2,6 +2,11 @@
 
 > Minimal Docker image for Salesforce CI/CD pipelines.
 
+[![CI](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml)
+[![Release](https://img.shields.io/github/v/release/Gforce-Innovation-Kft/sf-docker-images?sort=semver)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/releases)
+[![sf-ci size](https://img.shields.io/docker/image-size/gforceinnovation/sf-ci/latest?label=size)](https://hub.docker.com/r/gforceinnovation/sf-ci)
+[![sf-ci pulls](https://img.shields.io/docker/pulls/gforceinnovation/sf-ci?label=pulls)](https://hub.docker.com/r/gforceinnovation/sf-ci)
+[![License](https://img.shields.io/github/license/Gforce-Innovation-Kft/sf-docker-images)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/blob/main/LICENSE)
 [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
 Part of [**sf-docker-images**](../README.md). A lean `ubuntu:22.04` runner with Node.js, Java,
