@@ -1,4 +1,6 @@
-FROM node:24-alpine
+# Pinned by multi-arch index digest. Refresh with:
+#   docker buildx imagetools inspect node:24-alpine --format '{{.Manifest.Digest}}'
+FROM node:24-alpine@sha256:a0b9bf06e4e6193cf7a0f58816cc935ff8c2a908f81e6f1a95432d679c54fbfd
 
 # Metadata labels
 LABEL org.opencontainers.image.authors="GForce Innovation"

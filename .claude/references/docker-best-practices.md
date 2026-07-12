@@ -6,7 +6,14 @@ repo-specific rule set. The exhaustive rationale lives in
 
 ## Non-negotiable rules here
 
-- **Pin the base image** by tag (`ubuntu:22.04`, `node:24-alpine`). Never `latest`.
+- **Pin the base image by tag + multi-arch index digest**
+  (`FROM ubuntu:22.04@sha256:…`). The tag documents intent; the digest makes the build
+  reproducible and tamper-evident. Never `latest`. Refresh manually when picking up base
+  updates: `docker buildx imagetools inspect <image:tag> --format '{{.Manifest.Digest}}'` —
+  this yields the **index** (multi-arch) digest; a per-arch manifest digest would break the
+  arm64 build. Keep the refresh command as a comment above each `FROM`. The digest lives
+  only in the `FROM` line (`LABEL …base.name` stays the plain tag — one refresh point).
+  Digest refresh is deliberate and manual; no Renovate/Dependabot in this repo yet.
 - **One `RUN` per concern, clean up in the same layer.**
   - Ubuntu: `apt-get update && apt-get install -y --no-install-recommends ... && rm -rf /var/lib/apt/lists/*`
   - Alpine: `apk add --no-cache ...` (never leave an apk cache).
