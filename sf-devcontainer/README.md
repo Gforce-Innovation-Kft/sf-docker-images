@@ -68,9 +68,10 @@ docker run -it --rm -v "$(pwd):/workspace" gforceinnovation/sf-devcontainer:late
 
 ## When to use
 
-Use `sf-devcontainer` for local development. For pipelines, prefer the leaner
-[`sf-ci`](../sf-ci/README.md); for Java-free bulk data work, prefer
-[`sf-bulk`](../sf-bulk/README.md).
+Use `sf-devcontainer` for local development. It is **not intended as a CI
+`container:` image** — it is large and interactive-shell-oriented. For pipelines,
+prefer the leaner [`sf-ci`](../sf-ci/README.md); for Java-free bulk data work,
+prefer [`sf-bulk`](../sf-bulk/README.md).
 
 ## Building locally
 

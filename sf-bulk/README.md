@@ -69,6 +69,37 @@ jobs:
         run: sf data upsert bulk --sobject Account --file data/accounts.csv --external-id Id
 ```
 
+### GitHub Actions — matrix over datasets
+
+Fan out one lightweight container per sObject/CSV pair (delta deployments are a
+deploy concern — use [`sf-ci`](../sf-ci/README.md) for those; `sf-bulk` stays
+data-focused):
+
+```yaml
+jobs:
+  bulk-upsert:
+    strategy:
+      matrix:
+        include:
+          - sobject: Account
+            file: data/accounts.csv
+          - sobject: Contact
+            file: data/contacts.csv
+    runs-on: ubuntu-latest
+    container:
+      image: gforceinnovation/sf-bulk:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Authenticate to Salesforce
+        run: |
+          echo "${{ secrets.SF_AUTH_URL }}" > authfile
+          sf org login sfdx-url --sfdx-url-file authfile --set-default
+      - name: Bulk upsert ${{ matrix.sobject }}
+        run: |
+          sf data upsert bulk --sobject ${{ matrix.sobject }} \
+            --file ${{ matrix.file }} --external-id External_Id__c --wait 30
+```
+
 ### Docker
 
 ```bash
