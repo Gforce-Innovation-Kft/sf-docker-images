@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- sf-devcontainer: baked-in CLI productivity tools — GitHub CLI (`gh`), fzf 0.74,
+  zoxide 0.10, eza 0.23, bat, ripgrep, fd, git-delta 0.19 (system git pager),
+  lazygit 0.63; `bat`/`fd` symlinked from Ubuntu's `batcat`/`fdfind`
+- sf-devcontainer: global `prettier` + `prettier-plugin-apex` + `eslint`
+- sf-devcontainer: zsh upgrades — fzf keybindings, zoxide/gh/fd/ripgrep OMZ plugins,
+  50k deduplicated history (persistent via optional `/commandhistory` volume),
+  Salesforce aliases (`sfhelp`), and a `~/.zshrc.local` per-developer overlay hook
+- Reference `.devcontainer/devcontainer.json`: Claude Code devcontainer feature,
+  Salesforce Extension Pack (Expanded) + Apex PMD + Prettier + ESLint extensions,
+  persistent-history volume mount
+- Design doc: `docs/devcontainer-dx-design.md`
+
+### Changed
+- sf-devcontainer: welcome banner is now static (no `sf version` subprocess) for a
+  faster shell start
+
 ## [1.7.0] - 2026-07-12
 
 ### Added

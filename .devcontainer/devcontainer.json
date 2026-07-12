@@ -5,10 +5,23 @@
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "remoteUser": "vscode",
   "overrideCommand": true,
+  "features": {
+    // AI pair development — remove this line if you don't use Claude Code
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+  },
+  "mounts": [
+    // Persistent zsh history across container rebuilds (picked up by .zshrc)
+    "source=sf-devcontainer-history,target=/commandhistory,type=volume"
+    // Reuse your host Claude Code auth/settings (requires ~/.claude on the host):
+    // "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind"
+  ],
   "customizations": {
     "vscode": {
       "extensions": [
-        "salesforce.salesforcedx-vscode",
+        "salesforce.salesforcedx-vscode-expanded",
+        "chuckjonas.apex-pmd",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
         "redhat.vscode-xml",
         "redhat.vscode-yaml",
         "ms-azuretools.vscode-docker"
@@ -21,9 +34,10 @@
           }
         },
         "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
         "salesforcedx-vscode-core.telemetry.enabled": false
       }
     }
   },
-  "postCreateCommand": "sf version --verbose || true"
+  "postCreateCommand": "sudo chown vscode:vscode /commandhistory 2>/dev/null; sf version --verbose || true"
 }

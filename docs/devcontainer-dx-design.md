@@ -35,7 +35,8 @@ VS Code (plain `docker run`, compose).
 - **Symlinks**: `bat` → `batcat`, `fd` → `fdfind` (Ubuntu naming).
 - **npm globals**: `prettier`, `prettier-plugin-apex`, `eslint`.
 - **System git config**: `core.pager=delta`, `interactive.diffFilter`, `delta.navigate`,
-  `merge.conflictStyle=zdiff3` (pager only engages on a TTY — no CI impact).
+  `merge.conflictStyle=diff3` (pager only engages on a TTY — no CI impact; `zdiff3`
+  rejected — needs git ≥ 2.35, Ubuntu 22.04 ships 2.34 and hard-fails every clone).
 - No hard size cap on this image (see image-conventions.md); expect roughly +150–250 MB.
 
 ### 2. Shell config (`sf-devcontainer/.zshrc`)

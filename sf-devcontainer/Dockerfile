@@ -39,6 +39,10 @@ RUN apt-get update \
     less \
     htop \
     tree \
+    # Modern CLI tools (Ubuntu ships fd/bat as fdfind/batcat — symlinked below)
+    ripgrep \
+    fd-find \
+    bat \
     # Zsh and related
     zsh \
     fonts-powerline \
@@ -62,6 +66,50 @@ RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g @salesforce/cli@2.* \
     && npm cache clean --force
+
+# GitHub CLI from the official apt repo
+RUN mkdir -p -m 755 /etc/apt/keyrings \
+    && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg -o /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends gh \
+    && rm -rf /var/lib/apt/lists/*
+
+# Pinned CLI tools from GitHub releases (multi-arch; apt versions are too old
+# for shell integration — e.g. `fzf --zsh` needs >= 0.48, Ubuntu 22.04 ships 0.29)
+ARG TARGETARCH
+ARG FZF_VERSION=0.74.0
+ARG ZOXIDE_VERSION=0.10.0
+ARG EZA_VERSION=0.23.5
+ARG DELTA_VERSION=0.19.2
+ARG LAZYGIT_VERSION=0.63.0
+RUN ARCH="${TARGETARCH:-$(dpkg --print-architecture)}" \
+    && case "${ARCH}" in \
+    amd64) RUST_ARCH=x86_64; LG_ARCH=x86_64 ;; \
+    arm64) RUST_ARCH=aarch64; LG_ARCH=arm64 ;; \
+    *) echo "unsupported architecture: ${ARCH}" && exit 1 ;; \
+    esac \
+    && curl -fsSL "https://github.com/junegunn/fzf/releases/download/v${FZF_VERSION}/fzf-${FZF_VERSION}-linux_${ARCH}.tar.gz" | tar -xz -C /usr/local/bin fzf \
+    && curl -fsSLo /tmp/zoxide.deb "https://github.com/ajeetdsouza/zoxide/releases/download/v${ZOXIDE_VERSION}/zoxide_${ZOXIDE_VERSION}-1_${ARCH}.deb" \
+    && curl -fsSLo /tmp/delta.deb "https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_${ARCH}.deb" \
+    && dpkg -i /tmp/zoxide.deb /tmp/delta.deb \
+    && curl -fsSL "https://github.com/eza-community/eza/releases/download/v${EZA_VERSION}/eza_${RUST_ARCH}-unknown-linux-gnu.tar.gz" | tar -xz -C /usr/local/bin \
+    && curl -fsSL "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_${LG_ARCH}.tar.gz" | tar -xz -C /usr/local/bin lazygit \
+    && rm -f /tmp/*.deb \
+    && ln -sf /usr/bin/batcat /usr/local/bin/bat \
+    && ln -sf /usr/bin/fdfind /usr/local/bin/fd
+
+# Global formatters/linters for Apex + LWC work (usable without a project package.json)
+RUN npm install -g prettier prettier-plugin-apex eslint \
+    && npm cache clean --force
+
+# delta as the system git pager (only engages on a TTY — no effect on scripts/CI)
+RUN git config --system core.pager delta \
+    && git config --system interactive.diffFilter "delta --color-only" \
+    && git config --system delta.navigate true \
+    # diff3, not zdiff3 — Ubuntu 22.04's git 2.34 predates zdiff3 (2.35+)
+    && git config --system merge.conflictStyle diff3
 
 # Create vscode user with sudo privileges
 RUN useradd -m -s /bin/zsh -u 1000 vscode \
