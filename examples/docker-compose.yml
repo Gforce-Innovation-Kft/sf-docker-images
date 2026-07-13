@@ -1,0 +1,51 @@
+---
+# Salesforce container recipes — copy this file and .env.example into the root
+# of your sfdx project (rename .env.example → .env and git-ignore it).
+# Usage patterns: see examples/README.md in sf-docker-images.
+
+services:
+  # Interactive dev shell — the full toolchain with zero local installs.
+  #   docker compose run --rm dev
+  dev:
+    image: gforceinnovation/sf-devcontainer:latest
+    working_dir: /workspace
+    volumes:
+      - .:/workspace:cached
+      # Keep org auth + shell history across runs
+      - sf-config:/home/vscode/.sf
+      - sfdx-config:/home/vscode/.sfdx
+      - history:/commandhistory
+    env_file:
+      - path: .env
+        required: false
+    stdin_open: true
+    tty: true
+    command: /bin/zsh
+
+  # CI-parity runner — test pipeline scripts in the EXACT image CI uses.
+  # Especially useful on Windows: scripts run in Linux, not PowerShell/Git-Bash.
+  #   docker compose run --rm ci bash scripts/my-pipeline-step.sh
+  ci:
+    image: gforceinnovation/sf-ci:latest
+    working_dir: /workspace
+    volumes:
+      - .:/workspace:cached
+    env_file:
+      - path: .env
+        required: false
+
+  # Java-free bulk-data runner (sf data commands, sfdx-git-delta)
+  #   docker compose run --rm bulk sf data query -q "SELECT Id FROM Account" -o target-org
+  bulk:
+    image: gforceinnovation/sf-bulk:latest
+    working_dir: /workspace
+    volumes:
+      - .:/workspace:cached
+    env_file:
+      - path: .env
+        required: false
+
+volumes:
+  sf-config:
+  sfdx-config:
+  history:
