@@ -44,9 +44,14 @@ def host():
 
 
 def test_container_os(host):
-    """Test that the container is running Ubuntu 22.04"""
+    """Test that the container is running Ubuntu 24.04"""
     assert host.system_info.distribution == "ubuntu"
-    assert host.system_info.release.startswith("22.")
+    assert host.system_info.release.startswith("24.")
+
+
+def test_default_ubuntu_user_removed(host):
+    """Test that noble's default ubuntu user (UID 1000) was replaced by vscode"""
+    assert not host.user("ubuntu").exists
 
 
 def test_vscode_user_exists(host):
@@ -209,3 +214,53 @@ def test_sudo_available(host):
     """Test that vscode user has sudo privileges"""
     sudo_check = host.run("sudo -n true")
     assert sudo_check.rc == 0
+
+
+def test_modern_cli_tools_installed(host):
+    """Test that the baked-in CLI productivity tools are installed"""
+    for tool in ["fzf", "zoxide", "eza", "delta", "lazygit", "gh", "rg"]:
+        result = host.run(f"{tool} --version")
+        assert result.rc == 0, f"{tool} is missing or broken"
+
+
+def test_bat_and_fd_symlinks(host):
+    """Test that bat/fd resolve despite Ubuntu's batcat/fdfind naming"""
+    for tool in ["bat", "fd"]:
+        result = host.run(f"{tool} --version")
+        assert result.rc == 0, f"{tool} symlink is missing or broken"
+
+
+def test_npm_global_dev_tools(host):
+    """Test that prettier (+ apex plugin) and eslint are installed globally"""
+    assert host.run("prettier --version").rc == 0
+    assert host.run("eslint --version").rc == 0
+    plugin = host.run("npm ls -g prettier-plugin-apex")
+    assert plugin.rc == 0
+
+
+def test_git_delta_is_system_pager(host):
+    """Test that delta is configured as the system-wide git pager"""
+    pager = host.run("git config --system core.pager")
+    assert pager.stdout.strip() == "delta"
+
+
+def test_zshrc_personalization(host):
+    """Test that .zshrc wires up fzf/zoxide, SF aliases, and the per-dev overlay hook"""
+    zshrc = host.file("/home/vscode/.zshrc").content_string
+    for token in ["fzf --zsh", "zoxide", "alias sfl=", "sfhelp", "devhelp", ".zshrc.local"]:
+        assert token in zshrc, f"expected '{token}' in .zshrc"
+
+
+def test_cheatsheet_baked_in(host):
+    """Test that the devhelp cheatsheet is baked into the image"""
+    cheatsheet = host.file("/usr/local/share/sf-devcontainer/cheatsheet.md")
+    assert cheatsheet.exists
+    assert "fzf" in cheatsheet.content_string
+
+
+def test_zsh_starts_clean(host):
+    """Test that an interactive zsh emits no Oh My Zsh plugin warnings
+    (guards against plugins= entries that OMZ removed upstream, e.g. fd/ripgrep)"""
+    result = host.run("zsh -ic true")
+    combined = result.stdout + result.stderr
+    assert "[oh-my-zsh] plugin" not in combined, combined

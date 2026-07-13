@@ -40,7 +40,7 @@ This file gives concise, high-signal guidance for AI coding assistants working i
 
 ## Copilot Guidance (How to be "killer")
 - Prefer small, reversible changes; keep Dockerfiles readable and ordered.
-- Match existing patterns (Ubuntu 22.04 base, Node 24, Java 17, SF CLI).
+- Match existing patterns (Ubuntu 22.04 for sf-ci / 24.04 for sf-devcontainer, Node 24, Java 17, SF CLI).
 - If downloading third-party scripts, add integrity checks when possible.
 - Avoid editing `.github/workflows` unless explicitly requested.
 - Use conventional commits when asked to prepare commit messages.
