@@ -1,8 +1,10 @@
 # sf-devcontainer DX upgrade — design
 
-**Date:** 2026-07-12 · **Status:** skeleton implemented on `feat/devcontainer-dx`, awaiting review
-**Sub-project A** of the devcontainer initiative (B: security hardening, C: compose recipes,
-D: release pipeline fix — each gets its own spec later).
+**Date:** 2026-07-12 · **Status:** implemented on `feat/devcontainer-dx`, awaiting review
+**Sub-project A** of the devcontainer initiative. B (ubuntu:24.04 bump) and C (`examples/`
+compose recipes) were subsequently implemented on the same branch per Gabor's go-ahead;
+D (non-blocking README sync) turned out to be already fixed upstream in
+shared-github-actions (`v1` → 319fbb1). See CHANGELOG `[Unreleased]` and commit messages.
 
 ## Goal
 
