@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-07-13
+
 ### Added
 - sf-devcontainer: baked-in CLI productivity tools — GitHub CLI (`gh`), fzf 0.74,
   zoxide 0.10, eza 0.23, bat, ripgrep, fd, git-delta 0.19 (system git pager),
