@@ -61,7 +61,8 @@ cosign verify \
 Copy this repo's reference [`.devcontainer/devcontainer.json`](../.devcontainer/devcontainer.json)
 into your sfdx project, then run **Dev Containers: Reopen in Container**. It wires up the
 Salesforce Extension Pack (Expanded), Apex PMD, Prettier, ESLint, persistent shell
-history, and the Claude Code feature. Minimal version:
+history, and the Claude Code feature. When copying it, swap its `build` block (which
+builds from this repo's source) for the published image, as below. Minimal version:
 
 ```json
 {
