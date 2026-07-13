@@ -19,7 +19,10 @@ pytest-testinfra test in `tests/test_sf_*.py` (see
 
 ## sf-devcontainer — rich VS Code dev image
 
-- **Base:** `ubuntu:22.04`. **Runtimes:** Node 24.x, OpenJDK 17 (JDK), SF CLI `@2.*`.
+- **Base:** `ubuntu:24.04` (bumped from 22.04 for support horizon + toolchain; noble ships
+  a default `ubuntu` user at UID 1000 that the Dockerfile removes before creating `vscode`.
+  `linux-libc-dev` CVE noise persists on any Ubuntu — headers-only, `fixed: none`; treat as
+  accepted or suppress via scan policy). **Runtimes:** Node 24.x, OpenJDK 17 (JDK), SF CLI `@2.*`.
 - **Plugins:** `code-analyzer`, `sfdx-git-delta`, `sfdx-browserforce-plugin`.
 - **User:** `vscode` (UID 1000, `/bin/zsh`, passwordless sudo).
 - **Shell:** Oh My Zsh + Powerlevel10k + zsh-autosuggestions + zsh-syntax-highlighting +

@@ -23,6 +23,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - sf-devcontainer: welcome banner is now static (no `sf version` subprocess) for a
   faster shell start
+- **sf-devcontainer: base bumped `ubuntu:22.04` → `ubuntu:24.04`** — jammy standard
+  support ends 2027-04 (noble: 2029), and noble brings git 2.43 (zdiff3), gcc 13,
+  python 3.12. Note: `linux-libc-dev` CVE noise persists on noble (6 CRITICAL /
+  166 HIGH, all `fixed: none` — kernel headers, not exploitable in a container);
+  eliminating it from the dashboard needs a scan-policy change (e.g. Trivy
+  `--ignore-unfixed`) in the shared workflow. Noble's default `ubuntu` user
+  (UID 1000) is removed before creating `vscode`. sf-ci stays on 22.04 for
+  CI-consumer stability
+
+### Added (examples)
+- `examples/` — Docker Compose recipes for sfdx projects: zero-install dev shell,
+  org auth from a container via `SF_AUTH_URL` (`scripts/auth-org.sh`), CI-parity
+  script testing in sf-ci (Windows-friendly), bulk data ops; `.env.example` +
+  secrets guidance
 
 ## [1.7.0] - 2026-07-12
 

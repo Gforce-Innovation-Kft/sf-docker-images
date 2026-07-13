@@ -44,9 +44,14 @@ def host():
 
 
 def test_container_os(host):
-    """Test that the container is running Ubuntu 22.04"""
+    """Test that the container is running Ubuntu 24.04"""
     assert host.system_info.distribution == "ubuntu"
-    assert host.system_info.release.startswith("22.")
+    assert host.system_info.release.startswith("24.")
+
+
+def test_default_ubuntu_user_removed(host):
+    """Test that noble's default ubuntu user (UID 1000) was replaced by vscode"""
+    assert not host.user("ubuntu").exists
 
 
 def test_vscode_user_exists(host):

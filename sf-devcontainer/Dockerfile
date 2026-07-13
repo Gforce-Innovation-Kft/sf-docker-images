@@ -1,13 +1,13 @@
 # Pinned by multi-arch index digest. Refresh with:
-#   docker buildx imagetools inspect ubuntu:22.04 --format '{{.Manifest.Digest}}'
-FROM ubuntu:22.04@sha256:0e0a0fc6d18feda9db1590da249ac93e8d5abfea8f4c3c0c849ce512b5ef8982
+#   docker buildx imagetools inspect ubuntu:24.04 --format '{{.Manifest.Digest}}'
+FROM ubuntu:24.04@sha256:4fbb8e6a8395de5a7550b33509421a2bafbc0aab6c06ba2cef9ebffbc7092d90
 
 # Metadata labels
 LABEL org.opencontainers.image.authors="GForce Innovation"
 LABEL org.opencontainers.image.title="Salesforce DevContainer"
 LABEL org.opencontainers.image.description="Full-featured Salesforce development environment with SF CLI, Node.js, Java, and Zsh"
 LABEL org.opencontainers.image.source="https://github.com/Gforce-Innovation-Kft/sf-docker-images"
-LABEL org.opencontainers.image.base.name="ubuntu:22.04"
+LABEL org.opencontainers.image.base.name="ubuntu:24.04"
 
 # Avoid warnings by switching to noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -77,7 +77,7 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
     && rm -rf /var/lib/apt/lists/*
 
 # Pinned CLI tools from GitHub releases (multi-arch; apt versions are too old
-# for shell integration — e.g. `fzf --zsh` needs >= 0.48, Ubuntu 22.04 ships 0.29)
+# for shell integration — e.g. `fzf --zsh` needs >= 0.48, Ubuntu 24.04 ships 0.44)
 ARG TARGETARCH
 ARG FZF_VERSION=0.74.0
 ARG ZOXIDE_VERSION=0.10.0
@@ -108,11 +108,14 @@ RUN npm install -g prettier prettier-plugin-apex eslint \
 RUN git config --system core.pager delta \
     && git config --system interactive.diffFilter "delta --color-only" \
     && git config --system delta.navigate true \
-    # diff3, not zdiff3 — Ubuntu 22.04's git 2.34 predates zdiff3 (2.35+)
-    && git config --system merge.conflictStyle diff3
+    # zdiff3 needs git >= 2.35 — fine on noble's 2.43, NOT on jammy's 2.34
+    && git config --system merge.conflictStyle zdiff3
 
 # Create vscode user with sudo privileges
-RUN useradd -m -s /bin/zsh -u 1000 vscode \
+# (ubuntu:24.04 ships a default `ubuntu` user at UID 1000 — remove it first,
+# same rule as `deluser node` on the Alpine images)
+RUN userdel -r ubuntu \
+    && useradd -m -s /bin/zsh -u 1000 vscode \
     && echo vscode ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/vscode \
     && chmod 0440 /etc/sudoers.d/vscode
 
