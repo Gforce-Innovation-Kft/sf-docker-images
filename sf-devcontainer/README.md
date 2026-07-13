@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/github/license/Gforce-Innovation-Kft/sf-docker-images)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/blob/main/LICENSE)
 [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
-Part of [**sf-docker-images**](../README.md). An `ubuntu:22.04` image with everything a
+Part of [**sf-docker-images**](../README.md). An `ubuntu:24.04` image with everything a
 Salesforce developer needs day to day — a productive zsh shell, editors, and extra SF CLI
 plugins on top of the [`sf-ci`](../sf-ci/README.md) toolchain.
 

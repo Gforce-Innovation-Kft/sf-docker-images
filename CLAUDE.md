@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Builds and publishes three Salesforce-focused Docker images to Docker Hub under the `gforceinnovation` organization. sf-ci and sf-devcontainer are based on `ubuntu:22.04` with Node.js 24.x, OpenJDK 17, and Salesforce CLI v2. sf-bulk is Alpine-based with Node.js 24.x (no Java) for a minimal footprint.
+Builds and publishes three Salesforce-focused Docker images to Docker Hub under the `gforceinnovation` organization. sf-ci is based on `ubuntu:22.04` and sf-devcontainer on `ubuntu:24.04`, both with Node.js 24.x, OpenJDK 17, and Salesforce CLI v2. sf-bulk is Alpine-based with Node.js 24.x (no Java) for a minimal footprint.
 
 ## Images
 
@@ -91,6 +91,7 @@ verify Java is NOT installed and the image is under 600 MB.
 - sf-ci must stay minimal; sf-devcontainer can be feature-rich; sf-bulk must stay under 600MB with no Java.
 - Alpine images: use `apk add --no-cache` and include `coreutils` (needed for `env -S` in SF CLI shebang).
 - Alpine images: `node:24-alpine` ships a `node` user at UID 1000 — run `deluser node` before creating `ci`.
+- `ubuntu:24.04`+ ships a default `ubuntu` user at UID 1000 — run `userdel -r ubuntu` before creating the image user (sf-devcontainer does this; sf-ci is still on 22.04).
 - Ubuntu images: clean apt caches in the same `RUN` layer (`rm -rf /var/lib/apt/lists/*`).
 - Commit messages follow conventional commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
 - A pre-commit hook (`.github/hooks/pre-commit`, activated by `scripts/setup.sh` via
