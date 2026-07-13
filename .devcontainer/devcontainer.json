@@ -1,6 +1,9 @@
 {
   "name": "Salesforce Development (sf-devcontainer)",
-  "image": "gforceinnovation/sf-devcontainer:latest",
+  "build": {
+    "context": "../sf-devcontainer",
+    "dockerfile": "../sf-devcontainer/Dockerfile"
+  },
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "remoteUser": "vscode",
