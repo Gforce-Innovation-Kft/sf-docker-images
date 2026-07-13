@@ -7,6 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- sf-devcontainer: baked-in CLI productivity tools — GitHub CLI (`gh`), fzf 0.74,
+  zoxide 0.10, eza 0.23, bat, ripgrep, fd, git-delta 0.19 (system git pager),
+  lazygit 0.63; `bat`/`fd` symlinked from Ubuntu's `batcat`/`fdfind`
+- sf-devcontainer: global `prettier` + `prettier-plugin-apex` + `eslint`
+- sf-devcontainer: zsh upgrades — fzf keybindings, zoxide/gh OMZ plugins,
+  50k deduplicated history (persistent via optional `/commandhistory` volume),
+  Salesforce aliases (`sfhelp`), and a `~/.zshrc.local` per-developer overlay hook
+- sf-devcontainer: `devhelp` in-shell cheatsheet (baked at
+  `/usr/local/share/sf-devcontainer/cheatsheet.md`, rendered with bat) and
+  `TOOLS.md` expert guide to the CLI tools + zsh features, linked from the README
+- Reference `.devcontainer/devcontainer.json`: Claude Code devcontainer feature,
+  Salesforce Extension Pack (Expanded) + Apex PMD + Prettier + ESLint extensions,
+  persistent-history volume mount
+- Design doc: `docs/devcontainer-dx-design.md`
+
+### Changed
+- sf-devcontainer: welcome banner is now static (no `sf version` subprocess) for a
+  faster shell start
+- **sf-devcontainer: base bumped `ubuntu:22.04` → `ubuntu:24.04`** — jammy standard
+  support ends 2027-04 (noble: 2029), and noble brings git 2.43 (zdiff3), gcc 13,
+  python 3.12. Note: `linux-libc-dev` CVE noise persists on noble (6 CRITICAL /
+  166 HIGH, all `fixed: none` — kernel headers, not exploitable in a container);
+  eliminating it from the dashboard needs a scan-policy change (e.g. Trivy
+  `--ignore-unfixed`) in the shared workflow. Noble's default `ubuntu` user
+  (UID 1000) is removed before creating `vscode`. sf-ci stays on 22.04 for
+  CI-consumer stability
+- This repo's `.devcontainer/devcontainer.json` now **builds from
+  `../sf-devcontainer`** instead of pulling `:latest`, so the devcontainer always
+  matches the checked-out branch (consumers copying the file into their own
+  project should swap the `build` block for the `image:` form shown in the README)
+
+### Fixed
+- sf-devcontainer: removed `fd`/`ripgrep` from the OMZ plugins list — Oh My Zsh
+  deleted these completion-only plugins upstream, causing `plugin not found`
+  warnings on every shell start (the tools ship their own completions)
+- Per-image `.dockerignore` files are now tracked in git — the repo `.gitignore`
+  was ignoring them, so CI built every image with an unfiltered context while
+  local builds filtered
+
+### Added (examples)
+- `examples/` — Docker Compose recipes for sfdx projects: zero-install dev shell,
+  org auth from a container via `SF_AUTH_URL` (`scripts/auth-org.sh`), CI-parity
+  script testing in sf-ci (Windows-friendly), bulk data ops; `.env.example` +
+  secrets guidance
+
 ## [1.7.0] - 2026-07-12
 
 ### Added

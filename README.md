@@ -20,7 +20,7 @@ build.
 | Image | Base | Purpose | Size (uncompressed) | Use it when… |
 |-------|------|---------|---------------------|--------------|
 | [`sf-ci`](sf-ci/README.md) | `ubuntu:22.04` | Minimal CI/CD runner (Node 24 + Java 17 + SF CLI) | ~840 MB | you run deploys, Apex tests, or delta packaging in a pipeline |
-| [`sf-devcontainer`](sf-devcontainer/README.md) | `ubuntu:22.04` | Full VS Code dev environment (zsh, editors, extra plugins) | ~2.6 GB | you develop Salesforce locally in VS Code / Dev Containers |
+| [`sf-devcontainer`](sf-devcontainer/README.md) | `ubuntu:24.04` | Full VS Code dev environment (zsh, editors, extra plugins) | ~2.6 GB | you develop Salesforce locally in VS Code / Dev Containers |
 | [`sf-bulk`](sf-bulk/README.md) | `node:24-alpine` | Ultra-light bulk ops, **no Java** | ~435 MB (< 600 MB) | you do high-volume `sf data` / Bulk API work and don't need Apex |
 
 All three images ship Node.js 24 and [Salesforce CLI v2](https://developer.salesforce.com/tools/salesforcecli)
@@ -93,6 +93,12 @@ run **Dev Containers: Reopen in Container** from the Command Palette:
 ```bash
 docker run --rm -v "$(pwd):/workspace" gforceinnovation/sf-bulk:latest sf org list
 ```
+
+### Docker Compose recipes
+
+Copy-paste recipes for sfdx projects — zero-install dev shell, org auth from a
+container, CI-parity script testing (Windows-friendly), bulk data ops:
+see [`examples/`](examples/README.md).
 
 ## Supported tags
 

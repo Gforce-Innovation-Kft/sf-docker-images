@@ -1,0 +1,59 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github
+
+# Documentation (not needed in image, except the baked-in devhelp cheatsheet)
+*.md
+!cheatsheet.md
+README*
+CHANGELOG*
+LICENSE
+
+# Test files
+tests/
+test/
+*.test.js
+*.spec.js
+__tests__/
+
+# Build artifacts and dependencies from host
+node_modules/
+dist/
+build/
+*.log
+npm-debug.log*
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+.DS_Store
+
+# Environment files (should use secrets/env vars instead)
+.env
+.env.*
+!.env.example
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Coverage reports
+coverage/
+.nyc_output/
+*.coverage
