@@ -143,6 +143,9 @@ RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master
 COPY --chown=vscode:vscode .zshrc /home/vscode/.zshrc
 COPY --chown=vscode:vscode .p10k.zsh /home/vscode/.p10k.zsh
 
+# CLI tools cheatsheet rendered by the `devhelp` function in .zshrc
+COPY cheatsheet.md /usr/local/share/sf-devcontainer/cheatsheet.md
+
 # Create directories for Salesforce CLI
 RUN mkdir -p /home/vscode/.sfdx /home/vscode/.sf /home/vscode/.config
 

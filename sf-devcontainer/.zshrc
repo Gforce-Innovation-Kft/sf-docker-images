@@ -18,8 +18,6 @@ plugins=(
   npm
   vscode
   gh
-  fd
-  ripgrep
   zoxide
   command-not-found
   colored-man-pages
@@ -83,6 +81,11 @@ Salesforce shortcuts:
 EOF
 }
 
+# CLI tools cheatsheet (baked into the image; full guide in sf-devcontainer/TOOLS.md)
+function devhelp() {
+  bat --style=plain --language=md /usr/local/share/sf-devcontainer/cheatsheet.md
+}
+
 # Custom functions
 function mkcd() {
   mkdir -p "$1" && cd "$1"
@@ -93,7 +96,7 @@ echo ""
 echo "🚀 Salesforce Development Environment"
 echo "======================================"
 echo "sf · node · java 17 · gh · fzf · zoxide · eza · bat · rg · fd · delta · lazygit"
-echo "Run 'sfhelp' for Salesforce shortcuts, 'sf version' for tool versions."
+echo "Run 'sfhelp' for Salesforce shortcuts, 'devhelp' for the CLI tools cheatsheet."
 echo ""
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.

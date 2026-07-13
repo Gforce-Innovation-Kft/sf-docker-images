@@ -247,5 +247,20 @@ def test_git_delta_is_system_pager(host):
 def test_zshrc_personalization(host):
     """Test that .zshrc wires up fzf/zoxide, SF aliases, and the per-dev overlay hook"""
     zshrc = host.file("/home/vscode/.zshrc").content_string
-    for token in ["fzf --zsh", "zoxide", "alias sfl=", "sfhelp", ".zshrc.local"]:
+    for token in ["fzf --zsh", "zoxide", "alias sfl=", "sfhelp", "devhelp", ".zshrc.local"]:
         assert token in zshrc, f"expected '{token}' in .zshrc"
+
+
+def test_cheatsheet_baked_in(host):
+    """Test that the devhelp cheatsheet is baked into the image"""
+    cheatsheet = host.file("/usr/local/share/sf-devcontainer/cheatsheet.md")
+    assert cheatsheet.exists
+    assert "fzf" in cheatsheet.content_string
+
+
+def test_zsh_starts_clean(host):
+    """Test that an interactive zsh emits no Oh My Zsh plugin warnings
+    (guards against plugins= entries that OMZ removed upstream, e.g. fd/ripgrep)"""
+    result = host.run("zsh -ic true")
+    combined = result.stdout + result.stderr
+    assert "[oh-my-zsh] plugin" not in combined, combined

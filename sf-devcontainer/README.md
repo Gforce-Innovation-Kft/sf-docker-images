@@ -47,7 +47,8 @@ cosign verify \
   completions, fzf keybindings (Ctrl-R/Ctrl-T), zoxide (`z`), and Salesforce aliases
   (`sfhelp` lists them).
 - **CLI tools**: gh (GitHub CLI), fzf, zoxide, eza, bat, ripgrep, fd, git-delta
-  (system git pager), lazygit.
+  (system git pager), lazygit. Run `devhelp` inside the container for a cheatsheet;
+  see [TOOLS.md](TOOLS.md) for the expert guide.
 - **Formatters/linters**: prettier + prettier-plugin-apex + eslint (global — work
   without a project `package.json`).
 - **Editors & tools**: vim, nano, wget, htop, tree, less, build-essential, openssl.
