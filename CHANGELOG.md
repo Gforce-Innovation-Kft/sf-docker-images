@@ -44,6 +44,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Running under an *arbitrary* UID is explicitly not supported: `sf` calls Node's
     `os.userInfo()`, which throws ENOENT when the UID has no `/etc/passwd` entry. The usual
     entrypoint workaround does not apply — GitHub Actions container jobs override `ENTRYPOINT`.
+- The reference `.devcontainer/devcontainer.json` now persists Salesforce org auth in **named
+  Docker volumes** (`~/.sf`, `~/.sfdx`) instead of leaving it in the container's throwaway
+  layer, so a rebuild no longer costs you a re-login. **Do not bind-mount your host's `~/.sf`
+  or `~/.sfdx`** to share auth: those files are encrypted with the host OS keychain, which a
+  Linux container cannot read, and every org then reports `AuthDecryptError`. Verified
+  empirically on 2026-08-06. `tests/test_sf_devcontainer.py::test_auth_dirs_not_host_mounted`
+  guards this repo's own configs against the mistake
 - **sf-devcontainer's shell is now Starship with no framework**, replacing Oh My Zsh +
   Powerlevel10k. Plugins come from apt instead of git clones; `zsh-completions` is dropped
   (not packaged for noble). The prompt shows the project's Salesforce target org, read from

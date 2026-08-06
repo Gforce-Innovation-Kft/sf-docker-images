@@ -70,6 +70,15 @@ Tests for the full-featured development container:
 - ✅ Development tools (git, vim, nano, jq, xmlstarlet)
 - ✅ User configuration (vscode user with sudo)
 - ✅ Environment variables
+- ✅ `~/.sf`/`~/.sfdx` are never bind-mounted from the host in this repo's own
+  `.devcontainer/devcontainer.json` or `examples/docker-compose.yml` (`test_auth_dirs_not_host_mounted`,
+  no credentials needed) — that pattern is the #1 cause of `AuthDecryptError` on `sf org list`,
+  since host-encrypted auth JSON can't be decrypted with a container's different keychain
+- ✅ **Live only, skipped by default:** org auth performed *inside* one container and
+  persisted to named Docker volumes survives being read back from a second, freshly-started
+  container reusing those volumes — the same shape as a Dev Containers rebuild
+  (`test_org_auth_survives_container_recreate`). Needs a real org: run with
+  `SF_AUTH_URL="$(sf org display --target-org <alias> --verbose --json | jq -r .result.sfdxAuthUrl)" pytest tests/test_sf_devcontainer.py -k auth -v`
 
 ### test_sf_ci.py
 Tests for the lightweight CI/CD container:

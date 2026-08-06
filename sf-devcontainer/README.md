@@ -70,8 +70,9 @@ verify only against that identity instead:
 Copy this repo's reference [`.devcontainer/devcontainer.json`](../.devcontainer/devcontainer.json)
 into your sfdx project, then run **Dev Containers: Reopen in Container**. It wires up the
 Salesforce Extension Pack (Expanded), Apex PMD, Prettier, ESLint, persistent shell
-history, and the Claude Code feature. When copying it, swap its `build` block (which
-builds from this repo's source) for the published image, as below. Minimal version:
+history, persistent org auth, and the Claude Code feature. When copying it, swap its
+`build` block (which builds from this repo's source) for the published image, as below.
+Minimal version:
 
 ```json
 {
@@ -82,6 +83,20 @@ builds from this repo's source) for the published image, as below. Minimal versi
   }
 }
 ```
+
+### Salesforce org auth
+
+The reference `devcontainer.json` mounts `~/.sf` and `~/.sfdx` as **named Docker
+volumes**, so `sf org login` inside the container survives rebuilds. Authenticate
+from *inside* the container — `sf org login web`, or non-interactively via
+`SF_AUTH_URL` (get one with
+`sf org display --target-org <alias> --verbose --json | jq -r .result.sfdxAuthUrl`
+on a machine already logged in; see [`examples/`](../examples/)).
+
+**Do not** bind-mount your host's `~/.sf`/`~/.sfdx` into the container to avoid
+re-authenticating — those files are encrypted with your host OS's keychain, which
+this Linux container can't read, and `sf org list` will fail every org with
+`AuthDecryptError`. Auth in the container once; the named volumes keep it there.
 
 ### Personalize your shell
 

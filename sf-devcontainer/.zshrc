@@ -6,7 +6,18 @@
 
 # --- completions -----------------------------------------------------------
 # Every fpath addition MUST happen before compinit.
-fpath=(/usr/share/zsh/vendor-completions $fpath)
+#
+# The sf autocomplete directory is listed here on purpose. `sf autocomplete zsh`
+# generates a ~/.cache/sf/autocomplete/zsh_setup that appends to fpath and then
+# runs a SECOND, uncached `compinit` — a full security scan of every fpath
+# directory on every interactive shell, which is exactly the cost this file
+# exists to avoid. Adding the directory here instead lets the single cached
+# compinit below cover sf's completions too. Do not source zsh_setup.
+fpath=(
+  /usr/share/zsh/vendor-completions
+  /home/vscode/.cache/sf/autocomplete/functions/zsh
+  $fpath
+)
 
 autoload -Uz compinit
 _zcompdump="${HOME}/.cache/zsh/zcompdump"
@@ -93,7 +104,9 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # --- prompt ----------------------------------------------------------------
 eval "$(starship init zsh)"
 
-SF_AC_ZSH_SETUP_PATH=/home/vscode/.cache/sf/autocomplete/zsh_setup && test -f $SF_AC_ZSH_SETUP_PATH && source $SF_AC_ZSH_SETUP_PATH; # sf autocomplete setup
+# sf completions are wired up via the fpath entry at the top of this file, not
+# by sourcing sf's generated zsh_setup — sourcing it would run a second,
+# uncached compinit on every shell. See the comment there.
 
 # Per-developer overrides — layer your own aliases/tweaks without rebuilding.
 # For full dotfiles, use VS Code's dotfiles.repository setting.
