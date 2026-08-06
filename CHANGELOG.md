@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed — BREAKING
+- **`sf-ci` and `sf-bulk` now run as non-root `ci` (UID 1000) at runtime**, reverting the
+  `USER root` workaround added in 927c06d. Running CI pipelines as root was the wrong trade.
+  **Consumers must run the container with UID 1000** — on ARC set the runner pod's
+  `securityContext.runAsUser: 1000`, or add `options: --user 1000` to the container job.
+  Without that, `/github/home` (bind-mounted by the runner and owned by its UID) is unwritable
+  and the SF CLI fails with EACCES, exactly as before 927c06d. `sf-devcontainer` was already
+  non-root (`vscode`) and is unchanged. Requires a **3.0.0** release.
+  - Writable paths (`/home/ci`, `/opt/sf-data`, `/opt/sf-config`) are now owned by GID 0 and
+    group-writable, so any UID that *has* a passwd entry can write them.
+  - Running under an *arbitrary* UID is explicitly not supported: `sf` calls Node's
+    `os.userInfo()`, which throws ENOENT when the UID has no `/etc/passwd` entry. The usual
+    entrypoint workaround does not apply — GitHub Actions container jobs override `ENTRYPOINT`.
+- CI: third-party actions are pinned to floating major tags (`@v7`, `@v4`) instead of commit
+  SHAs. `sigstore/cosign-installer` (`@v4.1.2`) and `aquasecurity/trivy-action` (`@v0.36.0`)
+  stay exact — neither publishes a floating major tag.
+
+### Added
+- CI: path-filtered builds. A `changes` job reads the PR's changed files and builds only the
+  affected images — `sf-<image>/**` or `tests/test_sf_<image>.py` selects that image, while
+  `.github/workflows/**`, `tests/requirements.txt`, or any other `tests/*.py` rebuilds all of
+  them. Docs-only PRs now build nothing. Version tags are unaffected: they always build and
+  publish the full set so `latest` stays coherent across images. The image set is defined once,
+  in the `IMAGES` map of that job. A job summary lists which images were built and which were
+  skipped
+
+### Removed
+- Superseded design docs: `docs/devcontainer-dx-design.md`,
+  `docs/reusable-workflow-migration-design.md`, and
+  `docs/superpowers/specs/2026-07-13-devcontainer-tools-docs-design.md`. All three describe work
+  that shipped in 2.0.0 and is now documented in `CLAUDE.md` and the READMEs;
+  `docs/README.md` (the image decision guide) stays
+
 ## [2.0.0] - 2026-07-13
 
 ### Added

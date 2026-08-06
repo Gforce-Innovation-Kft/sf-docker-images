@@ -3,32 +3,58 @@
 Short repo-specific rules. Full rationale:
 [`.github/instructions/github-actions-ci-cd-best-practices.instructions.md`](../../.github/instructions/github-actions-ci-cd-best-practices.instructions.md).
 
-## The one workflow: `.github/workflows/build-and-push.yml` (thin caller)
+## The two workflows
+
+Both live in this repo — the pipeline is self-contained, with no cross-repo dependency.
+
+| File | Kind | Role |
+|---|---|---|
+| `.github/workflows/build-and-push.yml` | internal | thin matrix caller + the local `release` job |
+| `.github/workflows/reusable-docker-image-build.yml` | `workflow_call` | build → test → push for **one** image |
 
 - **Triggers:** PRs to `main` and version tags `v*.*.*` (pushes to `main` do not build).
-- **Job graph:** `images` (matrix: sf-ci, sf-devcontainer, sf-bulk — each invocation calls the
-  shared reusable workflow
-  `Gforce-Innovation-Kft/shared-github-actions/.github/workflows/docker-build-test-push.yml@v1`,
-  which runs build → test → push for that one image) → `release` (tags only, local).
+- **Job graph:** `changes` (computes the matrix from the PR diff) → `images` (matrix — each
+  invocation calls `./.github/workflows/reusable-docker-image-build.yml`) → `release`
+  (tags only, local).
 - **PRs build + test but never push or release.** Push/release run **only** on `v*.*.*` tags
   (the caller computes `push: startsWith(github.ref, 'refs/tags/v')`).
+- **Path filtering (`changes` job):** on a PR the matrix contains only the images whose files
+  changed — `sf-<image>/**` or `tests/test_sf_<image>.py` selects one image;
+  `.github/workflows/**`, `tests/requirements.txt`, or any other `tests/*.py` selects all;
+  anything else selects none and `images` is skipped via `has-images`. Tags always select all
+  so `latest` stays coherent. The job lists its decision in the run summary.
 
 ## Rules when editing the caller
 
-- Per-image pipeline changes (build/test/push/signing) belong in **shared-github-actions**,
-  not here. Do not copy that logic back into this repo.
+- Per-image pipeline changes (build/test/push/signing) belong in
+  `reusable-docker-image-build.yml`, not in the caller. Keep `build-and-push.yml` thin: the
+  `changes` job, the matrix, the permissions, and the release job.
+- **The image set is defined once**, in the `IMAGES` JSON map of the `changes` job. The key is
+  simultaneously the image name, the build-context directory (`./<key>`), and the test-file stem
+  (`tests/test_<key with underscores>.py`); the value is the Docker Hub short description. Add or
+  remove an image there and nothing else in the caller needs to change — do not reintroduce a
+  hard-coded matrix.
+- A new **shared** test helper (e.g. `tests/conftest.py`) is already treated as affecting every
+  image. A new non-shared file type that should trigger builds needs a rule added to the
+  `changes` job, or PRs touching it will silently build nothing.
 - The `images` job must grant the reusable workflow its permissions:
   `contents: read`, `checks: write`, `pull-requests: write`, `security-events: write`,
   `id-token: write` (cosign keyless signing).
-- Pin the reusable workflow to `@v1` (the shared repo's release process maintains the floating
-  major tag). Local actions pin to a major version tag (`@v4`) or SHA — never `@main`/`@latest`.
+- The reusable workflow is referenced with a local `./` path, so it is always the version on the
+  branch being built.
+- **Third-party actions pin to a floating major version tag** (`@v7`, `@v4`) — never `@main`,
+  `@latest`, or a commit SHA. Two actions have no floating major tag and must stay exact, so
+  leave them alone unless you have checked the upstream tag list:
+  - `sigstore/cosign-installer` — publishes only exact tags (`@v4.1.2`).
+  - `aquasecurity/trivy-action` — still 0.x, so there is no `v0` tag (`@v0.36.0`).
 - Registry is **Docker Hub only** (`gforceinnovation/*`) via the `dockerhub-token` secret
   (`secrets.DOCKERHUB_TOKEN`). Do not add other registries without an explicit decision.
 - **Tag scheme:** `{{version}}` + `latest` only. Rolling `{{major}}.{{minor}}`/`{{major}}` tags
   were deliberately dropped (existing ones stay frozen at 1.6.1).
 - Images are **cosign-signed** (keyless, GitHub OIDC) on tag pushes. The certificate identity is
-  the shared workflow's path — renaming/moving that file in shared-github-actions breaks every
-  documented `cosign verify` command.
+  `reusable-docker-image-build.yml`'s own path — renaming or moving that file breaks every
+  documented `cosign verify` command. Images published before 2026-08-06 were signed under the
+  workflow's previous home in `shared-github-actions` and verify only against that old identity.
 - Respect `.yamllint` (120-col, 2-space). The `.github/hooks/pre-commit` hook lints staged YAML.
 
 ## Release job

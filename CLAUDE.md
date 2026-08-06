@@ -10,7 +10,9 @@ Builds and publishes three Salesforce-focused Docker images to Docker Hub under 
 
 ### sf-ci
 - **Purpose:** Lightweight CI/CD runner for Salesforce automation pipelines.
-- **User:** `ci` (UID 1000, bash shell, non-root).
+- **User:** `ci` (UID 1000, bash shell). **Runs non-root at runtime** — consumers must run the
+  container with UID 1000 (ARC `runAsUser: 1000` / `options: --user 1000`), otherwise
+  `/github/home` is unwritable.
 - **SF CLI plugins:** `sfdx-git-delta`.
 - **Tools:** git, jq, xmlstarlet, curl, unzip/zip.
 - **Env vars:** `SFDX_CONTAINER_MODE=true`, `SFDX_DISABLE_DNS_CHECK=true`, `SF_AUTOUPDATE_DISABLE=true`, `SF_DISABLE_TELEMETRY=true`, `CI=true`.
@@ -30,7 +32,7 @@ Builds and publishes three Salesforce-focused Docker images to Docker Hub under 
 - **SF CLI plugins:** `sfdx-git-delta`.
 - **Tools:** bash, curl, git, jq, unzip, libc6-compat (gcompat).
 - **Env vars:** same set as sf-ci. XDG dirs pinned to `/opt/sf-data` and `/opt/sf-config` (chmod 777).
-- **Runtime:** runs as root (bypasses ARC dind UID mismatch, same as sf-ci).
+- **Runtime:** runs as non-root `ci` (UID 1000), same as sf-ci — same runner-UID requirement.
 - **Design rule:** No Java, no editors, no interactive tools. Must stay under 600MB uncompressed.
 
 All three images set `WORKDIR /workspace`, include a `HEALTHCHECK` using `sf version --json`, and have `.dockerignore` files.
@@ -61,16 +63,24 @@ docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf
 
 ### `.github/workflows/build-and-push.yml` -- Build and Push (thin caller)
 - **Triggers:** PRs to `main` and version tags (`v*.*.*`). Pushes to `main` do not build.
-- The per-image **build -> test -> push** pipeline lives in the shared reusable workflow
-  `Gforce-Innovation-Kft/shared-github-actions/.github/workflows/docker-build-test-push.yml@v1`;
-  this repo's workflow fans out over the three images with a matrix and keeps only the
-  repo-specific `release` job (CHANGELOG section + per-image tool-version tables assembled from
-  the `version-report-*` artifacts).
+- The per-image **build -> test -> push** pipeline lives in this repo's own
+  `.github/workflows/reusable-docker-image-build.yml`; `build-and-push.yml` fans out over the
+  images with a matrix and keeps the repo-specific `release` job (CHANGELOG section + per-image
+  tool-version tables assembled from the `version-report-*` artifacts).
+- **Path filtering:** a `changes` job computes the matrix from the PR's changed files, so a PR
+  only builds the images it actually touches; a docs-only PR builds nothing. Rules:
+  - `sf-<image>/**` or `tests/test_sf_<image>.py` -> that image only.
+  - `.github/workflows/**`, `tests/requirements.txt`, or any other `tests/*.py` -> all images.
+  - **Version tags always build all images**, so `latest` stays coherent across the set.
+  - The image set lives in **one place**: the `IMAGES` JSON map in the `changes` job (key =
+    image name = context dir = `tests/test_<name>.py`). Adding an image means editing that map
+    only — the matrix, contexts, and Docker Hub descriptions all derive from it.
 - On version tags: multi-arch push to Docker Hub with **two tags only** (`1.2.3` + `latest` —
   rolling `1.2`/`1` tags are no longer published), SBOM + provenance attestations, and a
-  **keyless cosign signature** (GitHub OIDC; identity = the shared workflow's path).
+  **keyless cosign signature** (GitHub OIDC; identity = the reusable workflow's path — renaming
+  or moving that file invalidates every documented `cosign verify` command).
 - Registry is **Docker Hub only** (`gforceinnovation/*`).
-- Do not copy per-image pipeline logic back into this repo — change the shared workflow instead.
+- Do not copy per-image pipeline logic into `build-and-push.yml` — change the reusable workflow.
 
 ### Release Process
 ```bash

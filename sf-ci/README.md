@@ -46,8 +46,12 @@ cosign verify \
 - **CI utilities**: git, jq, xmlstarlet, curl, unzip/zip.
 - **Container-mode env**: `SFDX_CONTAINER_MODE`, `SFDX_DISABLE_DNS_CHECK`, `SF_AUTOUPDATE_DISABLE`,
   `SF_DISABLE_TELEMETRY`, `CI`.
-- **User**: non-root `ci` (UID 1000) created at build time. Runs as **root at runtime** to avoid
-  UID mismatches on ARC dind self-hosted runners.
+- **User**: runs as **non-root `ci` (UID 1000)** at runtime.
+
+> **Runner UID must be 1000.** GitHub Actions bind-mounts `/github/home` owned by the runner's
+> UID; a container running under a different UID cannot write it. On ARC set the runner pod's
+> `securityContext.runAsUser: 1000`, or add `options: --user 1000` to the container job.
+> Versions before 3.0.0 ran as root and were immune to this.
 
 ## Usage
 
