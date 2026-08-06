@@ -16,7 +16,7 @@ flowchart TD
 | Image | Base | Size | Java | Best for |
 |-------|------|------|------|----------|
 | [`sf-ci`](../sf-ci/README.md) | `ubuntu:22.04` | ~840 MB | ✅ 17 | deploys, Apex tests, delta packaging in CI |
-| [`sf-devcontainer`](../sf-devcontainer/README.md) | `ubuntu:22.04` | ~2.6 GB | ✅ 17 | local development in VS Code |
+| [`sf-devcontainer`](../sf-devcontainer/README.md) | `ubuntu:24.04` | ~2.6 GB | ✅ 17 | local development in VS Code |
 | [`sf-bulk`](../sf-bulk/README.md) | `node:24-alpine` | ~410 MB | ❌ | high-volume `sf data` / Bulk API work |
 
 Rules of thumb:
@@ -32,8 +32,9 @@ A short terminal recording of the `sf-devcontainer` zsh shell belongs here:
 - **File:** `docs/sf-devcontainer.gif` (referenced from the top-level README once recorded).
 - **How to record:** capture with [asciinema](https://asciinema.org/)
   (`asciinema rec`) and convert to GIF with [agg](https://github.com/asciinema/agg), or record the
-  terminal directly. Keep it short (~10 s): open the container, show the P10k prompt, run
-  `sf version`.
+  terminal directly. Keep it short (~10 s): open the container in a project with a
+  Salesforce target org set, show the Starship prompt (the `sf_org` module displaying the
+  target org is the interesting bit), run `sf version`.
 
 ## Social preview
 

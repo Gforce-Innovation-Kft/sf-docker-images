@@ -62,8 +62,8 @@ Tests for the full-featured development container:
 - ✅ Java 17 (OpenJDK)
 - ✅ Salesforce CLI with plugins (code-analyzer, sfdx-git-delta, sfdx-browserforce-plugin)
 - ✅ Starship prompt — `starship.toml` baked in with the `sf_org` target-org module present
-- ✅ The previous shell framework and its prompt-theme config file are absent; zsh starts
-  with no leftover plugin warnings
+- ✅ Oh My Zsh and its Powerlevel10k config file (`.p10k.zsh`) are absent; zsh starts with
+  no leftover plugin warnings (see CHANGELOG for the full migration story)
 - ✅ zsh-autosuggestions and zsh-syntax-highlighting installed from apt (no `zsh-completions`),
   sourced in the correct order (`zsh-syntax-highlighting` last)
 - ✅ Prompt never shells out to `sf` — reads `.sf/config.json` via `jq` instead
