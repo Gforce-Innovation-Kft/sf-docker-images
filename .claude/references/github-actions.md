@@ -13,16 +13,30 @@ Both live in this repo — the pipeline is self-contained, with no cross-repo de
 | `.github/workflows/reusable-docker-image-build.yml` | `workflow_call` | build → test → push for **one** image |
 
 - **Triggers:** PRs to `main` and version tags `v*.*.*` (pushes to `main` do not build).
-- **Job graph:** `images` (matrix: sf-ci, sf-devcontainer, sf-bulk — each invocation calls
-  `./.github/workflows/reusable-docker-image-build.yml`) → `release` (tags only, local).
+- **Job graph:** `changes` (computes the matrix from the PR diff) → `images` (matrix — each
+  invocation calls `./.github/workflows/reusable-docker-image-build.yml`) → `release`
+  (tags only, local).
 - **PRs build + test but never push or release.** Push/release run **only** on `v*.*.*` tags
   (the caller computes `push: startsWith(github.ref, 'refs/tags/v')`).
+- **Path filtering (`changes` job):** on a PR the matrix contains only the images whose files
+  changed — `sf-<image>/**` or `tests/test_sf_<image>.py` selects one image;
+  `.github/workflows/**`, `tests/requirements.txt`, or any other `tests/*.py` selects all;
+  anything else selects none and `images` is skipped via `has-images`. Tags always select all
+  so `latest` stays coherent. The job lists its decision in the run summary.
 
 ## Rules when editing the caller
 
 - Per-image pipeline changes (build/test/push/signing) belong in
   `reusable-docker-image-build.yml`, not in the caller. Keep `build-and-push.yml` thin: the
-  matrix, the permissions, and the release job.
+  `changes` job, the matrix, the permissions, and the release job.
+- **The image set is defined once**, in the `IMAGES` JSON map of the `changes` job. The key is
+  simultaneously the image name, the build-context directory (`./<key>`), and the test-file stem
+  (`tests/test_<key with underscores>.py`); the value is the Docker Hub short description. Add or
+  remove an image there and nothing else in the caller needs to change — do not reintroduce a
+  hard-coded matrix.
+- A new **shared** test helper (e.g. `tests/conftest.py`) is already treated as affecting every
+  image. A new non-shared file type that should trigger builds needs a rule added to the
+  `changes` job, or PRs touching it will silently build nothing.
 - The `images` job must grant the reusable workflow its permissions:
   `contents: read`, `checks: write`, `pull-requests: write`, `security-events: write`,
   `id-token: write` (cosign keyless signing).
