@@ -41,6 +41,17 @@ RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
 # Create ci user (non-root for security)
 RUN useradd -m -s /bin/bash -u 1000 ci
 
+# Second, non-default account matching the GitHub Actions runner UID.
+#
+# GitHub Actions container jobs mount /github/home and the runner file-command
+# dir owned by the runner's UID (1001 on GitHub-hosted runners), so a container
+# job must run as that UID to write them — `options: --user 1001`. That alone is
+# not enough: `sf` (oclif) calls Node's os.userInfo(), which throws ENOENT when
+# the running UID has no passwd entry, so an unregistered 1001 crashes the CLI.
+# Registering it statically is what lets those jobs drop `--user root`.
+# GID 0 so it can write the group-0 paths set up below.
+RUN useradd -m -s /bin/bash -u 1001 -g 0 runner
+
 # Pin SF CLI data dirs to fixed paths owned by root so any runner UID can write.
 # XDG_DATA_HOME/XDG_CONFIG_HOME redirect SF CLI away from $HOME/.sf.
 # Dirs are world-writable so plugins can be updated at runtime by any user.
@@ -62,19 +73,19 @@ RUN echo y | sf plugins install sfdx-git-delta
 # Root bypassed the mismatch by ignoring permissions, at the cost of running
 # every pipeline privileged. We take the security trade instead.
 #
-# CONSUMER REQUIREMENT: the runner UID must be 1000. On ARC set the runner
-# pod's `securityContext.runAsUser: 1000`, or pass `options: --user 1000` on the
-# container job. A mismatched UID gets EACCES on /github/home exactly as before.
+# CONSUMER REQUIREMENT: run the container as a UID this image knows about —
+# 1000 (`ci`, the default) or 1001 (`runner`). GitHub Actions container jobs
+# should pass `options: --user 1001` to match the runner that owns
+# /github/home; on ARC set the runner pod's `securityContext.runAsUser`
+# to whichever of the two matches.
 #
-# Why not the OpenShift arbitrary-UID pattern (run as any injected --user)?
-# It does not work for this CLI: oclif calls Node's os.userInfo(), which fails
-# with ENOENT when the running UID has no /etc/passwd entry, so `sf` crashes
-# under an unknown UID. The usual remedy — an entrypoint that appends a passwd
-# line — is bypassed by GitHub Actions container jobs, which override
-# ENTRYPOINT with `--entrypoint tail`. Verified, do not re-attempt.
+# An UNREGISTERED UID does not work, and no Dockerfile change can fix it:
+# os.userInfo() throws ENOENT, and the usual remedy — an entrypoint appending a
+# passwd line — never runs, because GitHub Actions container jobs override
+# ENTRYPOINT with `--entrypoint tail`. That is why the two UIDs are baked in
+# rather than resolved at runtime. Verified; do not re-attempt.
 #
-# The GID 0 ownership below is still worth keeping: it lets the SF CLI data and
-# config dirs be written by any UID that does have a passwd entry.
+# GID 0 ownership lets either account write the SF CLI data and config dirs.
 USER root
 RUN chgrp -R 0 /home/ci /opt/sf-data /opt/sf-config \
     && chmod -R g=u /home/ci /opt/sf-data /opt/sf-config

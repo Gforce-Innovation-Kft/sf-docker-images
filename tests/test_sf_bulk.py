@@ -177,6 +177,25 @@ def test_workspace_writable_by_runtime_user(host):
     assert host.run("touch /workspace/.probe").rc == 0
 
 
+def test_runner_user_exists(host):
+    """UID 1001 is registered so GHA container jobs can run --user 1001."""
+    user = host.user("runner")
+    assert user.exists
+    assert user.uid == 1001
+    assert user.gid == 0, "runner must be in GID 0 to write the group-0 paths"
+
+
+def test_sf_cli_works_as_runner_uid():
+    """`sf` must work under --user 1001 — an unregistered UID crashes oclif."""
+    result = subprocess.run(
+        ["docker", "run", "--rm", "--user", "1001",
+         "--entrypoint", "sf", "sf-bulk:test", "version"],
+        capture_output=True, text=True,
+    )
+    assert result.returncode == 0, f"sf failed as UID 1001: {result.stderr[:400]}"
+    assert "@salesforce/cli" in result.stdout
+
+
 def test_libc6_compat_installed(host):
     """gcompat (libc6-compat) is installed for glibc compatibility with native npm modules."""
     result = host.run("apk info gcompat")

@@ -1,0 +1,49 @@
+---
+# sf-devcontainer — build and test on PRs that touch it.
+#
+# One workflow per image. The path filter below is GitHub's own, so a PR that
+# does not touch this image never starts this workflow, and the three image
+# workflows run in parallel with no coordinating job between them.
+#
+# Adding an image: copy this file, change the name, the context and the paths.
+# Removing one: delete its file. Releases are separate — see release.yml, which
+# builds every image on a tag so `latest` stays coherent across the set.
+name: sf-devcontainer
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      # This image's own build context and test suite.
+      - 'sf-devcontainer/**'
+      - 'tests/test_sf_devcontainer.py'
+      # Shared inputs that change what every image is built or tested with.
+      - 'tests/requirements.txt'
+      - '.github/workflows/image-sf-devcontainer.yml'
+      - '.github/workflows/reusable-docker-image-build.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  image:
+    name: sf-devcontainer
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+      security-events: write
+      # The reusable workflow's push job declares id-token: write for cosign.
+      # A called workflow cannot request more than the caller grants, so this
+      # must be here even though pull requests never reach that job.
+      id-token: write
+    uses: ./.github/workflows/reusable-docker-image-build.yml
+    with:
+      image-name: sf-devcontainer
+      context: ./sf-devcontainer
+      # Pull requests never publish. release.yml owns pushing.
+      push: false
+    secrets:
+      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}

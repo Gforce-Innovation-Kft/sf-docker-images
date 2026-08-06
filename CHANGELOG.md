@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **CI restructured to one workflow per image.** `build-and-push.yml` is replaced by
+  `image-sf-ci.yml`, `image-sf-devcontainer.yml`, `image-sf-bulk.yml` and `release.yml`.
+  Path filtering is now GitHub's own `on.pull_request.paths` rather than a `changes` job that
+  computed a matrix from the PR diff, so the image workflows are inherently parallel and adding
+  an image is copying one file. `release.yml` keeps a matrix because a release must push a
+  coherent set and aggregate every image's version report into one GitHub Release — which means
+  **adding an image now also requires a `release.yml` matrix entry**, or it is tested but never
+  published
+
+### Added
+- All three images register a second account, **`runner` (UID 1001, GID 0)**, alongside
+  `ci`/`vscode` (1000). GitHub Actions container jobs mount `/github/home` and the runner
+  file-command dir owned by the runner's UID, so the job must *be* that UID to write them —
+  and `sf` crashes on a UID with no `/etc/passwd` entry, because oclif calls
+  `os.userInfo()`. Registering 1001 statically is what lets the shared Salesforce
+  workflows drop `options: --user root` and run unprivileged. Verified against a
+  simulated runner mount, not just a passwd lookup
+- CI: `e2e` job. On PRs touching sf-ci it retags the **already-built** image (no rebuild)
+  to a throwaway GHCR tag and runs the real `weather2gp-release.yml` in `sf-develop-demo`
+  against it as `--user 1001`, synchronously, failing the PR if that pipeline fails.
+  Quota-light: no scratch org, and `--skip-validation` draws on the 500/day pool.
+  Needs an `E2E_DISPATCH_TOKEN` secret with `actions: write` on the downstream repo
+
 ### Changed — BREAKING
 - **`sf-ci` and `sf-bulk` now run as non-root `ci` (UID 1000) at runtime**, reverting the
   `USER root` workaround added in 927c06d. Running CI pipelines as root was the wrong trade.

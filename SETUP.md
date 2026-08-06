@@ -44,7 +44,7 @@ Add these secrets to your GitHub repository (Settings → Secrets and variables 
 
 - `DOCKERHUB_TOKEN`: Your Docker Hub access token
 
-The workflow uses `gforceinnovation` as the Docker Hub username by default. If your username is different, update the `DOCKERHUB_USERNAME` in `.github/workflows/build-and-push.yml`.
+The workflow uses `gforceinnovation` as the Docker Hub username by default. If your username is different, update the `dockerhub-username` input default in `.github/workflows/reusable-docker-image-build.yml`.
 
 ### 4. Test Locally
 

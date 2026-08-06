@@ -2,7 +2,7 @@
 
 > Minimal Docker image for Salesforce CI/CD pipelines.
 
-[![CI](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml)
+[![sf-ci](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/image-sf-ci.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/image-sf-ci.yml)
 [![Release](https://img.shields.io/github/v/release/Gforce-Innovation-Kft/sf-docker-images?sort=semver)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/releases)
 [![sf-ci size](https://img.shields.io/docker/image-size/gforceinnovation/sf-ci/latest?label=size)](https://hub.docker.com/r/gforceinnovation/sf-ci)
 [![sf-ci pulls](https://img.shields.io/docker/pulls/gforceinnovation/sf-ci?label=pulls)](https://hub.docker.com/r/gforceinnovation/sf-ci)
@@ -35,8 +35,15 @@ Every published image is signed with cosign (keyless, GitHub OIDC):
 cosign verify \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --certificate-identity-regexp \
-    '^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$' \
+    '^https://github\.com/Gforce-Innovation-Kft/sf-docker-images/\.github/workflows/reusable-docker-image-build\.yml@.+$' \
   gforceinnovation/sf-ci:latest
+```
+
+Images published **before 2026-08-06** were signed by the old shared workflow and
+verify only against that identity instead:
+
+```text
+^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$
 ```
 
 ## What's inside
@@ -48,10 +55,15 @@ cosign verify \
   `SF_DISABLE_TELEMETRY`, `CI`.
 - **User**: runs as **non-root `ci` (UID 1000)** at runtime.
 
-> **Runner UID must be 1000.** GitHub Actions bind-mounts `/github/home` owned by the runner's
-> UID; a container running under a different UID cannot write it. On ARC set the runner pod's
-> `securityContext.runAsUser: 1000`, or add `options: --user 1000` to the container job.
-> Versions before 3.0.0 ran as root and were immune to this.
+> **Run as a UID this image knows: 1000 (`ci`) or 1001 (`runner`).** GitHub Actions bind-mounts
+> `/github/home` owned by the runner's UID, and a container under a different UID cannot write
+> it. For **GitHub-hosted runners add `options: --user 1001`** to the container job — that is the
+> runner's UID. On ARC, set the runner pod's `securityContext.runAsUser` to whichever of the two
+> matches.
+>
+> An *unregistered* UID will not work: `sf` calls Node's `os.userInfo()`, which fails when the
+> UID has no `/etc/passwd` entry. Both 1000 and 1001 are baked in for exactly this reason.
+> Versions before 3.0.0 ran as root and were immune to all of it.
 
 ## Usage
 
