@@ -13,9 +13,18 @@ release. Read [`.claude/references/devops.md`](../../references/devops.md) for t
 
 ## Pre-flight
 
-- All changes are on `main` via a merged, green PR.
+- All changes are on `main` via a merged, green PR — including the **E2E gate** on any PR that
+  touched sf-ci. That gate is the only thing proving the image still works as a GitHub Actions
+  container job; a green container suite alone does not.
 - Decide the bump (see devops.md): MAJOR = breaking for consumers, MINOR = additive,
   PATCH = fixes/rebuilds.
+- **A release is the only irreversible step in this repo.** It pushes public images, signs them,
+  and writes to a public transparency log. Do not tag during a GitHub Actions incident
+  (check `githubstatus.com`) — a half-published set is awkward to unwind, and tags can never be
+  re-pointed.
+- If the release changes the runtime user, image UIDs, or anything consumers pass on the
+  command line, check `docs/usage-catalog.md` in `shared-github-actions` for who is affected
+  and whether their pinned ref picks the change up.
 
 ## Steps
 
@@ -31,9 +40,10 @@ release. Read [`.claude/references/devops.md`](../../references/devops.md) for t
    git push origin vX.Y.Z
    ```
 3. **CI does the rest** ([`release.yml`](../../../.github/workflows/release.yml)):
-   build (matrix over every image) → pytest-testinfra + Trivy → multi-arch push to Docker Hub with SBOM + provenance
-   (tags `X.Y.Z`, `X.Y`, `X`, `latest`) → GitHub Release with generated notes + the CHANGELOG
-   section.
+   build (matrix over every image) → pytest-testinfra + Trivy → multi-arch push to Docker Hub
+   with SBOM + provenance + a keyless cosign signature → GitHub Release with generated notes,
+   the CHANGELOG section, and a per-image tool-version table.
+   **Two tags only: `X.Y.Z` and `latest`** — rolling `X.Y`/`X` tags are not published.
 
 ## Verify after the run
 

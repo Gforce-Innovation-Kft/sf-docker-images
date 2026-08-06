@@ -2,9 +2,9 @@
 name: building-a-docker-image
 description: >-
   Scaffold or modify a Salesforce Docker image in this repo (sf-ci, sf-devcontainer,
-  sf-bulk) — the Dockerfile, its README, the pytest-testinfra container tests, and the CI build
-  matrix — while honouring the per-image size and tool rules. Use when adding/removing a
-  tool or plugin, changing a base image, or creating a new image.
+  sf-bulk) — the Dockerfile, its README, the pytest-testinfra container tests, and its CI
+  workflow — while honouring the per-image size, user, and tool rules. Use when adding/removing
+  a tool or plugin, changing a base image, or creating a new image.
 ---
 
 # Building / modifying a Docker image
@@ -39,11 +39,16 @@ For any tool/plugin/base change to `sf-ci`, `sf-devcontainer`, or `sf-bulk`:
 ## New image checklist
 
 - Create `<image>/Dockerfile`, `<image>/README.md`, `<image>/.dockerignore`.
-- Add `tests/test_sf_<image>.py` (copy the `host` fixture from an existing test file).
-- Add the image to the `build`, `test`, and `push` matrices in
-  a new `.github/workflows/image-<name>.yml` (copy an existing one) AND a matrix entry in
-  [`.github/workflows/release.yml`](../../../.github/workflows/release.yml) — an image
-  missing the second is tested on PRs but never published.
+- **Create both runtime accounts**: the image user at UID 1000 (`ci`/`vscode`) *and* `runner` at
+  UID 1001 with GID 0. GitHub Actions container jobs run as the runner's UID, and `sf` crashes
+  on a UID with no `/etc/passwd` entry. Make writable paths group-0 writable
+  (`chgrp -R 0 … && chmod -R g=u …`). End on the non-root user — never `USER root`.
+- Add `tests/test_sf_<image>.py` (copy the `host` fixture from an existing test file), including
+  the non-root and UID-1001 assertions.
+- **Two CI files, not one:** a new `.github/workflows/image-<name>.yml` (copy an existing one;
+  change the name, context, and `paths`) **and** a matrix entry in
+  [`.github/workflows/release.yml`](../../../.github/workflows/release.yml). An image with only
+  the first is built and tested on PRs but **never published** — and nothing warns you.
 - Document it in root `README.md`, `CLAUDE.md`, `AGENTS.md`, and `CHANGELOG.md`.
 
 ## Verify
