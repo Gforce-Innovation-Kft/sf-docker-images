@@ -1,8 +1,12 @@
 name: Build and Push Docker Images
 
-# Thin caller: per-image build → test → push lives in the shared reusable
-# workflow (see docs/reusable-workflow-migration-design.md). This workflow
-# fans out over the three images and keeps the repo-specific release job.
+# Thin caller: per-image build → test → push lives in
+# reusable-docker-image-build.yml. This workflow fans out over the images and
+# keeps the repo-specific release job.
+#
+# On pull requests the fan-out is narrowed to the images whose files actually
+# changed (see the `changes` job); a docs-only PR builds nothing. Version tags
+# always build and publish the full set so `latest` stays coherent across images.
 on:
   # Build/test/push only on version tags; PRs validate before merge.
   # Pushes to main do not build (avoids a redundant run right before tagging).
@@ -18,21 +22,95 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  changes:
+    name: Detect changed images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      matrix: ${{ steps.select.outputs.matrix }}
+      has-images: ${{ steps.select.outputs.has-images }}
+    env:
+      # Single source of truth for the image set. Key = image name = build
+      # context directory = tests/test_<name with underscores>.py; value = the
+      # Docker Hub short description.
+      IMAGES: >-
+        {
+          "sf-devcontainer": "Full-featured Salesforce devcontainer — SF CLI v2, Node 24, Java 17, zsh",
+          "sf-ci": "Minimal Salesforce CI/CD runner — SF CLI v2, Node 24, Java 17",
+          "sf-bulk": "Ultra-light Alpine SF CLI image for bulk org operations — no Java"
+        }
+    steps:
+      - name: Select images to build
+        id: select
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          names() { jq -r 'keys_unsorted[]' <<<"$IMAGES"; }
+          suite() { printf 'tests/test_%s.py' "${1//-/_}"; }
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            changed=$(gh api --paginate "repos/${REPO}/pulls/${PR_NUMBER}/files" --jq '.[].filename')
+            printf 'Changed files:\n%s\n\n' "$(sed 's/^/  /' <<<"$changed")"
+
+            # Shared inputs — the workflows themselves, tests/requirements.txt,
+            # or any tests/*.py that is not one image's own suite — rebuild all.
+            own_suites=$(for n in $(names); do suite "$n"; echo; done)
+            shared=$({ grep -E '^\.github/workflows/|^tests/.*\.py$|^tests/requirements\.txt$' <<<"$changed" \
+              || true; } | { grep -vxF "$own_suites" || true; })
+
+            if [ -n "$shared" ]; then
+              echo "Shared files changed — building every image:"
+              sed 's/^/  /' <<<"$shared"
+              selected=$(names)
+            else
+              selected=$(for n in $(names); do
+                if grep -qE "^${n}/|^$(suite "$n")\$" <<<"$changed"; then echo "$n"; fi
+              done)
+            fi
+          else
+            # Version tags: always build and publish the full set.
+            selected=$(names)
+          fi
+
+          matrix=$(jq -R . <<<"$selected" | jq -sc --argjson imgs "$IMAGES" \
+            'map(select(length > 0) | {name: ., context: ("./" + .), description: $imgs[.]})')
+          count=$(jq length <<<"$matrix")
+
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          if [ "$count" -gt 0 ]; then
+            echo "has-images=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has-images=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          {
+            echo "## Images selected for build"
+            echo
+            if [ "$count" -eq 0 ]; then
+              echo "No image files changed — build, test and push skipped."
+            else
+              for n in $(names); do
+                if grep -qxF "$n" <<<"$selected"; then echo "- ✅ \`$n\` — building"
+                else echo "- ⏭️ \`$n\` — unchanged, skipped"; fi
+              done
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
   images:
     name: ${{ matrix.image.name }}
+    needs: changes
+    if: ${{ needs.changes.outputs.has-images == 'true' }}
     strategy:
       fail-fast: false
       matrix:
-        image:
-          - name: sf-devcontainer
-            context: ./sf-devcontainer
-            description: Full-featured Salesforce devcontainer — SF CLI v2, Node 24, Java 17, zsh
-          - name: sf-ci
-            context: ./sf-ci
-            description: Minimal Salesforce CI/CD runner — SF CLI v2, Node 24, Java 17
-          - name: sf-bulk
-            context: ./sf-bulk
-            description: Ultra-light Alpine SF CLI image for bulk org operations — no Java
+        image: ${{ fromJSON(needs.changes.outputs.matrix) }}
     permissions:
       contents: read
       checks: write
@@ -41,8 +119,7 @@ jobs:
       # id-token is only consumed by the reusable push job (cosign keyless
       # signing), which never runs on pull requests.
       id-token: write
-    # @v1 is the shared repo's floating major tag, moved by its release process.
-    uses: Gforce-Innovation-Kft/shared-github-actions/.github/workflows/docker-build-test-push.yml@v1
+    uses: ./.github/workflows/reusable-docker-image-build.yml
     with:
       image-name: ${{ matrix.image.name }}
       context: ${{ matrix.image.context }}

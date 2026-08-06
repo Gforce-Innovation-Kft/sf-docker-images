@@ -74,7 +74,7 @@ Tests for the lightweight CI/CD container:
 - ✅ Java 17 (OpenJDK)
 - ✅ Salesforce CLI with sfdx-git-delta plugin
 - ✅ CI utilities (git, jq, xmlstarlet)
-- ✅ User configuration (ci user, non-root)
+- ✅ User configuration (ci user, non-root at runtime, writable `/workspace`)
 - ✅ CI environment variables
 - ✅ Minimal footprint (no interactive tools)
 
@@ -87,7 +87,7 @@ Tests for the ultra-lightweight Alpine bulk runner:
 - ✅ ci user (UID 1000, bash shell)
 - ✅ XDG dirs pinned to /opt/sf-data and /opt/sf-config (chmod 777)
 - ✅ CI environment variables
-- ✅ Runs as root at runtime
+- ✅ Runs as non-root `ci` (UID 1000) at runtime, with a writable `/workspace`
 - ✅ Java NOT installed (intentionally lightweight)
 - ✅ Image smaller than 600MB
 

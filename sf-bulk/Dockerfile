@@ -50,12 +50,16 @@ USER ci
 WORKDIR /home/ci
 RUN echo y | sf plugins install sfdx-git-delta
 
-# Switch back to root for runtime.
-# ARC dind runner uses UID 1001 (runner) which != ci (1000).
-# GitHub Actions bind-mounts /github/home with the runner's UID as owner,
-# so running as ci causes EACCES. Root bypasses this on all runner types.
-# This is the same deliberate decision as sf-ci.
+# Runtime user: non-root `ci` (UID 1000) — same decision as sf-ci, see the full
+# rationale there. CONSUMER REQUIREMENT: the runner UID must be 1000 (ARC
+# `runAsUser: 1000`, or `options: --user 1000`), otherwise /github/home is
+# unwritable exactly as before 927c06d. Running as an arbitrary UID is not
+# supported: `sf` crashes when the UID has no /etc/passwd entry.
 USER root
+RUN chgrp -R 0 /home/ci /opt/sf-data /opt/sf-config \
+    && chmod -R g=u /home/ci /opt/sf-data /opt/sf-config
+
+USER ci
 
 # SF CLI environment — same set as sf-ci, ensures headless/container behaviour
 ENV SFDX_CONTAINER_MODE=true

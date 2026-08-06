@@ -57,6 +57,11 @@ Each test builds the image, starts a container, and verifies OS, user/UID/shell,
 plugins, tools, env vars, and directory structure (plus size and no-Java checks for `sf-bulk`).
 All tests must pass before a PR is merged; the same suite runs in CI along with a Trivy scan.
 
+CI only builds the images your PR touches. Changing `sf-bulk/` (or `tests/test_sf_bulk.py`)
+runs the `sf-bulk` pipeline alone; changing a workflow or a shared test file runs all three; a
+docs-only PR runs none. The job summary of every run lists what was built and what was skipped —
+check it if you expected a build and did not get one.
+
 A pre-commit hook runs `yamllint` on staged YAML (config in [`.yamllint`](.yamllint)).
 
 ## Commit & PR conventions

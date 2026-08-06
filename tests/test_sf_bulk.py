@@ -150,10 +150,31 @@ def test_workspace_directory_exists(host):
     assert workspace.is_directory
 
 
-def test_runtime_user_is_root(host):
-    """Container runs as root at runtime (bypasses ARC dind UID mismatch)."""
+def test_runtime_user_is_non_root(host):
+    """Container runs as non-root ci (UID 1000) at runtime, not root."""
     result = host.run("id -u")
-    assert result.stdout.strip() == "0"
+    assert result.stdout.strip() == "1000", "image must not run as root"
+    assert host.run("id -un").stdout.strip() == "ci"
+
+
+def test_sf_cli_works_as_non_root(host):
+    """The SF CLI is usable by the non-root runtime user (writes to XDG dirs)."""
+    assert host.run("sf version").rc == 0
+    # SF CLI must be able to write its config as the non-root user
+    assert host.run("touch /opt/sf-config/.probe && touch /opt/sf-data/.probe").rc == 0
+
+
+def test_sf_dirs_group_zero_writable(host):
+    """XDG dirs are group-0 writable so a matching runner UID can also write."""
+    for path in ("/opt/sf-data", "/opt/sf-config"):
+        d = host.file(path)
+        assert d.exists and d.is_directory
+        assert d.mode & 0o020, f"{path} must be group-writable"
+
+
+def test_workspace_writable_by_runtime_user(host):
+    """WORKDIR /workspace must be writable now that the image is non-root."""
+    assert host.run("touch /workspace/.probe").rc == 0
 
 
 def test_libc6_compat_installed(host):

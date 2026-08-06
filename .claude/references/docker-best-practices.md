@@ -33,7 +33,13 @@ repo-specific rule set. The exhaustive rationale lives in
 Plugins are installed as the `ci`/`vscode` user so they land in
 `XDG_DATA_HOME=/opt/sf-data` (world-writable, 777) — this makes them usable regardless of
 the runtime UID. See [image-conventions.md](./image-conventions.md) for the per-image
-user/runtime rules and why `sf-ci`/`sf-bulk` run as root at runtime.
+user/runtime rules.
+
+**All three images run non-root at runtime** (UID 1000). Do not "fix" a permission error by
+adding `USER root` — that regression is what 3.0.0 undid. The correct fix is to align the
+runner UID to 1000. Running as an *arbitrary* UID is not supported: `sf` calls Node's
+`os.userInfo()`, which throws ENOENT when the UID has no `/etc/passwd` entry, and the usual
+entrypoint workaround is bypassed by GitHub Actions container jobs (`--entrypoint tail`).
 
 ## Multi-stage builds
 

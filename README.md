@@ -129,12 +129,16 @@ Every build in CI:
   cosign verify \
     --certificate-oidc-issuer https://token.actions.githubusercontent.com \
     --certificate-identity-regexp \
-      '^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$' \
+      '^https://github\.com/Gforce-Innovation-Kft/sf-docker-images/\.github/workflows/reusable-docker-image-build\.yml@.+$' \
     gforceinnovation/sf-ci:latest
   ```
 
-  The identity is the shared CI workflow that built and pushed the image — no keys to manage
+  The identity is the CI workflow that built and pushed the image — no keys to manage
   or leak. Swap in `sf-devcontainer` / `sf-bulk` and any published tag.
+
+  > Images published **before 2026-08-06** were signed while the build workflow lived in
+  > `shared-github-actions`. Verify those against the old identity instead:
+  > `^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$`
 
 Found a vulnerability? See [`SECURITY.md`](SECURITY.md).
 
@@ -147,8 +151,10 @@ Found a vulnerability? See [`SECURITY.md`](SECURITY.md).
 - **Multi-arch** — `linux/amd64` and `linux/arm64` from a single build.
 - **Tested** — every image has a [pytest-testinfra](tests/) suite asserting OS, user, runtimes,
   plugins, tools, env vars, and size budgets. Nothing ships unless the suite is green.
-- **Non-root build, container-mode aware** — non-root users are created at build time; SF CLI is
-  configured for containers (`SFDX_CONTAINER_MODE`, telemetry/auto-update disabled).
+- **Non-root at runtime, container-mode aware** — all three images run as a non-root user
+  (`ci`/`vscode`, UID 1000), not just build as one; SF CLI is configured for containers
+  (`SFDX_CONTAINER_MODE`, telemetry/auto-update disabled). On self-hosted runners the runner
+  UID must be 1000 — see the per-image READMEs.
 
 ## Development
 
@@ -186,9 +192,14 @@ CI then builds all three images multi-arch, runs the tests + Trivy scan, pushes 
 (tags `X.Y.Z` + `latest`) with SBOM, provenance, and a keyless cosign signature, and opens a
 GitHub Release with notes drawn from the matching `CHANGELOG.md` section plus per-image
 tool-version tables (Node, npm, SF CLI, plugins) read from the built images. The per-image
-pipeline lives in the shared
-[`docker-build-test-push`](https://github.com/Gforce-Innovation-Kft/shared-github-actions)
-reusable workflow; this repo's workflow is a thin caller.
+pipeline lives in this repo's own
+[`reusable-docker-image-build.yml`](.github/workflows/reusable-docker-image-build.yml);
+`build-and-push.yml` is a thin matrix caller over it.
+
+On pull requests the matrix is narrowed to the images whose files actually changed — touching
+`sf-bulk/Dockerfile` builds and tests `sf-bulk` alone, and a docs-only PR builds nothing.
+Changes to the workflows or to shared test files still rebuild everything, and release tags
+always build the full set so `latest` stays consistent across images.
 
 ## AI-Assisted Development
 

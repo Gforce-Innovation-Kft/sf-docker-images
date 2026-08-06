@@ -54,12 +54,32 @@ USER ci
 WORKDIR /home/ci
 RUN echo y | sf plugins install sfdx-git-delta
 
-# Switch back to root for runtime.
-# GitHub Actions bind-mounts /github/home with the runner's UID as owner:
-#   - self-hosted (gabor, UID 1000 = ci): worked without this
-#   - ARC dind (runner, UID 1001 ≠ ci): ci can't write → EACCES on mkdir .sf
-# Running as root bypasses UID mismatch on /github/home across all runner types.
+# Runtime user: non-root `ci` (UID 1000).
+#
+# History: this was `USER root` (927c06d) because GitHub Actions bind-mounts
+# /github/home owned by the runner's UID — self-hosted (UID 1000) matched `ci`,
+# but ARC dind (UID 1001) did not, giving EACCES on `mkdir /github/home/.sf`.
+# Root bypassed the mismatch by ignoring permissions, at the cost of running
+# every pipeline privileged. We take the security trade instead.
+#
+# CONSUMER REQUIREMENT: the runner UID must be 1000. On ARC set the runner
+# pod's `securityContext.runAsUser: 1000`, or pass `options: --user 1000` on the
+# container job. A mismatched UID gets EACCES on /github/home exactly as before.
+#
+# Why not the OpenShift arbitrary-UID pattern (run as any injected --user)?
+# It does not work for this CLI: oclif calls Node's os.userInfo(), which fails
+# with ENOENT when the running UID has no /etc/passwd entry, so `sf` crashes
+# under an unknown UID. The usual remedy — an entrypoint that appends a passwd
+# line — is bypassed by GitHub Actions container jobs, which override
+# ENTRYPOINT with `--entrypoint tail`. Verified, do not re-attempt.
+#
+# The GID 0 ownership below is still worth keeping: it lets the SF CLI data and
+# config dirs be written by any UID that does have a passwd entry.
 USER root
+RUN chgrp -R 0 /home/ci /opt/sf-data /opt/sf-config \
+    && chmod -R g=u /home/ci /opt/sf-data /opt/sf-config
+
+USER ci
 
 # Set environment variables for CI
 ENV SFDX_CONTAINER_MODE=true
