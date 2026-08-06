@@ -41,7 +41,9 @@ For any tool/plugin/base change to `sf-ci`, `sf-devcontainer`, or `sf-bulk`:
 - Create `<image>/Dockerfile`, `<image>/README.md`, `<image>/.dockerignore`.
 - Add `tests/test_sf_<image>.py` (copy the `host` fixture from an existing test file).
 - Add the image to the `build`, `test`, and `push` matrices in
-  [`.github/workflows/build-and-push.yml`](../../../.github/workflows/build-and-push.yml).
+  a new `.github/workflows/image-<name>.yml` (copy an existing one) AND a matrix entry in
+  [`.github/workflows/release.yml`](../../../.github/workflows/release.yml) — an image
+  missing the second is tested on PRs but never published.
 - Document it in root `README.md`, `CLAUDE.md`, `AGENTS.md`, and `CHANGELOG.md`.
 
 ## Verify

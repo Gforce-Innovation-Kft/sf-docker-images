@@ -2,7 +2,7 @@
 
 > Full-featured VS Code devcontainer for Salesforce development.
 
-[![CI](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml)
+[![sf-devcontainer](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/image-sf-devcontainer.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/image-sf-devcontainer.yml)
 [![Release](https://img.shields.io/github/v/release/Gforce-Innovation-Kft/sf-docker-images?sort=semver)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/releases)
 [![sf-devcontainer size](https://img.shields.io/docker/image-size/gforceinnovation/sf-devcontainer/latest?label=size)](https://hub.docker.com/r/gforceinnovation/sf-devcontainer)
 [![sf-devcontainer pulls](https://img.shields.io/docker/pulls/gforceinnovation/sf-devcontainer?label=pulls)](https://hub.docker.com/r/gforceinnovation/sf-devcontainer)
@@ -35,8 +35,15 @@ Every published image is signed with cosign (keyless, GitHub OIDC):
 cosign verify \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --certificate-identity-regexp \
-    '^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$' \
+    '^https://github\.com/Gforce-Innovation-Kft/sf-docker-images/\.github/workflows/reusable-docker-image-build\.yml@.+$' \
   gforceinnovation/sf-devcontainer:latest
+```
+
+Images published **before 2026-08-06** were signed by the old shared workflow and
+verify only against that identity instead:
+
+```text
+^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$
 ```
 
 ## What's inside

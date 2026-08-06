@@ -30,8 +30,8 @@ release. Read [`.claude/references/devops.md`](../../references/devops.md) for t
    git tag -a vX.Y.Z -m "Release vX.Y.Z"
    git push origin vX.Y.Z
    ```
-3. **CI does the rest** ([`build-and-push.yml`](../../../.github/workflows/build-and-push.yml)):
-   build (matrix) → pytest-testinfra + Trivy → multi-arch push to Docker Hub with SBOM + provenance
+3. **CI does the rest** ([`release.yml`](../../../.github/workflows/release.yml)):
+   build (matrix over every image) → pytest-testinfra + Trivy → multi-arch push to Docker Hub with SBOM + provenance
    (tags `X.Y.Z`, `X.Y`, `X`, `latest`) → GitHub Release with generated notes + the CHANGELOG
    section.
 

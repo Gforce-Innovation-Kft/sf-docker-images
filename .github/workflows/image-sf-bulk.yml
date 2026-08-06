@@ -1,0 +1,35 @@
+---
+# sf-bulk — build and test on PRs that touch it. See image-sf-devcontainer.yml
+# for the rationale behind one workflow per image.
+name: sf-bulk
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'sf-bulk/**'
+      - 'tests/test_sf_bulk.py'
+      - 'tests/requirements.txt'
+      - '.github/workflows/image-sf-bulk.yml'
+      - '.github/workflows/reusable-docker-image-build.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  image:
+    name: sf-bulk
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+      security-events: write
+    uses: ./.github/workflows/reusable-docker-image-build.yml
+    with:
+      image-name: sf-bulk
+      context: ./sf-bulk
+      push: false
+    secrets:
+      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}

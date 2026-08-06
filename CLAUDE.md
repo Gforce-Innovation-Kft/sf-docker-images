@@ -61,47 +61,70 @@ docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf
 
 ## CI/CD Workflows
 
-### `.github/workflows/build-and-push.yml` -- Build and Push (thin caller)
-- **Triggers:** PRs to `main` and version tags (`v*.*.*`). Pushes to `main` do not build.
-- The per-image **build -> test -> push** pipeline lives in this repo's own
-  `.github/workflows/reusable-docker-image-build.yml`; `build-and-push.yml` fans out over the
-  images with a matrix and keeps the repo-specific `release` job (CHANGELOG section + per-image
-  tool-version tables assembled from the `version-report-*` artifacts).
-- **Path filtering:** a `changes` job computes the matrix from the PR's changed files, so a PR
-  only builds the images it actually touches; a docs-only PR builds nothing. Rules:
-  - `sf-<image>/**` or `tests/test_sf_<image>.py` -> that image only.
-  - `.github/workflows/**`, `tests/requirements.txt`, or any other `tests/*.py` -> all images.
-  - **Version tags always build all images**, so `latest` stays coherent across the set.
-  - The image set lives in **one place**: the `IMAGES` JSON map in the `changes` job (key =
-    image name = context dir = `tests/test_<name>.py`). Adding an image means editing that map
-    only — the matrix, contexts, and Docker Hub descriptions all derive from it.
+**One workflow per image, plus one release workflow.** The per-image **build -> test -> push**
+pipeline itself lives in `.github/workflows/reusable-docker-image-build.yml`; everything else is
+a thin caller.
+
+| File | Trigger | Does |
+|---|---|---|
+| `image-sf-ci.yml` | PRs touching sf-ci | build -> test -> **E2E gate** |
+| `image-sf-devcontainer.yml` | PRs touching sf-devcontainer | build -> test |
+| `image-sf-bulk.yml` | PRs touching sf-bulk | build -> test |
+| `release.yml` | `v*.*.*` tags | matrix over **all** images -> push -> GitHub Release |
+| `reusable-docker-image-build.yml` | `workflow_call` | build -> test -> push for ONE image |
+
+- **Path filtering is GitHub's own** (`on.pull_request.paths`), not a `changes` job. A PR only
+  starts the workflows for images it touches; a docs-only PR starts nothing. Separate workflows
+  are inherently parallel.
+- Each image workflow filters on its own dir, its own `tests/test_<name>.py`, **and** the shared
+  inputs (`tests/requirements.txt`, the reusable workflow, itself).
+- **Adding an image: copy one `image-*.yml`, change the name/context/paths, and add a matrix
+  entry to `release.yml`.** Removing one: delete the file and the entry. Forgetting the
+  `release.yml` half means the image is tested but never published.
+- **Tags build every image**, so `latest` stays coherent — which is why the tag path keeps a
+  matrix instead of splitting per image. That duplication of the image list is the deliberate
+  cost of the split.
+- PRs never push (`push: false`); `release.yml` is the only publisher.
 - On version tags: multi-arch push to Docker Hub with **two tags only** (`1.2.3` + `latest` —
   rolling `1.2`/`1` tags are no longer published), SBOM + provenance attestations, and a
   **keyless cosign signature** (GitHub OIDC; identity = the reusable workflow's path — renaming
   or moving that file invalidates every documented `cosign verify` command).
-- Registry is **Docker Hub only** (`gforceinnovation/*`).
-- Do not copy per-image pipeline logic into `build-and-push.yml` — change the reusable workflow.
+- Registry is **Docker Hub only** (`gforceinnovation/*`); GHCR is used solely for throwaway E2E
+  candidates.
+- Do not copy per-image pipeline logic into the callers — change the reusable workflow.
 
-### `e2e` job — critical downstream workflows
+### E2E gate — two tiers, both blocking (`image-sf-ci.yml`)
 
-- Runs on PRs that touch **sf-ci** (the image the Salesforce pipelines use).
-- Takes the **already-built** `sf-ci-image` artifact — no rebuild, so the bits under
-  test are the bits the container suite just passed — retags it to a throwaway
-  `ghcr.io/<owner>/sf-ci-e2e:pr-<N>`, and dispatches the real
-  `weather2gp-release.yml` in `sf-develop-demo` against it, **as `--user 1001`**.
-- Waits synchronously (`gh run watch --exit-status`), so a downstream failure fails
-  the PR. Correlates via an `e2e-run-id` echoed into the downstream `run-name` —
-  "latest run" races when two PRs overlap.
-- **Quota-light on purpose:** `run-validate: false` (no scratch org) and
-  `skip-validation: true` (500/day pool, not the 6/day validated-create pool).
-  Each run still creates one package version and pushes a `pkg/...` provenance tag
-  in `sf-develop-demo`.
-- **Requires the `E2E_DISPATCH_TOKEN` secret** — a PAT/App token with `actions: write`
-  on `sf-develop-demo`. `GITHUB_TOKEN` cannot dispatch cross-repo. Without it the job
-  fails with an explicit message rather than silently passing.
-- Container tests assert the image is internally correct; this asserts it still works
-  *as a GitHub Actions container job*, which is how consumers use it. That distinction
-  is why UID regressions survived the test suite before.
+Only sf-ci carries it: it is the image the Salesforce pipelines run in.
+
+```
+image -> publish-candidate -> e2e-container -> e2e-workflows -> cleanup
+```
+
+- **`publish-candidate`** takes the **already-built** `sf-ci-image` artifact — no rebuild, so
+  the bits under test are the bits the container suite just passed — and pushes it to a
+  throwaway `ghcr.io/<owner>/sf-ci-e2e:pr-<N>`. Everything downstream needs to *pull* it: a
+  container job takes a registry reference, not a loaded image.
+- **Tier 1 `e2e-container`** is a real GitHub Actions container job on that image, **`--user
+  1001`**. Probes the runner file-command paths, `$HOME`, `sf version`/`plugins`, and
+  `sfdx-git-delta` (the `sf-source-delta` code path) — no secrets, no org, no quota.
+  `tests/` runs `docker run`, so it cannot see what GitHub does to a container job:
+  bind-mounting `/github/home` and the file-command dir owned by the runner's UID. **Every
+  regression this image has actually shipped lived in that gap.**
+- **Tier 2 `e2e-workflows`** dispatches real downstream pipelines against the candidate and
+  blocks on them (`gh run watch --exit-status`), so a downstream failure fails the PR.
+  Correlates via an `e2e-run-id` echoed into the downstream `run-name` — "latest run" races
+  when two PRs overlap. **Add a critical workflow by adding a `matrix.target` entry**; nothing
+  else changes.
+- Tier 1 gates tier 2, so a container that cannot run `sf` fails in ~1 minute instead of
+  spending a package-version create.
+- **Quota-light on purpose:** `run-validate: false` (no scratch org) and `skip-validation: true`
+  (500/day pool, not the 6/day validated-create pool). Each run still creates one package
+  version and pushes a `pkg/...` provenance tag in `sf-develop-demo`.
+- **Requires the `E2E_DISPATCH_TOKEN` secret** — a PAT/App token with `actions: write` on
+  `sf-develop-demo`. `GITHUB_TOKEN` cannot dispatch cross-repo. Without it the job fails with an
+  explicit message rather than silently passing.
+- `cleanup` deletes the throwaway GHCR tag on `always()`, whichever tier failed.
 
 ### Release Process
 ```bash

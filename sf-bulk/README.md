@@ -2,7 +2,7 @@
 
 > Ultra-light Alpine image for bulk Salesforce org operations — no Java.
 
-[![CI](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/build-and-push.yml)
+[![sf-bulk](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/image-sf-bulk.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/image-sf-bulk.yml)
 [![Release](https://img.shields.io/github/v/release/Gforce-Innovation-Kft/sf-docker-images?sort=semver)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/releases)
 [![sf-bulk size](https://img.shields.io/docker/image-size/gforceinnovation/sf-bulk/latest?label=size)](https://hub.docker.com/r/gforceinnovation/sf-bulk)
 [![sf-bulk pulls](https://img.shields.io/docker/pulls/gforceinnovation/sf-bulk?label=pulls)](https://hub.docker.com/r/gforceinnovation/sf-bulk)
@@ -34,8 +34,15 @@ Every published image is signed with cosign (keyless, GitHub OIDC):
 cosign verify \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --certificate-identity-regexp \
-    '^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$' \
+    '^https://github\.com/Gforce-Innovation-Kft/sf-docker-images/\.github/workflows/reusable-docker-image-build\.yml@.+$' \
   gforceinnovation/sf-bulk:latest
+```
+
+Images published **before 2026-08-06** were signed by the old shared workflow and
+verify only against that identity instead:
+
+```text
+^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$
 ```
 
 ## Features
@@ -46,9 +53,10 @@ cosign verify \
 - **Utilities**: bash, curl, git, jq, unzip, libc6-compat
 - **Container-mode env**: `SFDX_CONTAINER_MODE`, `SFDX_DISABLE_DNS_CHECK`, `SF_AUTOUPDATE_DISABLE`,
   `SF_DISABLE_TELEMETRY`, `CI` — XDG dirs pinned to `/opt/sf-data` and `/opt/sf-config`
-- **Runs as non-root `ci` (UID 1000)** at runtime, same as `sf-ci`. The runner UID must also be
-  1000 (ARC `securityContext.runAsUser: 1000`, or `options: --user 1000`) or `/github/home` is
-  unwritable. Versions before 3.0.0 ran as root.
+- **Runs as non-root `ci` (UID 1000)** at runtime, same as `sf-ci`. Run it as a UID the image
+  knows — 1000 (`ci`) or 1001 (`runner`); on GitHub-hosted runners use `options: --user 1001`,
+  which matches the runner that owns `/github/home`. An unregistered UID crashes `sf`
+  (`os.userInfo()` needs a passwd entry). Versions before 3.0.0 ran as root.
 
 ## When to use
 
