@@ -82,6 +82,27 @@ docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf
 - Registry is **Docker Hub only** (`gforceinnovation/*`).
 - Do not copy per-image pipeline logic into `build-and-push.yml` — change the reusable workflow.
 
+### `e2e` job — critical downstream workflows
+
+- Runs on PRs that touch **sf-ci** (the image the Salesforce pipelines use).
+- Takes the **already-built** `sf-ci-image` artifact — no rebuild, so the bits under
+  test are the bits the container suite just passed — retags it to a throwaway
+  `ghcr.io/<owner>/sf-ci-e2e:pr-<N>`, and dispatches the real
+  `weather2gp-release.yml` in `sf-develop-demo` against it, **as `--user 1001`**.
+- Waits synchronously (`gh run watch --exit-status`), so a downstream failure fails
+  the PR. Correlates via an `e2e-run-id` echoed into the downstream `run-name` —
+  "latest run" races when two PRs overlap.
+- **Quota-light on purpose:** `run-validate: false` (no scratch org) and
+  `skip-validation: true` (500/day pool, not the 6/day validated-create pool).
+  Each run still creates one package version and pushes a `pkg/...` provenance tag
+  in `sf-develop-demo`.
+- **Requires the `E2E_DISPATCH_TOKEN` secret** — a PAT/App token with `actions: write`
+  on `sf-develop-demo`. `GITHUB_TOKEN` cannot dispatch cross-repo. Without it the job
+  fails with an explicit message rather than silently passing.
+- Container tests assert the image is internally correct; this asserts it still works
+  *as a GitHub Actions container job*, which is how consumers use it. That distinction
+  is why UID regressions survived the test suite before.
+
 ### Release Process
 ```bash
 git tag -a v1.2.0 -m "Release v1.2.0"

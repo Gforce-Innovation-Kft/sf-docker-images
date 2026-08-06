@@ -128,6 +128,159 @@ jobs:
     secrets:
       dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
+  # ---------------------------------------------------------------------------
+  # e2e — run a real downstream pipeline against the image we just built.
+  #
+  # The container tests prove the image is internally correct. They cannot prove
+  # it still works as a GitHub Actions container job, which is how consumers
+  # actually use it — that has broken before on UID and permission mismatches
+  # that no in-container assertion would catch.
+  #
+  # So the candidate image is published to a throwaway GHCR tag and a real
+  # Salesforce release is dispatched against it in sf-develop-demo, synchronously.
+  # Profile is deliberately quota-light: no scratch org, and --skip-validation
+  # draws on the 500/day pool rather than the 6/day validated-create pool.
+  # ---------------------------------------------------------------------------
+  e2e:
+    name: E2E — critical workflows
+    runs-on: ubuntu-latest
+    needs: [changes, images]
+    # Only sf-ci is exercised: it is the image the Salesforce workflows run on.
+    if: >-
+      ${{ needs.changes.outputs.has-images == 'true'
+      && contains(needs.changes.outputs.matrix, '"sf-ci"') }}
+    permissions:
+      contents: read
+      packages: write
+    env:
+      GHCR_IMAGE: ghcr.io/${{ github.repository_owner }}/sf-ci-e2e
+      GHCR_TAG: pr-${{ github.event.pull_request.number || github.run_id }}
+      DOWNSTREAM_REPO: Gforce-Innovation-Kft/sf-develop-demo
+      DOWNSTREAM_WORKFLOW: weather2gp-release.yml
+      # The caller's inputs live on this branch until it merges to main.
+      DOWNSTREAM_REF: feature/weather2gp-release-flow
+    steps:
+      - name: Check out files
+        uses: actions/checkout@v7
+
+      # No rebuild: this is the exact artifact the test job just validated.
+      # Rebuilding could produce different bits and prove the wrong image.
+      - name: Download the sf-ci image built by this run
+        uses: actions/download-artifact@v8
+        with:
+          name: sf-ci-image
+
+      - name: Load and retag
+        run: |
+          set -euo pipefail
+          docker load < sf-ci.tar.gz
+          docker tag sf-ci:test "${GHCR_IMAGE}:${GHCR_TAG}"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push the candidate image
+        run: docker push "${GHCR_IMAGE}:${GHCR_TAG}"
+
+      # The downstream repo pulls this with its own token, so the package has to
+      # be readable outside this repo. Best-effort: the first push creates the
+      # package, and visibility can only be set once it exists.
+      - name: Make the candidate package public
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.E2E_DISPATCH_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh api -X PATCH "orgs/${{ github.repository_owner }}/packages/container/sf-ci-e2e" \
+            -f visibility=public \
+            || echo "::warning::Could not set package visibility; the downstream pull may need credentials."
+
+      - name: Dispatch the downstream release and wait
+        id: dispatch
+        env:
+          # GITHUB_TOKEN cannot dispatch workflows in another repository.
+          GH_TOKEN: ${{ secrets.E2E_DISPATCH_TOKEN }}
+          E2E_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::E2E_DISPATCH_TOKEN is not set. It needs actions:write on ${DOWNSTREAM_REPO}."
+            exit 1
+          fi
+
+          gh workflow run "$DOWNSTREAM_WORKFLOW" \
+            --repo "$DOWNSTREAM_REPO" \
+            --ref "$DOWNSTREAM_REF" \
+            -f "container-image=${GHCR_IMAGE}:${GHCR_TAG}" \
+            -f container-user=1001 \
+            -f run-validate=false \
+            -f skip-validation=true \
+            -f create-github-release=false \
+            -f "e2e-run-id=${E2E_ID}"
+
+          # Correlate by the id echoed into run-name; "latest run" races.
+          echo "Waiting for the dispatched run to appear..."
+          run_id=""
+          for _ in $(seq 1 30); do
+            sleep 10
+            run_id=$(gh run list --repo "$DOWNSTREAM_REPO" \
+              --workflow "$DOWNSTREAM_WORKFLOW" --limit 30 \
+              --json databaseId,displayTitle \
+              --jq "[.[] | select(.displayTitle | contains(\"${E2E_ID}\"))][0].databaseId // empty")
+            [ -n "$run_id" ] && break
+          done
+
+          if [ -z "$run_id" ]; then
+            echo "::error::Dispatched run never appeared for id ${E2E_ID}."
+            exit 1
+          fi
+
+          url="${GITHUB_SERVER_URL}/${DOWNSTREAM_REPO}/actions/runs/${run_id}"
+          echo "run-url=$url" >> "$GITHUB_OUTPUT"
+          echo "::notice::Downstream run: $url"
+
+          # Block on it. --exit-status makes a failed downstream run fail this job.
+          gh run watch "$run_id" --repo "$DOWNSTREAM_REPO" --exit-status
+
+      - name: Summarise
+        if: always()
+        run: |
+          {
+            echo "## E2E — critical workflows"
+            echo
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Image under test | \`${GHCR_IMAGE}:${GHCR_TAG}\` |"
+            echo "| Container user | \`1001\` (unprivileged) |"
+            echo "| Downstream | \`${DOWNSTREAM_WORKFLOW}\` in \`${DOWNSTREAM_REPO}\` |"
+            echo "| Downstream run | ${{ steps.dispatch.outputs.run-url || 'not started' }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # The throwaway tag must not outlive the test, or GHCR fills with pr-N tags.
+      - name: Delete the candidate image
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.E2E_DISPATCH_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          version_id=$(gh api --paginate \
+            "orgs/${{ github.repository_owner }}/packages/container/sf-ci-e2e/versions" \
+            --jq "[.[] | select(.metadata.container.tags[]? == \"${GHCR_TAG}\")][0].id // empty" \
+            2>/dev/null || true)
+          if [ -n "$version_id" ]; then
+            gh api -X DELETE \
+              "orgs/${{ github.repository_owner }}/packages/container/sf-ci-e2e/versions/${version_id}"
+            echo "::notice::Deleted ${GHCR_IMAGE}:${GHCR_TAG}"
+          else
+            echo "::warning::Could not resolve ${GHCR_TAG} for deletion; clean it up manually."
+          fi
+
   release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
