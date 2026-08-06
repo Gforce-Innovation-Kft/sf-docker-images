@@ -153,7 +153,9 @@ jobs:
       contents: read
       packages: write
     env:
-      GHCR_IMAGE: ghcr.io/${{ github.repository_owner }}/sf-ci-e2e
+      # GHCR_IMAGE is derived in the first step, not here: the owner is
+      # `Gforce-Innovation-Kft` and registry references must be lowercase, but
+      # workflow expressions have no lowercase function.
       GHCR_TAG: pr-${{ github.event.pull_request.number || github.run_id }}
       DOWNSTREAM_REPO: Gforce-Innovation-Kft/sf-develop-demo
       DOWNSTREAM_WORKFLOW: weather2gp-release.yml
@@ -162,6 +164,13 @@ jobs:
     steps:
       - name: Check out files
         uses: actions/checkout@v7
+
+      # Docker refuses a reference with an uppercase path, and the org name has
+      # capitals. Lowercase it once here so every later step shares one value.
+      - name: Resolve the GHCR reference
+        run: |
+          set -euo pipefail
+          echo "GHCR_IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/sf-ci-e2e" >> "$GITHUB_ENV"
 
       # No rebuild: this is the exact artifact the test job just validated.
       # Rebuilding could produce different bits and prove the wrong image.
