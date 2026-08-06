@@ -44,6 +44,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Running under an *arbitrary* UID is explicitly not supported: `sf` calls Node's
     `os.userInfo()`, which throws ENOENT when the UID has no `/etc/passwd` entry. The usual
     entrypoint workaround does not apply — GitHub Actions container jobs override `ENTRYPOINT`.
+- **sf-devcontainer's shell is now Starship with no framework**, replacing Oh My Zsh +
+  Powerlevel10k. Plugins come from apt instead of git clones; `zsh-completions` is dropped
+  (not packaged for noble). The prompt shows the project's Salesforce target org, read from
+  `.sf/config.json` with `jq` — never by calling `sf`, which would add ~500 ms of Node
+  startup to every prompt. Anyone relying on OMZ aliases or `p10k configure` must move that
+  into `~/.zshrc.local`
 - CI: third-party actions are pinned to floating major tags (`@v7`, `@v4`) instead of commit
   SHAs. `sigstore/cosign-installer` (`@v4.1.2`) and `aquasecurity/trivy-action` (`@v0.36.0`)
   stay exact — neither publishes a floating major tag.

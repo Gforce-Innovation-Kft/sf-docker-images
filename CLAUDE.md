@@ -23,7 +23,7 @@ Builds and publishes three Salesforce-focused Docker images to Docker Hub under 
 - **User:** `vscode` (UID 1000, zsh shell, passwordless sudo).
 - **SF CLI plugins:** `code-analyzer`, `sfdx-git-delta`, `sfdx-browserforce-plugin`.
 - **Tools:** Everything in sf-ci plus vim, nano, wget, htop, tree, less, build-essential, openssl, gh, fzf, zoxide, eza, bat, ripgrep, fd, git-delta (system git pager), lazygit, and global prettier + prettier-plugin-apex + eslint.
-- **Shell:** Zsh with Oh My Zsh, Powerlevel10k theme, zsh-autosuggestions, zsh-syntax-highlighting, zsh-completions, fzf keybindings, zoxide, SF aliases (`sfhelp`); `~/.zshrc.local` sourced last as per-dev overlay.
+- **Shell:** Zsh with Starship, zsh-autosuggestions and zsh-syntax-highlighting, no framework, fzf keybindings, zoxide, SF aliases (`sfhelp`); `~/.zshrc.local` sourced last as per-dev overlay. The prompt shows the project's Salesforce target org, read from `.sf/config.json` with `jq` (never by calling `sf`, which would add ~500 ms of Node startup per prompt).
 
 ### sf-bulk
 - **Purpose:** Ultra-lightweight Alpine-based image for bulk Salesforce org operations (no Java).

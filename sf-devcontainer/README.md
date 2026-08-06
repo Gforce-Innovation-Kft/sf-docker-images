@@ -50,9 +50,11 @@ verify only against that identity instead:
 
 - **Node.js 24.x** (LTS) and **Java 17** (OpenJDK).
 - **Salesforce CLI v2** with plugins: `code-analyzer`, `sfdx-git-delta`, `sfdx-browserforce-plugin`.
-- **Shell**: zsh with Oh My Zsh, Powerlevel10k, autosuggestions, syntax-highlighting,
-  completions, fzf keybindings (Ctrl-R/Ctrl-T), zoxide (`z`), and Salesforce aliases
-  (`sfhelp` lists them).
+- **Shell**: zsh with Starship, zsh-autosuggestions and zsh-syntax-highlighting, no
+  framework, fzf keybindings (Ctrl-R/Ctrl-T), zoxide (`z`), and Salesforce aliases
+  (`sfhelp` lists them). The prompt shows the project's Salesforce target org, read
+  from `.sf/config.json` with `jq` — never by calling `sf`, which would add ~500 ms
+  of Node startup to every prompt.
 - **CLI tools**: gh (GitHub CLI), fzf, zoxide, eza, bat, ripgrep, fd, git-delta
   (system git pager), lazygit. Run `devhelp` inside the container for a cheatsheet;
   see [TOOLS.md](TOOLS.md) for the expert guide.
@@ -90,8 +92,9 @@ The image ships team-wide defaults; layer your own on top — no rebuild needed:
 - **VS Code dotfiles** — set `"dotfiles.repository": "you/dotfiles"` in your VS Code
   user settings and VS Code clones + installs your dotfiles into every dev container
   automatically.
-- **Prompt** — run `p10k configure` inside the container for a wizard-driven
-  Powerlevel10k setup.
+- **Prompt** — Starship, configured by the baked-in `starship.toml`; there's no
+  interactive configuration wizard. Coming from the old Oh My Zsh shell? Move your
+  aliases, plugins, and prompt customizations into `~/.zshrc.local` instead.
 
 ### AI pair development (Claude Code)
 
