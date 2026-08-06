@@ -93,8 +93,9 @@ The image ships team-wide defaults; layer your own on top — no rebuild needed:
   user settings and VS Code clones + installs your dotfiles into every dev container
   automatically.
 - **Prompt** — Starship, configured by the baked-in `starship.toml`; there's no
-  interactive configuration wizard. Coming from the old Oh My Zsh shell? Move your
-  aliases, plugins, and prompt customizations into `~/.zshrc.local` instead.
+  interactive configuration wizard. Migrating from an earlier version of this image?
+  Move your old shell customizations into `~/.zshrc.local` instead — see the
+  CHANGELOG for exactly what changed.
 
 ### AI pair development (Claude Code)
 

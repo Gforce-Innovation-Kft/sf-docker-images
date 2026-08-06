@@ -221,10 +221,11 @@ target org — read straight from `.sf/config.json` with `jq`, never by calling
 `sf` (that would add ~500 ms of Node startup to every prompt). The prompt
 character turns red after a command exits non-zero. Configuration is baked
 into `starship.toml`; there's no interactive configuration wizard — if you
-relied on Oh My Zsh's alias packs (`gst`, `gco`, `extract`,
-`colored-man-pages`, and friends) or its prompt theme's setup wizard, recreate
-what you need in `~/.zshrc.local`. `mkcd new-dir` (mkdir + cd) ships in the
-image and still works the same as always.
+relied on the previous shell framework's alias packs (`gst`, `gco`, `extract`,
+`colored-man-pages`, and friends) or its prompt-theme setup wizard, recreate
+what you need in `~/.zshrc.local` (see the CHANGELOG for exactly what
+changed). `mkcd new-dir` (mkdir + cd) ships in the image and still works the
+same as always.
 
 ### Personalization
 

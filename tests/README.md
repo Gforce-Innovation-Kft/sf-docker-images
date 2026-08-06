@@ -57,12 +57,16 @@ The first time you run the tests, it will build the images. Subsequent runs will
 
 ### test_sf_devcontainer.py
 Tests for the full-featured development container:
-- ✅ Ubuntu 22.04 base
+- ✅ Ubuntu 24.04 base (noble's default `ubuntu` user removed, replaced by `vscode`)
 - ✅ Node.js 24.x & npm
 - ✅ Java 17 (OpenJDK)
 - ✅ Salesforce CLI with plugins (code-analyzer, sfdx-git-delta, sfdx-browserforce-plugin)
-- ✅ Oh My Zsh with Powerlevel10k theme
-- ✅ Zsh plugins (autosuggestions, syntax-highlighting, completions)
+- ✅ Starship prompt — `starship.toml` baked in with the `sf_org` target-org module present
+- ✅ The previous shell framework and its prompt-theme config file are absent; zsh starts
+  with no leftover plugin warnings
+- ✅ zsh-autosuggestions and zsh-syntax-highlighting installed from apt (no `zsh-completions`),
+  sourced in the correct order (`zsh-syntax-highlighting` last)
+- ✅ Prompt never shells out to `sf` — reads `.sf/config.json` via `jq` instead
 - ✅ Development tools (git, vim, nano, jq, xmlstarlet)
 - ✅ User configuration (vscode user with sudo)
 - ✅ Environment variables
