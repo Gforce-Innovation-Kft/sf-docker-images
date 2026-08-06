@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- CI: path-filtered builds. A `changes` job reads the PR's changed files and builds only the
+  affected images — `sf-<image>/**` or `tests/test_sf_<image>.py` selects that image, while
+  `.github/workflows/**`, `tests/requirements.txt`, or any other `tests/*.py` rebuilds all of
+  them. Docs-only PRs now build nothing. Version tags are unaffected: they always build and
+  publish the full set so `latest` stays coherent across images. The image set is defined once,
+  in the `IMAGES` map of that job. A job summary lists which images were built and which were
+  skipped
+
+### Removed
+- Superseded design docs: `docs/devcontainer-dx-design.md`,
+  `docs/reusable-workflow-migration-design.md`, and
+  `docs/superpowers/specs/2026-07-13-devcontainer-tools-docs-design.md`. All three describe work
+  that shipped in 2.0.0 and is now documented in `CLAUDE.md` and the READMEs;
+  `docs/README.md` (the image decision guide) stays
+
 ## [2.0.0] - 2026-07-13
 
 ### Added

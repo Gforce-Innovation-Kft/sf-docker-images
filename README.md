@@ -194,6 +194,11 @@ pipeline lives in this repo's own
 [`reusable-docker-image-build.yml`](.github/workflows/reusable-docker-image-build.yml);
 `build-and-push.yml` is a thin matrix caller over it.
 
+On pull requests the matrix is narrowed to the images whose files actually changed — touching
+`sf-bulk/Dockerfile` builds and tests `sf-bulk` alone, and a docs-only PR builds nothing.
+Changes to the workflows or to shared test files still rebuild everything, and release tags
+always build the full set so `latest` stays consistent across images.
+
 ## AI-Assisted Development
 
 This repo is developed with [Claude Code](https://claude.com/claude-code) against a disciplined,
