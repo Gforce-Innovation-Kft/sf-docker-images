@@ -10,7 +10,9 @@ Builds and publishes three Salesforce-focused Docker images to Docker Hub under 
 
 ### sf-ci
 - **Purpose:** Lightweight CI/CD runner for Salesforce automation pipelines.
-- **User:** `ci` (UID 1000, bash shell, non-root).
+- **User:** `ci` (UID 1000, bash shell). **Runs non-root at runtime** — consumers must run the
+  container with UID 1000 (ARC `runAsUser: 1000` / `options: --user 1000`), otherwise
+  `/github/home` is unwritable.
 - **SF CLI plugins:** `sfdx-git-delta`.
 - **Tools:** git, jq, xmlstarlet, curl, unzip/zip.
 - **Env vars:** `SFDX_CONTAINER_MODE=true`, `SFDX_DISABLE_DNS_CHECK=true`, `SF_AUTOUPDATE_DISABLE=true`, `SF_DISABLE_TELEMETRY=true`, `CI=true`.
@@ -30,7 +32,7 @@ Builds and publishes three Salesforce-focused Docker images to Docker Hub under 
 - **SF CLI plugins:** `sfdx-git-delta`.
 - **Tools:** bash, curl, git, jq, unzip, libc6-compat (gcompat).
 - **Env vars:** same set as sf-ci. XDG dirs pinned to `/opt/sf-data` and `/opt/sf-config` (chmod 777).
-- **Runtime:** runs as root (bypasses ARC dind UID mismatch, same as sf-ci).
+- **Runtime:** runs as non-root `ci` (UID 1000), same as sf-ci — same runner-UID requirement.
 - **Design rule:** No Java, no editors, no interactive tools. Must stay under 600MB uncompressed.
 
 All three images set `WORKDIR /workspace`, include a `HEALTHCHECK` using `sf version --json`, and have `.dockerignore` files.

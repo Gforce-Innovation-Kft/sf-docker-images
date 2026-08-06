@@ -6,7 +6,7 @@ This file gives concise, high-signal guidance for AI coding assistants working i
 - Purpose: build and publish Salesforce-focused Docker images.
 - Images:
   - `sf-devcontainer`: full-featured dev environment (interactive tools, Zsh, plugins).
-  - `sf-ci`: lightweight CI image (minimal tools, non-root user, root runtime).
+  - `sf-ci`: lightweight CI image (minimal tools, non-root `ci` user at runtime).
   - `sf-bulk`: ultralight Alpine image (no Java, must stay under 600MB).
 
 ## Repo Layout
@@ -35,7 +35,8 @@ This file gives concise, high-signal guidance for AI coding assistants working i
   - Add/adjust tests in `tests/test_sf_*.py`.
   - Update root `README.md` if user-facing features changed.
 - `sf-bulk` must stay under 600MB with no Java.
-- Keep the `vscode`/`ci` users (UID 1000) and existing env vars; `sf-ci`/`sf-bulk` run as root at runtime.
+- Keep the `vscode`/`ci` users (UID 1000) and existing env vars; all images run **non-root** at
+  runtime. Do not add `USER root` to fix a permission error — align the runner UID to 1000.
 - Clean apt caches for small images (see `sf-ci/Dockerfile` pattern).
 
 ## Copilot Guidance (How to be "killer")

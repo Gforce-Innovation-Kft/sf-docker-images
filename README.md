@@ -151,8 +151,10 @@ Found a vulnerability? See [`SECURITY.md`](SECURITY.md).
 - **Multi-arch** — `linux/amd64` and `linux/arm64` from a single build.
 - **Tested** — every image has a [pytest-testinfra](tests/) suite asserting OS, user, runtimes,
   plugins, tools, env vars, and size budgets. Nothing ships unless the suite is green.
-- **Non-root build, container-mode aware** — non-root users are created at build time; SF CLI is
-  configured for containers (`SFDX_CONTAINER_MODE`, telemetry/auto-update disabled).
+- **Non-root at runtime, container-mode aware** — all three images run as a non-root user
+  (`ci`/`vscode`, UID 1000), not just build as one; SF CLI is configured for containers
+  (`SFDX_CONTAINER_MODE`, telemetry/auto-update disabled). On self-hosted runners the runner
+  UID must be 1000 — see the per-image READMEs.
 
 ## Development
 

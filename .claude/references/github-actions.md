@@ -41,8 +41,12 @@ Both live in this repo — the pipeline is self-contained, with no cross-repo de
   `contents: read`, `checks: write`, `pull-requests: write`, `security-events: write`,
   `id-token: write` (cosign keyless signing).
 - The reusable workflow is referenced with a local `./` path, so it is always the version on the
-  branch being built. Local third-party actions pin to a major version tag (`@v4`) or SHA —
-  never `@main`/`@latest`.
+  branch being built.
+- **Third-party actions pin to a floating major version tag** (`@v7`, `@v4`) — never `@main`,
+  `@latest`, or a commit SHA. Two actions have no floating major tag and must stay exact, so
+  leave them alone unless you have checked the upstream tag list:
+  - `sigstore/cosign-installer` — publishes only exact tags (`@v4.1.2`).
+  - `aquasecurity/trivy-action` — still 0.x, so there is no `v0` tag (`@v0.36.0`).
 - Registry is **Docker Hub only** (`gforceinnovation/*`) via the `dockerhub-token` secret
   (`secrets.DOCKERHUB_TOKEN`). Do not add other registries without an explicit decision.
 - **Tag scheme:** `{{version}}` + `latest` only. Rolling `{{major}}.{{minor}}`/`{{major}}` tags

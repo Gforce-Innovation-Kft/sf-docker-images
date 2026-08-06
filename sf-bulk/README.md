@@ -46,7 +46,9 @@ cosign verify \
 - **Utilities**: bash, curl, git, jq, unzip, libc6-compat
 - **Container-mode env**: `SFDX_CONTAINER_MODE`, `SFDX_DISABLE_DNS_CHECK`, `SF_AUTOUPDATE_DISABLE`,
   `SF_DISABLE_TELEMETRY`, `CI` — XDG dirs pinned to `/opt/sf-data` and `/opt/sf-config`
-- **Runs as root** at runtime (bypasses ARC dind UID mismatch, same as `sf-ci`)
+- **Runs as non-root `ci` (UID 1000)** at runtime, same as `sf-ci`. The runner UID must also be
+  1000 (ARC `securityContext.runAsUser: 1000`, or `options: --user 1000`) or `/github/home` is
+  unwritable. Versions before 3.0.0 ran as root.
 
 ## When to use
 
