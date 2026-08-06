@@ -119,6 +119,12 @@ RUN userdel -r ubuntu \
     && echo vscode ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/vscode \
     && chmod 0440 /etc/sudoers.d/vscode
 
+# Second account matching the GitHub Actions runner UID, so this image can also
+# be used as a CI container job (`options: --user 1001`) without root — see the
+# long rationale in sf-ci/Dockerfile. `sf` crashes on a UID with no passwd
+# entry, so 1001 is registered statically rather than resolved at runtime.
+RUN useradd -m -s /bin/bash -u 1001 -g 0 runner
+
 # Switch to vscode user
 USER vscode
 WORKDIR /home/vscode

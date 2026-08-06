@@ -35,6 +35,12 @@ RUN npm install -g @salesforce/cli@2.* \
 RUN deluser node \
     && adduser -D -u 1000 -s /bin/bash ci
 
+# Second account matching the GitHub Actions runner UID — see the long rationale
+# in sf-ci/Dockerfile. GitHub Actions container jobs run as the runner UID
+# (1001) to write /github/home, and `sf` crashes on a UID with no passwd entry,
+# so 1001 is registered statically. `-G root` puts it in GID 0.
+RUN adduser -D -u 1001 -G root -s /bin/bash runner
+
 # Pin SF CLI data dirs to fixed paths owned by nobody so any runner UID can write.
 # XDG_DATA_HOME / XDG_CONFIG_HOME redirect SF CLI away from $HOME/.sf.
 # Dirs are world-writable so plugins installed by ci user are readable by root,
@@ -51,10 +57,10 @@ WORKDIR /home/ci
 RUN echo y | sf plugins install sfdx-git-delta
 
 # Runtime user: non-root `ci` (UID 1000) — same decision as sf-ci, see the full
-# rationale there. CONSUMER REQUIREMENT: the runner UID must be 1000 (ARC
-# `runAsUser: 1000`, or `options: --user 1000`), otherwise /github/home is
-# unwritable exactly as before 927c06d. Running as an arbitrary UID is not
-# supported: `sf` crashes when the UID has no /etc/passwd entry.
+# rationale there. CONSUMER REQUIREMENT: run as a UID this image knows —
+# 1000 (`ci`) or 1001 (`runner`, matching the GitHub Actions runner that owns
+# /github/home). An unregistered UID crashes `sf` and cannot be fixed in the
+# image.
 USER root
 RUN chgrp -R 0 /home/ci /opt/sf-data /opt/sf-config \
     && chmod -R g=u /home/ci /opt/sf-data /opt/sf-config

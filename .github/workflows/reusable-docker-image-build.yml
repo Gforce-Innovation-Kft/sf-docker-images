@@ -1,8 +1,8 @@
 ---
 # Reusable workflow: build → test → push for ONE Docker image.
 #
-# build-and-push.yml fans out with a matrix (one invocation per image) and keeps
-# the repo-specific release job locally. The test stage expects pytest-testinfra
+# Callers: one image-<name>.yml per image on pull requests, and release.yml
+# with a matrix over every image on version tags. The test stage expects pytest-testinfra
 # suites at tests/test_<image_name_with_underscores>.py and a tests/requirements.txt.
 #
 # NOTE: this file's path is part of the cosign keyless certificate identity of

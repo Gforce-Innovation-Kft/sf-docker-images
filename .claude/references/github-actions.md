@@ -9,37 +9,41 @@ Both live in this repo — the pipeline is self-contained, with no cross-repo de
 
 | File | Kind | Role |
 |---|---|---|
-| `.github/workflows/build-and-push.yml` | internal | thin matrix caller + the local `release` job |
+| `.github/workflows/image-sf-ci.yml` | internal | PRs touching sf-ci: build → test → **E2E gate** |
+| `.github/workflows/image-sf-devcontainer.yml` | internal | PRs touching sf-devcontainer: build → test |
+| `.github/workflows/image-sf-bulk.yml` | internal | PRs touching sf-bulk: build → test |
+| `.github/workflows/release.yml` | internal | `v*.*.*` tags: matrix over all images → push → Release |
 | `.github/workflows/reusable-docker-image-build.yml` | `workflow_call` | build → test → push for **one** image |
 
-- **Triggers:** PRs to `main` and version tags `v*.*.*` (pushes to `main` do not build).
-- **Job graph:** `changes` (computes the matrix from the PR diff) → `images` (matrix — each
-  invocation calls `./.github/workflows/reusable-docker-image-build.yml`) → `release`
-  (tags only, local).
-- **PRs build + test but never push or release.** Push/release run **only** on `v*.*.*` tags
-  (the caller computes `push: startsWith(github.ref, 'refs/tags/v')`).
-- **Path filtering (`changes` job):** on a PR the matrix contains only the images whose files
-  changed — `sf-<image>/**` or `tests/test_sf_<image>.py` selects one image;
-  `.github/workflows/**`, `tests/requirements.txt`, or any other `tests/*.py` selects all;
-  anything else selects none and `images` is skipped via `has-images`. Tags always select all
-  so `latest` stays coherent. The job lists its decision in the run summary.
+- **One workflow per image.** Path filtering is GitHub's own `on.pull_request.paths`, so a PR
+  only starts the workflows for images it touches and a docs-only PR starts nothing. Separate
+  workflows are inherently parallel — there is no coordinating job.
+- **PRs never push** (`push: false`). `release.yml` is the only publisher, on tags only.
+- **Tags build every image** so `latest` stays coherent; that is why the tag path keeps a matrix
+  rather than splitting per image.
+- **E2E job graph** (sf-ci only): `image` → `publish-candidate` → `e2e-container` (tier 1,
+  a real container job on the candidate as `--user 1001`) → `e2e-workflows` (tier 2, dispatched
+  downstream pipelines) → `cleanup`.
 
-## Rules when editing the caller
+## Rules when editing these workflows
 
 - Per-image pipeline changes (build/test/push/signing) belong in
-  `reusable-docker-image-build.yml`, not in the caller. Keep `build-and-push.yml` thin: the
-  `changes` job, the matrix, the permissions, and the release job.
-- **The image set is defined once**, in the `IMAGES` JSON map of the `changes` job. The key is
-  simultaneously the image name, the build-context directory (`./<key>`), and the test-file stem
-  (`tests/test_<key with underscores>.py`); the value is the Docker Hub short description. Add or
-  remove an image there and nothing else in the caller needs to change — do not reintroduce a
-  hard-coded matrix.
-- A new **shared** test helper (e.g. `tests/conftest.py`) is already treated as affecting every
-  image. A new non-shared file type that should trigger builds needs a rule added to the
-  `changes` job, or PRs touching it will silently build nothing.
-- The `images` job must grant the reusable workflow its permissions:
-  `contents: read`, `checks: write`, `pull-requests: write`, `security-events: write`,
-  `id-token: write` (cosign keyless signing).
+  `reusable-docker-image-build.yml`, not in the callers. Keep the callers thin.
+- **The image list now lives in two places**, unavoidably: the per-image workflow file and the
+  `release.yml` matrix. Adding an image means doing BOTH — copy an `image-*.yml` and add a matrix
+  entry. An image with only the first is tested on PRs but **never published**; that failure is
+  silent, so check `release.yml` whenever the image set changes.
+- Each `image-*.yml` must filter on its own dir, its own `tests/test_<name>.py`, **and** the
+  shared inputs (`tests/requirements.txt`, `reusable-docker-image-build.yml`, itself). A new
+  shared file (e.g. `tests/conftest.py`) has to be added to **every** image workflow's `paths`,
+  or PRs touching it silently build nothing.
+- **Adding a critical workflow to the E2E** is one `matrix.target` entry in `image-sf-ci.yml`
+  (`name`, `repo`, `workflow`, `ref`, `inputs`). Do not add bespoke job logic per target.
+- Tier 1 probes must stay secret-free so they can gate tier 2 cheaply. Anything needing a
+  Salesforce org belongs in tier 2.
+- The image jobs must grant the reusable workflow its permissions:
+  `contents: read`, `checks: write`, `pull-requests: write`, `security-events: write`, plus
+  `id-token: write` in `release.yml` (cosign keyless signing).
 - The reusable workflow is referenced with a local `./` path, so it is always the version on the
   branch being built.
 - **Third-party actions pin to a floating major version tag** (`@v7`, `@v4`) — never `@main`,

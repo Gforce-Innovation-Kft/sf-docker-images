@@ -1,0 +1,109 @@
+---
+# Release — the only workflow that publishes.
+#
+# Tags build EVERY image, not just the ones a diff touched, so `latest` stays
+# coherent across the set and the release notes carry a tool-version table for
+# each image. That coordination is why the tag path keeps a matrix while pull
+# requests use one workflow per image (image-sf-*.yml).
+#
+# The cost of the split is that the image list lives here as well as in the
+# per-image workflows. Adding an image means adding its file AND a matrix entry
+# below; forgetting the second half means it never gets published.
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+# Never cancel a release in flight: a half-pushed set of tags is worse than a
+# slow one, and cosign signatures are recorded in a public transparency log.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  images:
+    name: ${{ matrix.image.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - name: sf-devcontainer
+            context: ./sf-devcontainer
+            description: Full-featured Salesforce devcontainer — SF CLI v2, Node 24, Java 17, zsh
+          - name: sf-ci
+            context: ./sf-ci
+            description: Minimal Salesforce CI/CD runner — SF CLI v2, Node 24, Java 17
+          - name: sf-bulk
+            context: ./sf-bulk
+            description: Ultra-light Alpine SF CLI image for bulk org operations — no Java
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+      security-events: write
+      # Consumed by the reusable push job for cosign keyless signing.
+      id-token: write
+    uses: ./.github/workflows/reusable-docker-image-build.yml
+    with:
+      image-name: ${{ matrix.image.name }}
+      context: ${{ matrix.image.context }}
+      push: true
+      image-description: ${{ matrix.image.description }}
+    secrets:
+      dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: images
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # Each reusable push job uploads a version-report-<image> artifact with
+      # the tool versions read from the built image.
+      - name: Download version reports
+        uses: actions/download-artifact@v8
+        with:
+          pattern: version-report-*
+          path: version-reports
+          merge-multiple: true
+
+      - name: Assemble release notes
+        id: notes
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          NOTES_FILE="$(mktemp)"
+          # Pull the [VERSION] section out of CHANGELOG.md (Keep a Changelog format)
+          awk -v ver="$VERSION" '
+            /^## \[/ {
+              if (found) { exit }
+              if (index($0, "[" ver "]")) { found = 1; next }
+            }
+            found { print }
+          ' CHANGELOG.md > "$NOTES_FILE"
+          if [ ! -s "$NOTES_FILE" ]; then
+            echo "Release ${GITHUB_REF_NAME} — see the auto-generated notes below." > "$NOTES_FILE"
+          fi
+          {
+            echo
+            echo "## Image tool versions"
+            echo
+            cat version-reports/version-report-*.md
+          } >> "$NOTES_FILE"
+          echo "notes_file=${NOTES_FILE}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: ${{ steps.notes.outputs.notes_file }}
+          generate_release_notes: true

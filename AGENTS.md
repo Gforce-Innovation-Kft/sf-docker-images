@@ -16,7 +16,9 @@ This file gives concise, high-signal guidance for AI coding assistants working i
 - `tests/` pytest-testinfra container tests (`tests/test_sf_ci.py`, `tests/test_sf_devcontainer.py`, `tests/test_sf_bulk.py`)
 - `.claude/references/*` (rules) and `.claude/skills/*` (repo skills)
 - `README.md`, `CONTRIBUTING.md`, `SETUP.md`, `CLAUDE.md`
-- `.github/workflows/*.yml` for CI/build+test+push+release on tag
+- `.github/workflows/image-<name>.yml` — one per image, PR build+test (path-filtered);
+  `release.yml` — tags only, builds every image and publishes;
+  `reusable-docker-image-build.yml` — the shared build→test→push pipeline
 
 ## Local Commands
 - Build dev image: `docker build -t sf-devcontainer:local ./sf-devcontainer`

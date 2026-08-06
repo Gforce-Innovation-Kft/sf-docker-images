@@ -9,8 +9,9 @@ pytest-testinfra test in `tests/test_sf_*.py` (see
 
 - **Base:** `ubuntu:22.04`. **Runtimes:** Node 24.x, OpenJDK 17 (JRE), SF CLI `@2.*`.
 - **Plugins:** `sfdx-git-delta` (keep minimal).
-- **User:** `ci` (UID 1000, `/bin/bash`). **Runtime user: `ci`, non-root** — consumers must run
-  with UID 1000. Never revert this to `USER root`.
+- **User:** `ci` (UID 1000, `/bin/bash`) **plus `runner` (UID 1001, GID 0)**. **Runtime user:
+  `ci`, non-root** — consumers must run as 1000 or 1001; GitHub Actions container jobs use
+  `--user 1001`. Never revert this to `USER root`.
 - **Tools allowed:** git, jq, xmlstarlet, curl, unzip, zip.
 - **FORBIDDEN:** vim, nano, zsh, htop, tree, build-essential, any editor/interactive/UI tool.
   Tests assert these are absent — do not add them.
@@ -39,7 +40,8 @@ pytest-testinfra test in `tests/test_sf_*.py` (see
 - **Base:** `node:24-alpine` + `coreutils` (needed for `env -S` in the SF CLI shebang on musl/BusyBox).
 - **No Java.** **Plugins:** `sfdx-git-delta`. **Tools:** bash, curl, git, jq, unzip, libc6-compat.
 - **User:** `ci` (UID 1000, `/bin/bash`) created after `deluser node` (base ships `node` at UID 1000).
-  **Runtime user: `ci`, non-root.** XDG dirs pinned like sf-ci.
+  **Runtime user: `ci`, non-root**, plus a `runner` account at UID 1001 (GID 0). XDG dirs
+  pinned like sf-ci.
 - **HARD LIMIT:** image must stay **under 600 MB** uncompressed (raised from 500 MB for the
   Node 24-alpine base). `tests/test_sf_bulk.py` fails if exceeded. No Java, no editors,
   no interactive tooling.

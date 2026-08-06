@@ -82,6 +82,57 @@ def test_workspace_writable_by_runtime_user(host):
     assert host.run("touch /workspace/.probe").rc == 0
 
 
+def test_runner_user_exists(host):
+    """UID 1001 is registered so GHA container jobs can run --user 1001."""
+    user = host.user("runner")
+    assert user.exists
+    assert user.uid == 1001
+    assert user.gid == 0, "runner must be in GID 0 to write the group-0 paths"
+
+
+def test_sf_cli_works_as_runner_uid():
+    """`sf` must work under --user 1001 — an unregistered UID crashes oclif.
+
+    This is the property that lets the shared workflows drop `--user root`,
+    so it is asserted directly rather than inferred from the passwd entry.
+    """
+    result = subprocess.run(
+        ["docker", "run", "--rm", "--user", "1001",
+         "--entrypoint", "sf", "sf-ci:test", "version"],
+        capture_output=True, text=True,
+    )
+    assert result.returncode == 0, f"sf failed as UID 1001: {result.stderr[:400]}"
+    assert "@salesforce/cli" in result.stdout
+
+
+def test_github_home_writable_as_runner_uid():
+    """Reproduces the GHA container-job mount that originally forced root.
+
+    The runner bind-mounts /github/home owned by its own UID. A named volume
+    chowned to 1001 stands in for that; the CLI must then be able to create
+    its config there without root.
+    """
+    volume = "sf-ci-github-home-test"
+    subprocess.run(["docker", "volume", "rm", "-f", volume], capture_output=True)
+    subprocess.run(["docker", "volume", "create", volume], capture_output=True, check=True)
+    try:
+        subprocess.run(
+            ["docker", "run", "--rm", "--user", "0", "-v", f"{volume}:/github/home",
+             "--entrypoint", "chown", "sf-ci:test", "1001:0", "/github/home"],
+            capture_output=True, check=True,
+        )
+        result = subprocess.run(
+            ["docker", "run", "--rm", "--user", "1001", "-v", f"{volume}:/github/home",
+             "-e", "HOME=/github/home", "--entrypoint", "bash", "sf-ci:test", "-c",
+             "mkdir -p /github/home/.sf && sf version >/dev/null && echo ok"],
+            capture_output=True, text=True,
+        )
+        assert result.returncode == 0, (
+            f"UID 1001 could not use /github/home: {result.stderr[:400]}")
+    finally:
+        subprocess.run(["docker", "volume", "rm", "-f", volume], capture_output=True)
+
+
 def test_nodejs_installed(host):
     """Test that Node.js 24.x is installed"""
     node = host.run("node --version")

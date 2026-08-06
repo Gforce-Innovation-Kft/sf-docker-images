@@ -35,11 +35,20 @@ Plugins are installed as the `ci`/`vscode` user so they land in
 the runtime UID. See [image-conventions.md](./image-conventions.md) for the per-image
 user/runtime rules.
 
-**All three images run non-root at runtime** (UID 1000). Do not "fix" a permission error by
-adding `USER root` — that regression is what 3.0.0 undid. The correct fix is to align the
-runner UID to 1000. Running as an *arbitrary* UID is not supported: `sf` calls Node's
-`os.userInfo()`, which throws ENOENT when the UID has no `/etc/passwd` entry, and the usual
-entrypoint workaround is bypassed by GitHub Actions container jobs (`--entrypoint tail`).
+**All three images run non-root at runtime** (`ci`/`vscode`, UID 1000) and register a second
+account, **`runner` at UID 1001 with GID 0**. Do not "fix" a permission error by adding
+`USER root` — that regression is what 3.0.0 undid.
+
+The two UIDs exist because GitHub Actions bind-mounts `/github/home` and the runner
+file-command dir owned by the *runner's* UID (1001 on GitHub-hosted runners), so a container
+job must run as that UID to write them: `options: --user 1001`.
+
+Running as an **arbitrary** UID is not supported and cannot be made to work from the
+Dockerfile: `sf` calls Node's `os.userInfo()`, which throws ENOENT when the running UID has no
+`/etc/passwd` entry, and the usual remedy — an entrypoint that appends a passwd line — never
+executes, because GitHub Actions container jobs override `ENTRYPOINT` with `--entrypoint tail`.
+That is why 1000 and 1001 are baked in statically rather than resolved at runtime. Verified;
+do not re-attempt.
 
 ## Multi-stage builds
 

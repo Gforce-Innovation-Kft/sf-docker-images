@@ -84,7 +84,7 @@ shared branches.
 
 ## Release process
 
-Releases are automated by [`.github/workflows/build-and-push.yml`](.github/workflows/build-and-push.yml)
+Releases are automated by [`.github/workflows/release.yml`](.github/workflows/release.yml)
 on a version tag:
 
 ```bash
