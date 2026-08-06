@@ -38,6 +38,19 @@ docker build -t sf-ci:test ./sf-ci && pytest tests/test_sf_ci.py -v
 Each suite mirrors the image's rules: OS, user/UID/shell, runtimes, `sf version`, plugins,
 present tools, **absent** forbidden tools, env vars, `/workspace`, and (sf-bulk) the size cap.
 
+**Some assertions cannot use the `host` fixture.** The fixture runs one long-lived container as
+the image's default user, so anything about a *different* user, or about mounts, has to shell
+out to `docker run` itself with `subprocess`. That is why
+`test_sf_cli_works_as_runner_uid` and `test_github_home_writable_as_runner_uid` are plain
+functions with no `host` argument — they run `--user 1001` and mount a volume chowned to 1001
+to reproduce what GitHub does to a container job. Follow that pattern for any UID, mount, or
+entrypoint behaviour; do not try to bend the fixture to it.
+
+**These tests still cannot see everything.** `docker run` is not a GitHub Actions container job:
+it does not bind-mount `/github/home` or the runner file-command dir, and it does not override
+the entrypoint. That gap is covered by the E2E tier-1 probes in `image-sf-ci.yml`, not here.
+A green suite is necessary, not sufficient.
+
 ## Adding an assertion
 
 Add a `def test_<thing>(host):` in the relevant file using `host.run(...)` / `host.file(...)`

@@ -153,8 +153,9 @@ Found a vulnerability? See [`SECURITY.md`](SECURITY.md).
   plugins, tools, env vars, and size budgets. Nothing ships unless the suite is green.
 - **Non-root at runtime, container-mode aware** — all three images run as a non-root user
   (`ci`/`vscode`, UID 1000), not just build as one; SF CLI is configured for containers
-  (`SFDX_CONTAINER_MODE`, telemetry/auto-update disabled). On self-hosted runners the runner
-  UID must be 1000 — see the per-image READMEs.
+  (`SFDX_CONTAINER_MODE`, telemetry/auto-update disabled). Each image also registers UID **1001**
+  (`runner`) so GitHub Actions container jobs can run unprivileged with `options: --user 1001` —
+  see the per-image READMEs.
 
 ## Development
 
