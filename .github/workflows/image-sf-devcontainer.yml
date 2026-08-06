@@ -35,6 +35,10 @@ jobs:
       checks: write
       pull-requests: write
       security-events: write
+      # The reusable workflow's push job declares id-token: write for cosign.
+      # A called workflow cannot request more than the caller grants, so this
+      # must be here even though pull requests never reach that job.
+      id-token: write
     uses: ./.github/workflows/reusable-docker-image-build.yml
     with:
       image-name: sf-devcontainer
