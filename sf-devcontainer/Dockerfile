@@ -21,6 +21,7 @@ RUN apt-get update \
     curl \
     wget \
     git \
+    openssh-client \
     gnupg2 \
     lsb-release \
     apt-transport-https \
@@ -57,6 +58,16 @@ RUN apt-get update \
 RUN test -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
     && test -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
     || { echo "zsh plugin paths changed — fix .zshrc and the tests" >&2; exit 1; }
+
+# Auto-accept unknown SSH host keys (TOFU) instead of the interactive
+# "are you sure you want to continue connecting (yes/no)?" prompt, which
+# has nothing to answer it in a non-interactive container shell and would
+# otherwise hang the first `git clone`/`git push` over ssh:// or git@ to any
+# host — not just github.com. Still verifies and pins on every connection
+# after the first (this is not the same as disabling host-key checking).
+RUN mkdir -p /etc/ssh/ssh_config.d \
+    && echo 'Host *' > /etc/ssh/ssh_config.d/99-devcontainer.conf \
+    && echo '    StrictHostKeyChecking accept-new' >> /etc/ssh/ssh_config.d/99-devcontainer.conf
 
 # Set locale
 RUN locale-gen en_US.UTF-8

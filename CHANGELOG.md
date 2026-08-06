@@ -30,6 +30,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   against it as `--user 1001`, synchronously, failing the PR if that pipeline fails.
   Quota-light: no scratch org, and `--skip-validation` draws on the 500/day pool.
   Needs an `E2E_DISPATCH_TOKEN` secret with `actions: write` on the downstream repo
+- sf-devcontainer: **`openssh-client`**, so `git clone`/`git push` over `ssh://` or
+  `git@host:...` remotes work, not just HTTPS. Previously failed with `error: cannot run
+  ssh: No such file or directory` — the `git` package doesn't pull it in. Also ships a
+  `/etc/ssh/ssh_config.d/99-devcontainer.conf` setting `StrictHostKeyChecking accept-new`
+  repo-wide, so the first connection to a new host doesn't hang on an unanswerable
+  interactive "are you sure? (yes/no)" prompt
 
 ### Changed — BREAKING
 - **`sf-ci` and `sf-bulk` now run as non-root `ci` (UID 1000) at runtime**, reverting the

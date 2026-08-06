@@ -108,6 +108,26 @@ def test_git_installed(host):
     assert "git version" in git.stdout
 
 
+def test_openssh_client_installed(host):
+    """git clone/push over ssh:// or git@ needs the ssh binary — it's not part
+    of the `git` package. Without it: 'error: cannot run ssh: No such file or
+    directory'. HTTPS remotes work either way; this covers SSH remotes too."""
+    ssh = host.run("ssh -V")
+    combined = ssh.stdout + ssh.stderr
+    assert "OpenSSH" in combined, combined
+
+
+def test_ssh_accepts_new_host_keys_noninteractively(host):
+    """A container shell has nothing to answer the interactive 'are you sure
+    you want to continue connecting (yes/no)?' prompt on the first connection
+    to any new SSH host, so it would otherwise hang forever. Ubuntu's
+    ssh_config Includes /etc/ssh/ssh_config.d/*.conf, so a drop-in file here
+    is picked up ahead of any later Host block in the base config."""
+    cfg = host.file("/etc/ssh/ssh_config.d/99-devcontainer.conf")
+    assert cfg.exists
+    assert "StrictHostKeyChecking accept-new" in cfg.content_string
+
+
 def test_jq_installed(host):
     """Test that jq is installed"""
     jq = host.run("jq --version")

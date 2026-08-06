@@ -58,6 +58,10 @@ verify only against that identity instead:
 - **CLI tools**: gh (GitHub CLI), fzf, zoxide, eza, bat, ripgrep, fd, git-delta
   (system git pager), lazygit. Run `devhelp` inside the container for a cheatsheet;
   see [TOOLS.md](TOOLS.md) for the expert guide.
+- **Git over SSH and HTTPS**: `openssh-client` is installed, so `git@host:...` and
+  `ssh://` remotes work alongside `https://` ones. Unknown host keys are accepted
+  automatically on first connect (`StrictHostKeyChecking accept-new`) instead of
+  hanging on a prompt with nothing to answer it.
 - **Formatters/linters**: prettier + prettier-plugin-apex + eslint (global — work
   without a project `package.json`).
 - **Editors & tools**: vim, nano, wget, htop, tree, less, build-essential, openssl.
@@ -97,6 +101,24 @@ on a machine already logged in; see [`examples/`](../examples/)).
 re-authenticating — those files are encrypted with your host OS's keychain, which
 this Linux container can't read, and `sf org list` will fail every org with
 `AuthDecryptError`. Auth in the container once; the named volumes keep it there.
+
+### Git over SSH
+
+`openssh-client` is installed, so SSH remotes (`git@host:org/repo.git`, `ssh://...`)
+work the same as HTTPS ones. Two ways to get a key into the container:
+
+- **SSH agent forwarding (recommended, usually needs no setup)** — VS Code Dev
+  Containers automatically forwards a running host `ssh-agent`'s socket into the
+  container. Run `ssh-add -l` inside the container: if it lists your key, `git clone`/
+  `git push` over SSH just works. If it says "no identities," run `ssh-add
+  ~/.ssh/id_ed25519` (or your key) **on the host** first, then reopen the container.
+- **Bind-mount `~/.ssh` read-only**, if you'd rather not depend on agent forwarding —
+  add `"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly"` to
+  `devcontainer.json`'s `mounts`. (This is safe, unlike bind-mounting `~/.sf`/`~/.sfdx`
+  — SSH keys aren't re-encrypted per OS the way SF CLI auth is.)
+
+Unknown host keys (first connection to a new host) are accepted automatically via
+`StrictHostKeyChecking accept-new` instead of hanging on an interactive prompt.
 
 ### Personalize your shell
 
