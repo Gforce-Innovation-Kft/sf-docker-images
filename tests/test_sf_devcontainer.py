@@ -126,29 +126,50 @@ def test_zsh_installed(host):
     assert "zsh" in zsh.stdout
 
 
-def test_oh_my_zsh_installed(host):
-    """Test that Oh My Zsh is installed"""
-    omz_dir = host.file("/home/vscode/.oh-my-zsh")
-    assert omz_dir.exists
-    assert omz_dir.is_directory
+def test_starship_installed(host):
+    """Starship replaced Powerlevel10k as the prompt."""
+    result = host.run("starship --version")
+    assert result.rc == 0
+    assert "starship" in result.stdout
 
 
-def test_powerlevel10k_theme_installed(host):
-    """Test that Powerlevel10k theme is installed"""
-    p10k = host.file("/home/vscode/.oh-my-zsh/custom/themes/powerlevel10k")
-    assert p10k.exists
-    assert p10k.is_directory
+def test_starship_config_present(host):
+    """The prompt config (including the target-org module) is baked in."""
+    cfg = host.file("/home/vscode/.config/starship.toml")
+    assert cfg.exists
+    assert cfg.user == "vscode"
+    assert "sf_org" in cfg.content_string
+
+
+def test_oh_my_zsh_absent(host):
+    """OMZ was removed — the host migrated off it for a 22x startup win."""
+    assert not host.file("/home/vscode/.oh-my-zsh").exists
+    assert not host.file("/home/vscode/.p10k.zsh").exists
 
 
 def test_zsh_plugins_installed(host):
-    """Test that required Zsh plugins are installed"""
+    """Plugins come from apt now, not git clones under OMZ."""
     plugins = [
-        "/home/vscode/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
-        "/home/vscode/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting",
-        "/home/vscode/.oh-my-zsh/custom/plugins/zsh-completions"
+        "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh",
+        "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh",
     ]
     for plugin in plugins:
-        assert host.file(plugin).exists
+        assert host.file(plugin).exists, f"{plugin} missing"
+
+
+def test_zshrc_sources_plugins_in_order(host):
+    """zsh-syntax-highlighting must be sourced last or it silently no-ops."""
+    zshrc = host.file("/home/vscode/.zshrc").content_string
+    autosuggest = zshrc.index("zsh-autosuggestions.zsh")
+    highlight = zshrc.index("zsh-syntax-highlighting.zsh")
+    assert autosuggest < highlight
+
+
+def test_prompt_does_not_shell_out_to_sf(host):
+    """A `sf` call in the prompt would add ~500ms of Node startup per prompt."""
+    cfg = host.file("/home/vscode/.config/starship.toml").content_string
+    assert "sf config" not in cfg
+    assert "jq" in cfg
 
 
 def test_zshrc_exists(host):
@@ -156,13 +177,6 @@ def test_zshrc_exists(host):
     zshrc = host.file("/home/vscode/.zshrc")
     assert zshrc.exists
     assert zshrc.user == "vscode"
-
-
-def test_p10k_config_exists(host):
-    """Test that .p10k.zsh is configured"""
-    p10k_config = host.file("/home/vscode/.p10k.zsh")
-    assert p10k_config.exists
-    assert p10k_config.user == "vscode"
 
 
 def test_sfdx_directories_exist(host):
