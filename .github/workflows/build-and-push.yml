@@ -1,8 +1,8 @@
 name: Build and Push Docker Images
 
-# Thin caller: per-image build → test → push lives in the shared reusable
-# workflow (see docs/reusable-workflow-migration-design.md). This workflow
-# fans out over the three images and keeps the repo-specific release job.
+# Thin caller: per-image build → test → push lives in
+# reusable-docker-image-build.yml. This workflow fans out over the three images
+# and keeps the repo-specific release job.
 on:
   # Build/test/push only on version tags; PRs validate before merge.
   # Pushes to main do not build (avoids a redundant run right before tagging).
@@ -41,8 +41,7 @@ jobs:
       # id-token is only consumed by the reusable push job (cosign keyless
       # signing), which never runs on pull requests.
       id-token: write
-    # @v1 is the shared repo's floating major tag, moved by its release process.
-    uses: Gforce-Innovation-Kft/shared-github-actions/.github/workflows/docker-build-test-push.yml@v1
+    uses: ./.github/workflows/reusable-docker-image-build.yml
     with:
       image-name: ${{ matrix.image.name }}
       context: ${{ matrix.image.context }}

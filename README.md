@@ -129,12 +129,16 @@ Every build in CI:
   cosign verify \
     --certificate-oidc-issuer https://token.actions.githubusercontent.com \
     --certificate-identity-regexp \
-      '^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$' \
+      '^https://github\.com/Gforce-Innovation-Kft/sf-docker-images/\.github/workflows/reusable-docker-image-build\.yml@.+$' \
     gforceinnovation/sf-ci:latest
   ```
 
-  The identity is the shared CI workflow that built and pushed the image — no keys to manage
+  The identity is the CI workflow that built and pushed the image — no keys to manage
   or leak. Swap in `sf-devcontainer` / `sf-bulk` and any published tag.
+
+  > Images published **before 2026-08-06** were signed while the build workflow lived in
+  > `shared-github-actions`. Verify those against the old identity instead:
+  > `^https://github\.com/Gforce-Innovation-Kft/shared-github-actions/\.github/workflows/docker-build-test-push\.yml@.+$`
 
 Found a vulnerability? See [`SECURITY.md`](SECURITY.md).
 
@@ -186,9 +190,9 @@ CI then builds all three images multi-arch, runs the tests + Trivy scan, pushes 
 (tags `X.Y.Z` + `latest`) with SBOM, provenance, and a keyless cosign signature, and opens a
 GitHub Release with notes drawn from the matching `CHANGELOG.md` section plus per-image
 tool-version tables (Node, npm, SF CLI, plugins) read from the built images. The per-image
-pipeline lives in the shared
-[`docker-build-test-push`](https://github.com/Gforce-Innovation-Kft/shared-github-actions)
-reusable workflow; this repo's workflow is a thin caller.
+pipeline lives in this repo's own
+[`reusable-docker-image-build.yml`](.github/workflows/reusable-docker-image-build.yml);
+`build-and-push.yml` is a thin matrix caller over it.
 
 ## AI-Assisted Development
 
