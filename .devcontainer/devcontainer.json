@@ -14,7 +14,17 @@
   },
   "mounts": [
     // Persistent zsh history across container rebuilds (picked up by .zshrc)
-    "source=sf-devcontainer-history,target=/commandhistory,type=volume"
+    "source=sf-devcontainer-history,target=/commandhistory,type=volume",
+    // Persistent SF CLI org auth across rebuilds. These are named Docker
+    // volumes (container-native storage), NOT a bind mount of your host
+    // ~/.sf or ~/.sfdx — bind-mounting host auth files here causes
+    // `AuthDecryptError` on `sf org list`, because they were encrypted with
+    // your host OS's keychain, which this Linux container can't read.
+    // Auth into these volumes from *inside* the container instead — see
+    // examples/scripts/auth-org.sh / examples/.env.example (SF_AUTH_URL) —
+    // and it will survive rebuilds without ever touching host-encrypted files.
+    "source=sf-devcontainer-sf-config,target=/home/vscode/.sf,type=volume",
+    "source=sf-devcontainer-sfdx-config,target=/home/vscode/.sfdx,type=volume"
     // Reuse your host Claude Code auth/settings (requires ~/.claude on the host):
     // "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind"
   ],

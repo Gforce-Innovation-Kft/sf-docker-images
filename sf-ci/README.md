@@ -155,7 +155,8 @@ docker run --rm -v "$(pwd):/workspace" gforceinnovation/sf-ci:latest sf org list
 
 ## Why it's small
 
-- No interactive shell enhancements (zsh, Oh My Zsh, Powerlevel10k).
+- No interactive shell enhancements (bash only — the zsh + Starship setup lives in
+  `sf-devcontainer`).
 - No text editors (vim, nano) — asserted absent by the tests.
 - Only the `sfdx-git-delta` plugin.
 - apt caches cleaned in the same layer.

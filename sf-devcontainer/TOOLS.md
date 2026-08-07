@@ -56,9 +56,9 @@ zi force       # interactive: all matches in fzf, pick one
 z -            # back to the previous directory
 ```
 
-`cd` keeps working normally (the Oh My Zsh plugin adds `z`/`zi` alongside it).
-The ranking database is per-container unless you mount a volume over
-`~/.local/share/zoxide`.
+`cd` keeps working normally (zoxide is sourced directly in `.zshrc` and adds
+`z`/`zi` alongside it). The ranking database is per-container unless you mount
+a volume over `~/.local/share/zoxide`.
 
 ## eza
 
@@ -192,19 +192,19 @@ gh api repos/{owner}/{repo}/releases/latest -q .tag_name
 
 ## Zsh features
 
-### Autosuggestions, syntax highlighting, completions
+### Autosuggestions and syntax highlighting
 
-- **zsh-autosuggestions** — ghost text after the cursor suggests the rest of
-  the command from your history. Accept the whole thing with `→` (or `End`),
-  accept one word with `Ctrl-→` (`forward-word`).
-- **zsh-syntax-highlighting** — the command line is linted as you type: red
-  command = typo/not installed, green = resolves; quotes and paths get their
-  own colors. If it's red, don't bother pressing Enter.
-- **zsh-completions** — extra completion definitions for hundreds of tools on
-  top of zsh's own. `Tab` through everything; menu-select is enabled by
-  Oh My Zsh.
+- **zsh-autosuggestions** (apt package, sourced directly — no framework) —
+  ghost text after the cursor suggests the rest of the command from your
+  history. Accept the whole thing with `→` (or `End`), accept one word with
+  `Ctrl-→` (`forward-word`).
+- **zsh-syntax-highlighting** (apt package) — the command line is linted as
+  you type: red command = typo/not installed, green = resolves; quotes and
+  paths get their own colors. If it's red, don't bother pressing Enter. It's
+  sourced last of the two plugins — sourcing it earlier silently breaks
+  highlighting.
 - **SF CLI autocomplete** is baked in too — `sf <TAB>` completes topics,
-  commands, and flags.
+  commands, and flags, via zsh's own single, cached `compinit`.
 
 ### History
 
@@ -213,33 +213,19 @@ crashed shell). With the reference devcontainer.json, history lives in the
 `sf-devcontainer-history` volume mounted at `/commandhistory` — it **survives
 container rebuilds**. `Ctrl-R` (fzf) searches all of it.
 
-### Oh My Zsh plugin gems
+### Prompt (Starship)
 
-The image enables these plugins — the highest-value bits:
-
-- **git** — the famous alias pack: `gst` (status), `gco` (checkout), `gcb`
-  (create branch), `gp` (push), `gl` (pull), `gd` (diff), `ga`/`gaa` (add),
-  `gcmsg "..."` (commit -m), `glola` (decorated graph log), `grbi` (rebase -i),
-  `gwip` (quick WIP commit) / `gunwip` (undo it). Run `alias | grep '^g'` to
-  see them all.
-- **extract** — `extract anything.tar.gz|zip|7z|rar|...` — one verb for every
-  archive format.
-- **copyfile / copypath** — `copyfile notes.md` copies the file's contents,
-  `copypath` copies the cwd (or a given path) to the clipboard.
-- **colored-man-pages** — man pages with section headers and highlights.
-- **command-not-found** — typo a command and Ubuntu tells you which package
-  provides it.
-- **docker / docker-compose / node / npm / gh / vscode** — completions and
-  small alias packs for each (e.g. `dps` for `docker ps` in newer OMZ
-  versions; check `alias | grep <tool>`).
-- **take** (built into OMZ) — `take new-dir` = mkdir + cd. The image also
-  ships a `mkcd` function that does the same.
-
-### Prompt (Powerlevel10k)
-
-The prompt shows git state (branch, dirty/staged counts), exit status, and
-command duration. Reconfigure it interactively with `p10k configure`; your
-answers land in `~/.p10k.zsh`.
+Starship renders the current directory (truncated to the repo root), git
+branch and status, and a cyan `☁` badge showing the project's Salesforce
+target org — read straight from `.sf/config.json` with `jq`, never by calling
+`sf` (that would add ~500 ms of Node startup to every prompt). The prompt
+character turns red after a command exits non-zero. Configuration is baked
+into `starship.toml`; there's no interactive configuration wizard — if you
+relied on the previous shell framework's alias packs (`gst`, `gco`, `extract`,
+`colored-man-pages`, and friends) or its prompt-theme setup wizard, recreate
+what you need in `~/.zshrc.local` (see the CHANGELOG for exactly what
+changed). `mkcd new-dir` (mkdir + cd) ships in the image and still works the
+same as always.
 
 ### Personalization
 
