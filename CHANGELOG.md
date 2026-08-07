@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-08-07
+
 ### Changed
 - **CI restructured to one workflow per image.** `build-and-push.yml` is replaced by
   `image-sf-ci.yml`, `image-sf-devcontainer.yml`, `image-sf-bulk.yml` and `release.yml`.
