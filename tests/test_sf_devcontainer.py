@@ -3,6 +3,8 @@ Pytest-testinfra tests for sf-devcontainer Docker image
 Run with: pytest tests/test_sf_devcontainer.py
 """
 
+import json
+import os
 import pytest
 import subprocess
 import testinfra
@@ -106,6 +108,26 @@ def test_git_installed(host):
     assert "git version" in git.stdout
 
 
+def test_openssh_client_installed(host):
+    """git clone/push over ssh:// or git@ needs the ssh binary — it's not part
+    of the `git` package. Without it: 'error: cannot run ssh: No such file or
+    directory'. HTTPS remotes work either way; this covers SSH remotes too."""
+    ssh = host.run("ssh -V")
+    combined = ssh.stdout + ssh.stderr
+    assert "OpenSSH" in combined, combined
+
+
+def test_ssh_accepts_new_host_keys_noninteractively(host):
+    """A container shell has nothing to answer the interactive 'are you sure
+    you want to continue connecting (yes/no)?' prompt on the first connection
+    to any new SSH host, so it would otherwise hang forever. Ubuntu's
+    ssh_config Includes /etc/ssh/ssh_config.d/*.conf, so a drop-in file here
+    is picked up ahead of any later Host block in the base config."""
+    cfg = host.file("/etc/ssh/ssh_config.d/99-devcontainer.conf")
+    assert cfg.exists
+    assert "StrictHostKeyChecking accept-new" in cfg.content_string
+
+
 def test_jq_installed(host):
     """Test that jq is installed"""
     jq = host.run("jq --version")
@@ -126,29 +148,50 @@ def test_zsh_installed(host):
     assert "zsh" in zsh.stdout
 
 
-def test_oh_my_zsh_installed(host):
-    """Test that Oh My Zsh is installed"""
-    omz_dir = host.file("/home/vscode/.oh-my-zsh")
-    assert omz_dir.exists
-    assert omz_dir.is_directory
+def test_starship_installed(host):
+    """Starship replaced Powerlevel10k as the prompt."""
+    result = host.run("starship --version")
+    assert result.rc == 0
+    assert "starship" in result.stdout
 
 
-def test_powerlevel10k_theme_installed(host):
-    """Test that Powerlevel10k theme is installed"""
-    p10k = host.file("/home/vscode/.oh-my-zsh/custom/themes/powerlevel10k")
-    assert p10k.exists
-    assert p10k.is_directory
+def test_starship_config_present(host):
+    """The prompt config (including the target-org module) is baked in."""
+    cfg = host.file("/home/vscode/.config/starship.toml")
+    assert cfg.exists
+    assert cfg.user == "vscode"
+    assert "sf_org" in cfg.content_string
+
+
+def test_oh_my_zsh_absent(host):
+    """OMZ was removed — the host migrated off it for a 22x startup win."""
+    assert not host.file("/home/vscode/.oh-my-zsh").exists
+    assert not host.file("/home/vscode/.p10k.zsh").exists
 
 
 def test_zsh_plugins_installed(host):
-    """Test that required Zsh plugins are installed"""
+    """Plugins come from apt now, not git clones under OMZ."""
     plugins = [
-        "/home/vscode/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
-        "/home/vscode/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting",
-        "/home/vscode/.oh-my-zsh/custom/plugins/zsh-completions"
+        "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh",
+        "/usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh",
     ]
     for plugin in plugins:
-        assert host.file(plugin).exists
+        assert host.file(plugin).exists, f"{plugin} missing"
+
+
+def test_zshrc_sources_plugins_in_order(host):
+    """zsh-syntax-highlighting must be sourced last or it silently no-ops."""
+    zshrc = host.file("/home/vscode/.zshrc").content_string
+    autosuggest = zshrc.index("zsh-autosuggestions.zsh")
+    highlight = zshrc.index("zsh-syntax-highlighting.zsh")
+    assert autosuggest < highlight
+
+
+def test_prompt_does_not_shell_out_to_sf(host):
+    """A `sf` call in the prompt would add ~500ms of Node startup per prompt."""
+    cfg = host.file("/home/vscode/.config/starship.toml").content_string
+    assert "sf config" not in cfg
+    assert "jq" in cfg
 
 
 def test_zshrc_exists(host):
@@ -156,13 +199,6 @@ def test_zshrc_exists(host):
     zshrc = host.file("/home/vscode/.zshrc")
     assert zshrc.exists
     assert zshrc.user == "vscode"
-
-
-def test_p10k_config_exists(host):
-    """Test that .p10k.zsh is configured"""
-    p10k_config = host.file("/home/vscode/.p10k.zsh")
-    assert p10k_config.exists
-    assert p10k_config.user == "vscode"
 
 
 def test_sfdx_directories_exist(host):
@@ -264,3 +300,131 @@ def test_zsh_starts_clean(host):
     result = host.run("zsh -ic true")
     combined = result.stdout + result.stderr
     assert "[oh-my-zsh] plugin" not in combined, combined
+
+
+# ---------------------------------------------------------------------------
+# Live org-auth tests
+#
+# Everything above uses the `host` fixture: one container, built once, kept
+# running for the whole module. These tests are different on purpose — they
+# start their own short-lived containers so they can exercise the thing the
+# `host` fixture can't: what happens to SF CLI's encrypted org auth when the
+# *container is thrown away and a new one is started against the same
+# volumes* — exactly what a VS Code "Dev Containers: Rebuild" or a fresh
+# `docker compose run` does.
+#
+# `sf org list` failing with `AuthDecryptError` on an otherwise-healthy
+# container almost always means the auth JSON under ~/.sf / ~/.sfdx was
+# encrypted with a key the current container can't reproduce — classically
+# because those files were copied/bind-mounted in from the host (a different
+# OS, a different keychain) instead of being produced by an `sf org login`
+# run *inside* a container. That failure mode doesn't need real org
+# credentials to guard against: test_auth_dirs_not_host_mounted below is a
+# static config check for the mistake itself, and passes with no secrets in
+# every CI run. The end-to-end round-trip below it needs a real (or scratch)
+# org and is skipped unless SF_AUTH_URL is set — see
+# examples/.env.example for how to obtain one. Run locally with:
+#   SF_AUTH_URL="$(sf org display --target-org <alias> --verbose --json | jq -r .result.sfdxAuthUrl)" \
+#     pytest tests/test_sf_devcontainer.py -k auth -v
+# ---------------------------------------------------------------------------
+
+requires_live_org = pytest.mark.skipif(
+    not os.environ.get("SF_AUTH_URL"),
+    reason="set SF_AUTH_URL to a real org's auth URL to run the live auth round-trip "
+    "(see examples/.env.example) — this is a live-credential test, not part of the "
+    "default suite",
+)
+
+
+def test_auth_dirs_not_host_mounted():
+    """Guard against the most common cause of a fresh AuthDecryptError report:
+    someone adding a bind mount of their *host* ~/.sf or ~/.sfdx into the
+    devcontainer so they don't have to re-auth. That copies in auth JSON
+    encrypted with the host OS's keychain, which the container can't read —
+    hence AuthDecryptError on first `sf org list`. The supported way to get
+    org auth into any of these images is `sf org login` *inside* the
+    container (see examples/scripts/auth-org.sh and SF_AUTH_URL), optionally
+    backed by a named Docker volume (examples/docker-compose.yml) so it
+    survives a rebuild without ever touching host-encrypted files.
+
+    SCOPE: this only scans THIS repo's config. It cannot see consumer repos,
+    which is where the mistake was actually made once (sf-develop-demo, 2026-08-06)
+    — so a green run here does not mean no consumer is bind-mounting host auth.
+    Verified empirically on 2026-08-06: bind-mounting a macOS host's ~/.sf and
+    ~/.sfdx into this image makes every org report AuthDecryptError."""
+    repo_root = Path(__file__).parent.parent
+    devcontainer_json = (repo_root / ".devcontainer" / "devcontainer.json").read_text()
+    compose_yml = (repo_root / "examples" / "docker-compose.yml").read_text()
+
+    for label, text in [(".devcontainer/devcontainer.json", devcontainer_json), ("examples/docker-compose.yml", compose_yml)]:
+        assert "${localEnv:HOME}/.sf" not in text, f"{label} bind-mounts the host's ~/.sf — this causes AuthDecryptError"
+        assert "${HOME}/.sf" not in text, f"{label} bind-mounts the host's ~/.sf — this causes AuthDecryptError"
+        assert "${localEnv:HOME}/.sfdx" not in text, f"{label} bind-mounts the host's ~/.sfdx — this causes AuthDecryptError"
+        assert "${HOME}/.sfdx" not in text, f"{label} bind-mounts the host's ~/.sfdx — this causes AuthDecryptError"
+
+    # The compose recipe's own persistence story must use named volumes
+    # (docker-managed storage, created fresh by/for the container) rather
+    # than a host path, for exactly the same reason.
+    assert "sf-config:/home/vscode/.sf" in compose_yml
+    assert "sfdx-config:/home/vscode/.sfdx" in compose_yml
+
+
+@requires_live_org
+def test_org_auth_survives_container_recreate():
+    """End-to-end regression test for AuthDecryptError: authenticate inside
+    one throwaway container with org auth persisted to named Docker volumes,
+    then read it back from a *second, freshly-started* container reusing
+    those same volumes (no state carried over except the volumes) — the
+    same shape as a VS Code Dev Containers rebuild or a repeat
+    `docker compose run`. If the container's own auth flow is used (never a
+    host bind mount), this must succeed with no AuthDecryptError."""
+    sf_auth_url = os.environ["SF_AUTH_URL"]
+    image = "sf-devcontainer:test"
+    vol_sf = "pytest-auth-sf-config"
+    vol_sfdx = "pytest-auth-sfdx-config"
+
+    def run_in_fresh_container(cmd, **extra_env):
+        env_args = []
+        for key, value in extra_env.items():
+            env_args += ["-e", f"{key}={value}"]
+        result = subprocess.run(
+            [
+                "docker", "run", "--rm",
+                *env_args,
+                "-v", f"{vol_sf}:/home/vscode/.sf",
+                "-v", f"{vol_sfdx}:/home/vscode/.sfdx",
+                image, "bash", "-lc", cmd,
+            ],
+            capture_output=True,
+            text=True,
+        )
+        return result
+
+    subprocess.run(["docker", "volume", "rm", "-f", vol_sf, vol_sfdx], check=False)
+    try:
+        login = run_in_fresh_container(
+            'echo "$SF_AUTH_URL" | sf org login sfdx-url --sfdx-url-stdin '
+            "--alias pytest-auth-org --set-default",
+            SF_AUTH_URL=sf_auth_url,
+        )
+        assert login.returncode == 0, f"login failed:\n{login.stdout}\n{login.stderr}"
+
+        # Fresh container, same volumes, no SF_AUTH_URL passed this time —
+        # only what's on disk in ~/.sf / ~/.sfdx is available to decrypt.
+        listing = run_in_fresh_container("sf org list --json")
+        assert listing.returncode == 0, f"org list failed:\n{listing.stdout}\n{listing.stderr}"
+
+        data = json.loads(listing.stdout)
+        result = data["result"]
+        orgs = result.get("nonScratchOrgs", []) + result.get("scratchOrgs", [])
+        assert orgs, f"expected at least one org in `sf org list --json`, got: {data}"
+
+        pytest_org = next((o for o in orgs if o.get("alias") == "pytest-auth-org"), None)
+        assert pytest_org is not None, f"pytest-auth-org not found in: {orgs}"
+        assert pytest_org.get("connectedStatus") != "AuthDecryptError", (
+            f"AuthDecryptError on a container-native login+recreate — the container's own "
+            f"encryption key did not survive alongside the org auth in the named volume: "
+            f"{pytest_org}"
+        )
+    finally:
+        subprocess.run(["docker", "volume", "rm", "-f", vol_sf, vol_sfdx], check=False)

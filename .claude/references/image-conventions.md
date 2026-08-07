@@ -27,9 +27,11 @@ pytest-testinfra test in `tests/test_sf_*.py` (see
   accepted or suppress via scan policy). **Runtimes:** Node 24.x, OpenJDK 17 (JDK), SF CLI `@2.*`.
 - **Plugins:** `code-analyzer`, `sfdx-git-delta`, `sfdx-browserforce-plugin`.
 - **User:** `vscode` (UID 1000, `/bin/zsh`, passwordless sudo).
-- **Shell:** Oh My Zsh + Powerlevel10k + zsh-autosuggestions + zsh-syntax-highlighting +
-  zsh-completions + fzf keybindings + zoxide + SF aliases; `.zshrc` and `.p10k.zsh` baked
-  in; `~/.zshrc.local` sourced last as the per-developer overlay hook.
+- **Shell:** Starship (no framework) + zsh-autosuggestions + zsh-syntax-highlighting (apt,
+  sourced last) + fzf keybindings + zoxide + SF aliases; `.zshrc` and `starship.toml` baked
+  in; `~/.zshrc.local` sourced last as the per-developer overlay hook. The Starship prompt
+  shows the project's Salesforce target org via `jq` against `.sf/config.json`, not `sf`
+  (avoids ~500 ms of Node startup per prompt).
 - **Tools:** everything in sf-ci plus vim, nano, wget, htop, tree, less, build-essential,
   openssl, gh, fzf, zoxide, eza, bat, ripgrep, fd, git-delta (system git pager), lazygit,
   and global prettier + prettier-plugin-apex + eslint.

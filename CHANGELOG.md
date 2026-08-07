@@ -30,6 +30,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   against it as `--user 1001`, synchronously, failing the PR if that pipeline fails.
   Quota-light: no scratch org, and `--skip-validation` draws on the 500/day pool.
   Needs an `E2E_DISPATCH_TOKEN` secret with `actions: write` on the downstream repo
+- sf-devcontainer: **`openssh-client`**, so `git clone`/`git push` over `ssh://` or
+  `git@host:...` remotes work, not just HTTPS. Previously failed with `error: cannot run
+  ssh: No such file or directory` — the `git` package doesn't pull it in. Also ships a
+  `/etc/ssh/ssh_config.d/99-devcontainer.conf` setting `StrictHostKeyChecking accept-new`
+  repo-wide, so the first connection to a new host doesn't hang on an unanswerable
+  interactive "are you sure? (yes/no)" prompt
 
 ### Changed — BREAKING
 - **`sf-ci` and `sf-bulk` now run as non-root `ci` (UID 1000) at runtime**, reverting the
@@ -44,6 +50,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Running under an *arbitrary* UID is explicitly not supported: `sf` calls Node's
     `os.userInfo()`, which throws ENOENT when the UID has no `/etc/passwd` entry. The usual
     entrypoint workaround does not apply — GitHub Actions container jobs override `ENTRYPOINT`.
+- The reference `.devcontainer/devcontainer.json` now persists Salesforce org auth in **named
+  Docker volumes** (`~/.sf`, `~/.sfdx`) instead of leaving it in the container's throwaway
+  layer, so a rebuild no longer costs you a re-login. **Do not bind-mount your host's `~/.sf`
+  or `~/.sfdx`** to share auth: those files are encrypted with the host OS keychain, which a
+  Linux container cannot read, and every org then reports `AuthDecryptError`. Verified
+  empirically on 2026-08-06. `tests/test_sf_devcontainer.py::test_auth_dirs_not_host_mounted`
+  guards this repo's own configs against the mistake
+- **sf-devcontainer's shell is now Starship with no framework**, replacing Oh My Zsh +
+  Powerlevel10k. Plugins come from apt instead of git clones; `zsh-completions` is dropped
+  (not packaged for noble). The prompt shows the project's Salesforce target org, read from
+  `.sf/config.json` with `jq` — never by calling `sf`, which would add ~500 ms of Node
+  startup to every prompt. Anyone relying on OMZ aliases or `p10k configure` must move that
+  into `~/.zshrc.local`
 - CI: third-party actions are pinned to floating major tags (`@v7`, `@v4`) instead of commit
   SHAs. `sigstore/cosign-installer` (`@v4.1.2`) and `aquasecurity/trivy-action` (`@v0.36.0`)
   stay exact — neither publishes a floating major tag.

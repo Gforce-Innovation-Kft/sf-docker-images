@@ -59,8 +59,6 @@ Run `lazygit` in any repo: `space` stage · `c` commit · `P` push · `p` pull �
 
 - Ghost text after the cursor = autosuggestion from history — accept with `→`
 - Command typed in red = not found; green = valid (syntax highlighting)
-- `extract archive.tar.gz` — one command for any archive format
-- `take dir` or `mkcd dir` — mkdir + cd in one step
-- git plugin aliases: `gst` status · `gco` checkout · `gcb` new branch · `glola` graph log
+- `mkcd dir` — mkdir + cd in one step
 - History: 50k entries, deduplicated, persists in the `/commandhistory` volume
-- Prompt wizard: `p10k configure` · personal overrides: `~/.zshrc.local`
+- Prompt: Starship, shows the Salesforce target org · personal overrides: `~/.zshrc.local`

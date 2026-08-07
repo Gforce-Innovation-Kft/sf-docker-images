@@ -50,12 +50,18 @@ verify only against that identity instead:
 
 - **Node.js 24.x** (LTS) and **Java 17** (OpenJDK).
 - **Salesforce CLI v2** with plugins: `code-analyzer`, `sfdx-git-delta`, `sfdx-browserforce-plugin`.
-- **Shell**: zsh with Oh My Zsh, Powerlevel10k, autosuggestions, syntax-highlighting,
-  completions, fzf keybindings (Ctrl-R/Ctrl-T), zoxide (`z`), and Salesforce aliases
-  (`sfhelp` lists them).
+- **Shell**: zsh with Starship, zsh-autosuggestions and zsh-syntax-highlighting, no
+  framework, fzf keybindings (Ctrl-R/Ctrl-T), zoxide (`z`), and Salesforce aliases
+  (`sfhelp` lists them). The prompt shows the project's Salesforce target org, read
+  from `.sf/config.json` with `jq` — never by calling `sf`, which would add ~500 ms
+  of Node startup to every prompt.
 - **CLI tools**: gh (GitHub CLI), fzf, zoxide, eza, bat, ripgrep, fd, git-delta
   (system git pager), lazygit. Run `devhelp` inside the container for a cheatsheet;
   see [TOOLS.md](TOOLS.md) for the expert guide.
+- **Git over SSH and HTTPS**: `openssh-client` is installed, so `git@host:...` and
+  `ssh://` remotes work alongside `https://` ones. Unknown host keys are accepted
+  automatically on first connect (`StrictHostKeyChecking accept-new`) instead of
+  hanging on a prompt with nothing to answer it.
 - **Formatters/linters**: prettier + prettier-plugin-apex + eslint (global — work
   without a project `package.json`).
 - **Editors & tools**: vim, nano, wget, htop, tree, less, build-essential, openssl.
@@ -68,8 +74,9 @@ verify only against that identity instead:
 Copy this repo's reference [`.devcontainer/devcontainer.json`](../.devcontainer/devcontainer.json)
 into your sfdx project, then run **Dev Containers: Reopen in Container**. It wires up the
 Salesforce Extension Pack (Expanded), Apex PMD, Prettier, ESLint, persistent shell
-history, and the Claude Code feature. When copying it, swap its `build` block (which
-builds from this repo's source) for the published image, as below. Minimal version:
+history, persistent org auth, and the Claude Code feature. When copying it, swap its
+`build` block (which builds from this repo's source) for the published image, as below.
+Minimal version:
 
 ```json
 {
@@ -81,6 +88,38 @@ builds from this repo's source) for the published image, as below. Minimal versi
 }
 ```
 
+### Salesforce org auth
+
+The reference `devcontainer.json` mounts `~/.sf` and `~/.sfdx` as **named Docker
+volumes**, so `sf org login` inside the container survives rebuilds. Authenticate
+from *inside* the container — `sf org login web`, or non-interactively via
+`SF_AUTH_URL` (get one with
+`sf org display --target-org <alias> --verbose --json | jq -r .result.sfdxAuthUrl`
+on a machine already logged in; see [`examples/`](../examples/)).
+
+**Do not** bind-mount your host's `~/.sf`/`~/.sfdx` into the container to avoid
+re-authenticating — those files are encrypted with your host OS's keychain, which
+this Linux container can't read, and `sf org list` will fail every org with
+`AuthDecryptError`. Auth in the container once; the named volumes keep it there.
+
+### Git over SSH
+
+`openssh-client` is installed, so SSH remotes (`git@host:org/repo.git`, `ssh://...`)
+work the same as HTTPS ones. Two ways to get a key into the container:
+
+- **SSH agent forwarding (recommended, usually needs no setup)** — VS Code Dev
+  Containers automatically forwards a running host `ssh-agent`'s socket into the
+  container. Run `ssh-add -l` inside the container: if it lists your key, `git clone`/
+  `git push` over SSH just works. If it says "no identities," run `ssh-add
+  ~/.ssh/id_ed25519` (or your key) **on the host** first, then reopen the container.
+- **Bind-mount `~/.ssh` read-only**, if you'd rather not depend on agent forwarding —
+  add `"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly"` to
+  `devcontainer.json`'s `mounts`. (This is safe, unlike bind-mounting `~/.sf`/`~/.sfdx`
+  — SSH keys aren't re-encrypted per OS the way SF CLI auth is.)
+
+Unknown host keys (first connection to a new host) are accepted automatically via
+`StrictHostKeyChecking accept-new` instead of hanging on an interactive prompt.
+
 ### Personalize your shell
 
 The image ships team-wide defaults; layer your own on top — no rebuild needed:
@@ -90,8 +129,10 @@ The image ships team-wide defaults; layer your own on top — no rebuild needed:
 - **VS Code dotfiles** — set `"dotfiles.repository": "you/dotfiles"` in your VS Code
   user settings and VS Code clones + installs your dotfiles into every dev container
   automatically.
-- **Prompt** — run `p10k configure` inside the container for a wizard-driven
-  Powerlevel10k setup.
+- **Prompt** — Starship, configured by the baked-in `starship.toml`; there's no
+  interactive configuration wizard. Migrating from an earlier version of this image?
+  Move your old shell customizations into `~/.zshrc.local` instead — see the
+  CHANGELOG for exactly what changed.
 
 ### AI pair development (Claude Code)
 

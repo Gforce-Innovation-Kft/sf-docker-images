@@ -1,0 +1,32 @@
+# Prompt for the Salesforce devcontainer.
+#
+# Mirrors the host's Starship setup so the shell feels identical inside and out.
+# The sf_org module reads .sf/config.json directly with jq. Shelling out to the
+# Salesforce CLI here would pay ~500ms of Node startup on EVERY prompt, which is
+# exactly the latency this whole change removes — the test asserts it does not.
+
+format = """$directory$git_branch$git_status$custom$character"""
+
+add_newline = false
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+
+[git_branch]
+symbol = " "
+
+[git_status]
+style = "yellow"
+
+[custom.sf_org]
+description = "Salesforce target org for this project"
+command = "jq -r '.\"target-org\" // empty' .sf/config.json 2>/dev/null"
+when = "test -f .sf/config.json"
+symbol = "☁ "
+style = "cyan"
+format = "[$symbol$output]($style) "
+
+[character]
+success_symbol = "[❯](green)"
+error_symbol = "[❯](red)"

@@ -21,6 +21,7 @@ RUN apt-get update \
     curl \
     wget \
     git \
+    openssh-client \
     gnupg2 \
     lsb-release \
     apt-transport-https \
@@ -45,11 +46,28 @@ RUN apt-get update \
     bat \
     # Zsh and related
     zsh \
+    zsh-autosuggestions \
+    zsh-syntax-highlighting \
     fonts-powerline \
     locales \
     sudo \
     && rm -rf /var/lib/apt/lists/* \
     2>&1
+
+# Fail loudly at build time rather than shipping a shell with no plugins.
+RUN test -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
+    && test -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+    || { echo "zsh plugin paths changed — fix .zshrc and the tests" >&2; exit 1; }
+
+# Auto-accept unknown SSH host keys (TOFU) instead of the interactive
+# "are you sure you want to continue connecting (yes/no)?" prompt, which
+# has nothing to answer it in a non-interactive container shell and would
+# otherwise hang the first `git clone`/`git push` over ssh:// or git@ to any
+# host — not just github.com. Still verifies and pins on every connection
+# after the first (this is not the same as disabling host-key checking).
+RUN mkdir -p /etc/ssh/ssh_config.d \
+    && echo 'Host *' > /etc/ssh/ssh_config.d/99-devcontainer.conf \
+    && echo '    StrictHostKeyChecking accept-new' >> /etc/ssh/ssh_config.d/99-devcontainer.conf
 
 # Set locale
 RUN locale-gen en_US.UTF-8
@@ -84,6 +102,7 @@ ARG ZOXIDE_VERSION=0.10.0
 ARG EZA_VERSION=0.23.5
 ARG DELTA_VERSION=0.19.2
 ARG LAZYGIT_VERSION=0.63.0
+ARG STARSHIP_VERSION=1.26.0
 RUN ARCH="${TARGETARCH:-$(dpkg --print-architecture)}" \
     && case "${ARCH}" in \
     amd64) RUST_ARCH=x86_64; LG_ARCH=x86_64 ;; \
@@ -96,6 +115,8 @@ RUN ARCH="${TARGETARCH:-$(dpkg --print-architecture)}" \
     && dpkg -i /tmp/zoxide.deb /tmp/delta.deb \
     && curl -fsSL "https://github.com/eza-community/eza/releases/download/v${EZA_VERSION}/eza_${RUST_ARCH}-unknown-linux-gnu.tar.gz" | tar -xz -C /usr/local/bin \
     && curl -fsSL "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_${LG_ARCH}.tar.gz" | tar -xz -C /usr/local/bin lazygit \
+    && curl -fsSL "https://github.com/starship/starship/releases/download/v${STARSHIP_VERSION}/starship-${RUST_ARCH}-unknown-linux-musl.tar.gz" \
+    | tar -xz -C /usr/local/bin starship \
     && rm -f /tmp/*.deb \
     && ln -sf /usr/bin/batcat /usr/local/bin/bat \
     && ln -sf /usr/bin/fdfind /usr/local/bin/fd
@@ -137,17 +158,10 @@ RUN echo y | sf plugins install code-analyzer && \
     echo y | sf plugins install sfdx-git-delta && \
     echo y | sf plugins install sfdx-browserforce-plugin
 
-# Install Oh My Zsh, Powerlevel10k theme, and Zsh plugins in one layer
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended \
-    && git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" \
-    && git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" \
-    && git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" \
-    && git clone --depth=1 https://github.com/zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-completions"
-
 # Copy Zsh configuration files owned by vscode directly — avoids a recursive
 # root chown layer that would duplicate all of /home/vscode in the image
 COPY --chown=vscode:vscode .zshrc /home/vscode/.zshrc
-COPY --chown=vscode:vscode .p10k.zsh /home/vscode/.p10k.zsh
+COPY --chown=vscode:vscode starship.toml /home/vscode/.config/starship.toml
 
 # CLI tools cheatsheet rendered by the `devhelp` function in .zshrc
 COPY cheatsheet.md /usr/local/share/sf-devcontainer/cheatsheet.md
