@@ -57,10 +57,31 @@ def test_ci_user_exists(host):
     assert user.shell == "/bin/bash"
 
 
-def test_runtime_user_is_non_root(host):
-    """Container runs as non-root ci (UID 1000) at runtime, not root."""
-    assert host.run("id -u").stdout.strip() == "1000", "image must not run as root"
-    assert host.run("id -un").stdout.strip() == "ci"
+def test_runtime_user_is_the_runner_uid(host):
+    """Default runtime user is `runner` (1001) — the GitHub-hosted runner's UID.
+
+    This is what lets a container job be written as a bare
+    `container: gforceinnovation/sf-ci:<tag>` with no `options:` at all.
+    If it regresses to 1000, every consumer silently loses the ability to write
+    $GITHUB_OUTPUT and has to remember `--user 1001` again — a failure that
+    names neither the UID nor the file commands.
+    """
+    assert host.run("id -u").stdout.strip() == "1001", "image must default to the runner UID"
+    assert host.run("id -un").stdout.strip() == "runner"
+    assert host.run("id -g").stdout.strip() == "0", "runner must be GID 0 for the group-0 paths"
+
+
+def test_default_user_can_write_the_runner_file_commands(host):
+    """The property the default UID exists for.
+
+    GitHub creates $GITHUB_OUTPUT / $GITHUB_ENV / $GITHUB_STEP_SUMMARY owned by
+    UID 1001. Simulated here by writing to a 1001-owned file: if the default
+    user cannot append to one, no composite action can set an output.
+    """
+    probe = "/tmp/file_command_probe"
+    assert host.run(f"rm -f {probe} && touch {probe}").rc == 0
+    assert host.run(f"echo 'k=v' >> {probe}").rc == 0, "default user cannot append to a file it owns"
+    assert "k=v" in host.file(probe).content_string
 
 
 def test_sf_cli_works_as_non_root(host):
@@ -236,3 +257,60 @@ def test_minimal_footprint(host):
     
     omz = host.file("/home/ci/.oh-my-zsh")
     assert not omz.exists
+
+
+# Keep in sync with the ARG in sf-ci/Dockerfile.
+EXPECTED_GITLEAKS = "8.21.2"
+
+
+def test_gitleaks_installed_and_pinned(host):
+    """gitleaks gates artifact upload, so its version is pinned deliberately.
+
+    A scanner that silently changes its ruleset changes what passes CI.
+    """
+    out = host.run("gitleaks version")
+    assert out.rc == 0, out.stderr[:300]
+    assert EXPECTED_GITLEAKS in out.stdout, out.stdout
+
+
+def test_gitleaks_detects_a_planted_private_key(host):
+    """Presence is not the property we need — detection is.
+
+    A gitleaks that runs but finds nothing would wave a secret-bearing
+    artifact through while reporting success, which is worse than not
+    scanning at all because it looks like a gate.
+
+    A private key block is the right probe: it is exactly what this gate
+    exists to keep out of a deployment artifact — the Salesforce JWT key and
+    the GitHub App key are both PEM private keys — and gitleaks matches the
+    BEGIN line rather than any particular key material.
+
+    Recorded so nobody repeats it: the obvious probe, AKIAIOSFODNN7EXAMPLE,
+    does NOT work. It is AWS's own documentation key and gitleaks allowlists
+    it, so a test built on it passes for the wrong reason.
+    """
+    planted = (
+        "rm -rf /tmp/leakprobe && mkdir -p /tmp/leakprobe && "
+        "printf -- '-----BEGIN RSA PRIVATE KEY-----\\n"
+        "MIIEowIBAAKCAQEAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\n"
+        "-----END RSA PRIVATE KEY-----\\n' > /tmp/leakprobe/key.pem && "
+        "gitleaks dir /tmp/leakprobe --no-banner"
+    )
+    assert host.run(planted).rc != 0, "gitleaks must exit non-zero on a private key"
+
+
+def test_gitleaks_passes_a_clean_directory(host):
+    """The other half: a clean tree must not fail the build."""
+    clean = (
+        "rm -rf /tmp/cleanprobe && mkdir -p /tmp/cleanprobe && "
+        "printf 'public class A {}\\n' > /tmp/cleanprobe/A.cls && "
+        "gitleaks dir /tmp/cleanprobe --no-banner"
+    )
+    assert host.run(clean).rc == 0, "gitleaks must pass a directory with no secrets"
+
+
+def test_envsubst_available(host):
+    """sf-env-config-apply renders metadata templates with envsubst."""
+    out = host.run("printf 'x=${PROBE_VAL}' | PROBE_VAL=ok envsubst")
+    assert out.rc == 0
+    assert out.stdout.strip() == "x=ok"
