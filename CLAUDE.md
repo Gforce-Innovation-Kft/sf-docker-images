@@ -1,191 +1,64 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code in this repository.
 
 ## Project Overview
 
-Builds and publishes three Salesforce-focused Docker images to Docker Hub under the `gforceinnovation` organization. sf-ci is based on `ubuntu:22.04` and sf-devcontainer on `ubuntu:24.04`, both with Node.js 24.x, OpenJDK 17, and Salesforce CLI v2. sf-bulk is Alpine-based with Node.js 24.x (no Java) for a minimal footprint.
+Builds and publishes three Salesforce-focused Docker images to Docker Hub under
+`gforceinnovation`:
 
-## Images
+| Image | Base | Purpose | Hard rules |
+|---|---|---|---|
+| **sf-ci** | ubuntu:22.04 | CI/CD runner for SF pipelines | Stay minimal — no editors, no zsh (tests verify absence). Non-root `ci` UID 1000; consumers must run `--user 1000` or `/github/home` is unwritable |
+| **sf-devcontainer** | ubuntu:24.04 | Full VS Code devcontainer | Feature-rich is fine. `vscode` UID 1000, zsh + Starship; prompt reads target org from `.sf/config.json` via `jq`, never `sf` (~500 ms) |
+| **sf-bulk** | node:24-alpine | Bulk org ops, no Java | Under 600MB uncompressed, no Java (tests verify). `ci` UID 1000 |
 
-### sf-ci
-- **Purpose:** Lightweight CI/CD runner for Salesforce automation pipelines.
-- **User:** `ci` (UID 1000, bash shell). **Runs non-root at runtime** — consumers must run the
-  container with UID 1000 (ARC `runAsUser: 1000` / `options: --user 1000`), otherwise
-  `/github/home` is unwritable.
-- **SF CLI plugins:** `sfdx-git-delta`.
-- **Tools:** git, jq, xmlstarlet, curl, unzip/zip.
-- **Env vars:** `SFDX_CONTAINER_MODE=true`, `SFDX_DISABLE_DNS_CHECK=true`, `SF_AUTOUPDATE_DISABLE=true`, `SF_DISABLE_TELEMETRY=true`, `CI=true`.
-- **Design rule:** Must stay minimal. No editors, no zsh, no interactive tools. Tests verify absence of vim/nano/zsh.
+All: Node 24.x, SF CLI v2 (+ OpenJDK 17 on the Ubuntu pair), `WORKDIR /workspace`,
+`HEALTHCHECK` via `sf version --json`.
 
-### sf-devcontainer
-- **Purpose:** Full-featured VS Code devcontainer for Salesforce development.
-- **User:** `vscode` (UID 1000, zsh shell, passwordless sudo).
-- **SF CLI plugins:** `code-analyzer`, `sfdx-git-delta`, `sfdx-browserforce-plugin`.
-- **Tools:** Everything in sf-ci plus vim, nano, wget, htop, tree, less, build-essential, openssl, gh, fzf, zoxide, eza, bat, ripgrep, fd, git-delta (system git pager), lazygit, and global prettier + prettier-plugin-apex + eslint.
-- **Shell:** Zsh with Starship, zsh-autosuggestions and zsh-syntax-highlighting, no framework, fzf keybindings, zoxide, SF aliases (`sfhelp`); `~/.zshrc.local` sourced last as per-dev overlay. The prompt shows the project's Salesforce target org, read from `.sf/config.json` with `jq` (never by calling `sf`, which would add ~500 ms of Node startup per prompt).
+**Details** (full tool/env/plugin lists, build commands, CI walkthrough, E2E gate):
+[`docs/claude-ci-reference.md`](docs/claude-ci-reference.md) — **read it before
+touching any workflow or Dockerfile.**
 
-### sf-bulk
-- **Purpose:** Ultra-lightweight Alpine-based image for bulk Salesforce org operations (no Java).
-- **Base:** `node:24-alpine` with `coreutils` (needed for `env -S` in SF CLI shebang on musl/BusyBox).
-- **User:** `ci` (UID 1000, bash shell) — created after removing the pre-existing `node` user from the base image.
-- **SF CLI plugins:** `sfdx-git-delta`.
-- **Tools:** bash, curl, git, jq, unzip, libc6-compat (gcompat).
-- **Env vars:** same set as sf-ci. XDG dirs pinned to `/opt/sf-data` and `/opt/sf-config` (chmod 777).
-- **Runtime:** runs as non-root `ci` (UID 1000), same as sf-ci — same runner-UID requirement.
-- **Design rule:** No Java, no editors, no interactive tools. Must stay under 600MB uncompressed.
+## CI/CD shape (invariants)
 
-All three images set `WORKDIR /workspace`, include a `HEALTHCHECK` using `sf version --json`, and have `.dockerignore` files.
+One workflow per image + `release.yml`; the build→test→push pipeline lives in
+`reusable-docker-image-build.yml`, everything else is a thin caller.
 
-## Key Commands
-
-```bash
-# Build locally
-docker build -t sf-ci:local ./sf-ci
-docker build -t sf-devcontainer:local ./sf-devcontainer
-docker build -t sf-bulk:local ./sf-bulk
-
-# Run container tests (pytest-testinfra)
-pip install -r tests/requirements.txt
-pytest tests/ -v
-pytest tests/test_sf_ci.py -v          # single image
-pytest tests/test_sf_devcontainer.py -v # single image
-pytest tests/test_sf_bulk.py -v         # single image
-
-# Multi-platform build and push (requires buildx)
-docker buildx create --name multiplatform --use
-docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf-ci:latest --push ./sf-ci
-docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf-devcontainer:latest --push ./sf-devcontainer
-docker buildx build --platform linux/amd64,linux/arm64 --tag gforceinnovation/sf-bulk:latest --push ./sf-bulk
-```
-
-## CI/CD Workflows
-
-**One workflow per image, plus one release workflow.** The per-image **build -> test -> push**
-pipeline itself lives in `.github/workflows/reusable-docker-image-build.yml`; everything else is
-a thin caller.
-
-| File | Trigger | Does |
-|---|---|---|
-| `image-sf-ci.yml` | PRs touching sf-ci | build -> test -> **E2E gate** |
-| `image-sf-devcontainer.yml` | PRs touching sf-devcontainer | build -> test |
-| `image-sf-bulk.yml` | PRs touching sf-bulk | build -> test |
-| `release.yml` | `v*.*.*` tags | matrix over **all** images -> push -> GitHub Release |
-| `reusable-docker-image-build.yml` | `workflow_call` | build -> test -> push for ONE image |
-
-- **Path filtering is GitHub's own** (`on.pull_request.paths`), not a `changes` job. A PR only
-  starts the workflows for images it touches; a docs-only PR starts nothing. Separate workflows
-  are inherently parallel.
-- Each image workflow filters on its own dir, its own `tests/test_<name>.py`, **and** the shared
-  inputs (`tests/requirements.txt`, the reusable workflow, itself).
-- **Adding an image: copy one `image-*.yml`, change the name/context/paths, and add a matrix
-  entry to `release.yml`.** Removing one: delete the file and the entry. Forgetting the
-  `release.yml` half means the image is tested but never published.
-- **Tags build every image**, so `latest` stays coherent — which is why the tag path keeps a
-  matrix instead of splitting per image. That duplication of the image list is the deliberate
-  cost of the split.
-- PRs never push (`push: false`); `release.yml` is the only publisher.
-- On version tags: multi-arch push to Docker Hub with **two tags only** (`1.2.3` + `latest` —
-  rolling `1.2`/`1` tags are no longer published), SBOM + provenance attestations, and a
-  **keyless cosign signature** (GitHub OIDC; identity = the reusable workflow's path — renaming
-  or moving that file invalidates every documented `cosign verify` command).
-- Registry is **Docker Hub only** (`gforceinnovation/*`); GHCR is used solely for throwaway E2E
-  candidates.
-- Do not copy per-image pipeline logic into the callers — change the reusable workflow.
-
-### E2E gate — two tiers, both blocking (`image-sf-ci.yml`)
-
-Only sf-ci carries it: it is the image the Salesforce pipelines run in.
-
-```
-image -> publish-candidate -> e2e-container -> e2e-workflows -> cleanup
-```
-
-- **`publish-candidate`** takes the **already-built** `sf-ci-image` artifact — no rebuild, so
-  the bits under test are the bits the container suite just passed — and pushes it to a
-  throwaway `ghcr.io/<owner>/sf-ci-e2e:pr-<N>`. Everything downstream needs to *pull* it: a
-  container job takes a registry reference, not a loaded image.
-- **Tier 1 `e2e-container`** is a real GitHub Actions container job on that image, **`--user
-  1001`**. Probes the runner file-command paths, `$HOME`, `sf version`/`plugins`, and
-  `sfdx-git-delta` (the `sf-source-delta` code path) — no secrets, no org, no quota.
-  `tests/` runs `docker run`, so it cannot see what GitHub does to a container job:
-  bind-mounting `/github/home` and the file-command dir owned by the runner's UID. **Every
-  regression this image has actually shipped lived in that gap.**
-- **Tier 2 `e2e-workflows`** dispatches real downstream pipelines against the candidate and
-  blocks on them (`gh run watch --exit-status`), so a downstream failure fails the PR.
-  Correlates via an `e2e-run-id` echoed into the downstream `run-name` — "latest run" races
-  when two PRs overlap. **Add a critical workflow by adding a `matrix.target` entry**; nothing
-  else changes.
-- Tier 1 gates tier 2, so a container that cannot run `sf` fails in ~1 minute instead of
-  spending a package-version create.
-- **Quota-light on purpose:** `run-validate: false` (no scratch org) and `skip-validation: true`
-  (500/day pool, not the 6/day validated-create pool). Each run still creates one package
-  version and pushes a `pkg/...` provenance tag in `sf-develop-demo`.
-- **Requires the `E2E_DISPATCH_TOKEN` secret** — a PAT/App token with `actions: write` on
-  `sf-develop-demo`. `GITHUB_TOKEN` cannot dispatch cross-repo. Without it the job fails with an
-  explicit message rather than silently passing.
-- `cleanup` deletes the throwaway GHCR tag on `always()`, whichever tier failed.
-
-### Release Process
-```bash
-git tag -a v1.2.0 -m "Release v1.2.0"
-git push origin v1.2.0
-```
+- **Do not copy pipeline logic into the callers** — change the reusable workflow.
+- **Adding an image = copy one `image-*.yml` + add a `release.yml` matrix entry.**
+  Forgetting the release half means tested-but-never-published.
+- PRs never push; `release.yml` is the only publisher (Docker Hub only; GHCR is for
+  throwaway E2E candidates).
+- Only sf-ci carries the two-tier **E2E gate** (real container job at `--user 1001`
+  → dispatched downstream pipelines). Needs `E2E_DISPATCH_TOKEN` (cross-repo
+  dispatch). Details + rationale in the reference doc — the container-job gap it
+  covers is where every shipped regression has lived.
 
 ## Testing
 
-Tests use **pytest-testinfra** (in `tests/`). Each `tests/test_sf_*.py` builds the image, starts a
-container, and verifies: OS version, user/UID/shell, runtimes (Node, Java, SF CLI), plugins, tools,
-env vars, and directory structure. sf-ci tests verify vim/nano/zsh are NOT installed; sf-bulk tests
-verify Java is NOT installed and the image is under 600 MB.
+**pytest-testinfra** in `tests/` — each `test_sf_*.py` builds the image, starts a
+container, verifies OS/user/runtimes/plugins/tools/env/dirs, and asserts the
+*absence* rules (sf-ci: no vim/nano/zsh; sf-bulk: no Java, <600MB).
 
 ## Change Rules
 
-- When adding/removing tools: update the Dockerfile, the image's README, and add/adjust tests in `tests/test_sf_*.py`.
-- sf-ci must stay minimal; sf-devcontainer can be feature-rich; sf-bulk must stay under 600MB with no Java.
-- Alpine images: use `apk add --no-cache` and include `coreutils` (needed for `env -S` in SF CLI shebang).
-- Alpine images: `node:24-alpine` ships a `node` user at UID 1000 — run `deluser node` before creating `ci`.
-- `ubuntu:24.04`+ ships a default `ubuntu` user at UID 1000 — run `userdel -r ubuntu` before creating the image user (sf-devcontainer does this; sf-ci is still on 22.04).
-- Ubuntu images: clean apt caches in the same `RUN` layer (`rm -rf /var/lib/apt/lists/*`).
-- Commit messages follow conventional commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
-- A pre-commit hook (`.github/hooks/pre-commit`, activated by `scripts/setup.sh` via
-  `core.hooksPath`) runs yamllint on staged YAML files (blocking) and refreshes the graphify graph
-  (non-blocking). Config in `.yamllint` (max line length 120, 2-space indent).
+- Adding/removing tools: update the Dockerfile, the image's README, AND
+  `tests/test_sf_*.py`.
+- Alpine: `apk add --no-cache`; include `coreutils` (`env -S` in SF CLI shebang);
+  `deluser node` before creating `ci` (base ships `node` at UID 1000).
+- `ubuntu:24.04`+: `userdel -r ubuntu` before creating the image user.
+- Ubuntu: clean apt caches in the same `RUN` layer.
+- Commits: conventional commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
+- Pre-commit hook (via `scripts/setup.sh`, `core.hooksPath`): yamllint on staged YAML
+  (blocking), graphify refresh (non-blocking). `.yamllint`: 120 cols, 2-space indent.
 
-## AI Pair-Development Layer
+## AI layer
 
-This repo is set up to be developed with Claude Code. The loop is: **CLAUDE.md → references → skills → tests → release.**
-
-- **`.claude/references/`** — read before generating code:
-  [`docker-best-practices.md`](.claude/references/docker-best-practices.md),
-  [`image-conventions.md`](.claude/references/image-conventions.md) (per-image size budgets +
-  allowed/forbidden tools), [`github-actions.md`](.claude/references/github-actions.md),
-  [`devops.md`](.claude/references/devops.md).
-- **`.claude/skills/`** — repo skills: `building-a-docker-image`, `testing-images`, `releasing`,
-  and `working-in-the-devcontainer` (vendored, attributed).
-- **`.agents/skills/`** — ecosystem skills vendored via the skills CLI (`npx skills add`), symlinked
-  into `.claude/skills/` and pinned in `skills-lock.json`: `docker-expert`
-  (sickn33/antigravity-awesome-skills), `multi-stage-dockerfile` (github/awesome-copilot),
-  `devcontainer-setup` (trailofbits/skills), `platform-docs-get` (forcedotcom/sf-skills).
-  Use `docker-expert` + `multi-stage-dockerfile` when reviewing/changing Dockerfiles,
-  `devcontainer-setup` for `.devcontainer/` work, `platform-docs-get` for official Salesforce docs.
-- **`.claude/settings.json`** — committed permission allow-list. `settings.local.json` is git-ignored.
-- **`scripts/setup.sh`** — one-command bootstrap: verifies Docker + Python + `gh`, installs test
-  deps, and prints the recommended external Claude skills to install.
-
-## Knowledge Graph (graphify)
-
-This repo ships a [graphify](https://github.com/) knowledge graph in `graphify-out/` so Claude
-answers codebase questions from a **scoped subgraph** instead of grepping/reading whole files —
-this is the token-management win. See [`.claude/references/graphify.md`](.claude/references/graphify.md).
-
-- **For codebase questions**, run `graphify query "<question>"` (scoped subgraph, usually much
-  smaller than raw grep/reads). Use `graphify explain "<concept>"` for one node + neighbors and
-  `graphify path "<A>" "<B>"` for relationships. Read `graphify-out/GRAPH_REPORT.md` only for a
-  broad architecture pass.
-- **After modifying code**, run `graphify update .` to keep the graph current (AST-only, no API cost).
-- `graphify-out/` is a **local build artifact and is git-ignored** — regenerated by
-  `scripts/setup.sh` and the pre-commit hook, not committed.
+`.claude/references/` (read before generating code) · repo + vendored skills (see
+below) · `scripts/setup.sh` bootstrap · graphify graph (`graphify query` for codebase
+questions, `graphify update .` after changes; `graphify-out/` is git-ignored).
+Details in the reference doc.
 
 <!-- skills-tooling -->
 ## Skills & AI tooling

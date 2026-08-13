@@ -64,6 +64,18 @@ verify only against that identity instead:
 > An *unregistered* UID will not work: `sf` calls Node's `os.userInfo()`, which fails when the
 > UID has no `/etc/passwd` entry. Both 1000 and 1001 are baked in for exactly this reason.
 > Versions before 3.0.0 ran as root and were immune to all of it.
+>
+> `--user 1001` is **required, not advisory**. Beyond `/github/home`, the runner creates the
+> job's file-command files — `$GITHUB_OUTPUT`, `$GITHUB_ENV`, `$GITHUB_STEP_SUMMARY` — as
+> `-rw-r--r-- 1001:1001`, so under any other UID the first step that sets an output fails with
+> `Permission denied`. Overriding `HOME` is **not** a workaround: it fixes `sf` and leaves the
+> file commands broken, which looks like a working job right up until it isn't.
+>
+> Container jobs also default to `sh`, which has no `-o pipefail`. Set
+> `defaults.run.shell: bash` or every `set -euo pipefail` step dies with `Illegal option`.
+>
+> Full rules, a failure decoder, and how to reproduce an Actions container job locally:
+> **[docs/using-in-github-actions.md](../docs/using-in-github-actions.md)**.
 
 ## Usage
 
