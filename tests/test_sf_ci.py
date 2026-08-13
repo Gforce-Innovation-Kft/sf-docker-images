@@ -57,10 +57,31 @@ def test_ci_user_exists(host):
     assert user.shell == "/bin/bash"
 
 
-def test_runtime_user_is_non_root(host):
-    """Container runs as non-root ci (UID 1000) at runtime, not root."""
-    assert host.run("id -u").stdout.strip() == "1000", "image must not run as root"
-    assert host.run("id -un").stdout.strip() == "ci"
+def test_runtime_user_is_the_runner_uid(host):
+    """Default runtime user is `runner` (1001) — the GitHub-hosted runner's UID.
+
+    This is what lets a container job be written as a bare
+    `container: gforceinnovation/sf-ci:<tag>` with no `options:` at all.
+    If it regresses to 1000, every consumer silently loses the ability to write
+    $GITHUB_OUTPUT and has to remember `--user 1001` again — a failure that
+    names neither the UID nor the file commands.
+    """
+    assert host.run("id -u").stdout.strip() == "1001", "image must default to the runner UID"
+    assert host.run("id -un").stdout.strip() == "runner"
+    assert host.run("id -g").stdout.strip() == "0", "runner must be GID 0 for the group-0 paths"
+
+
+def test_default_user_can_write_the_runner_file_commands(host):
+    """The property the default UID exists for.
+
+    GitHub creates $GITHUB_OUTPUT / $GITHUB_ENV / $GITHUB_STEP_SUMMARY owned by
+    UID 1001. Simulated here by writing to a 1001-owned file: if the default
+    user cannot append to one, no composite action can set an output.
+    """
+    probe = "/tmp/file_command_probe"
+    assert host.run(f"rm -f {probe} && touch {probe}").rc == 0
+    assert host.run(f"echo 'k=v' >> {probe}").rc == 0, "default user cannot append to a file it owns"
+    assert "k=v" in host.file(probe).content_string
 
 
 def test_sf_cli_works_as_non_root(host):
