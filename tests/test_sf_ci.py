@@ -257,3 +257,60 @@ def test_minimal_footprint(host):
     
     omz = host.file("/home/ci/.oh-my-zsh")
     assert not omz.exists
+
+
+# Keep in sync with the ARG in sf-ci/Dockerfile.
+EXPECTED_GITLEAKS = "8.21.2"
+
+
+def test_gitleaks_installed_and_pinned(host):
+    """gitleaks gates artifact upload, so its version is pinned deliberately.
+
+    A scanner that silently changes its ruleset changes what passes CI.
+    """
+    out = host.run("gitleaks version")
+    assert out.rc == 0, out.stderr[:300]
+    assert EXPECTED_GITLEAKS in out.stdout, out.stdout
+
+
+def test_gitleaks_detects_a_planted_private_key(host):
+    """Presence is not the property we need — detection is.
+
+    A gitleaks that runs but finds nothing would wave a secret-bearing
+    artifact through while reporting success, which is worse than not
+    scanning at all because it looks like a gate.
+
+    A private key block is the right probe: it is exactly what this gate
+    exists to keep out of a deployment artifact — the Salesforce JWT key and
+    the GitHub App key are both PEM private keys — and gitleaks matches the
+    BEGIN line rather than any particular key material.
+
+    Recorded so nobody repeats it: the obvious probe, AKIAIOSFODNN7EXAMPLE,
+    does NOT work. It is AWS's own documentation key and gitleaks allowlists
+    it, so a test built on it passes for the wrong reason.
+    """
+    planted = (
+        "rm -rf /tmp/leakprobe && mkdir -p /tmp/leakprobe && "
+        "printf -- '-----BEGIN RSA PRIVATE KEY-----\\n"
+        "MIIEowIBAAKCAQEAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\n"
+        "-----END RSA PRIVATE KEY-----\\n' > /tmp/leakprobe/key.pem && "
+        "gitleaks dir /tmp/leakprobe --no-banner"
+    )
+    assert host.run(planted).rc != 0, "gitleaks must exit non-zero on a private key"
+
+
+def test_gitleaks_passes_a_clean_directory(host):
+    """The other half: a clean tree must not fail the build."""
+    clean = (
+        "rm -rf /tmp/cleanprobe && mkdir -p /tmp/cleanprobe && "
+        "printf 'public class A {}\\n' > /tmp/cleanprobe/A.cls && "
+        "gitleaks dir /tmp/cleanprobe --no-banner"
+    )
+    assert host.run(clean).rc == 0, "gitleaks must pass a directory with no secrets"
+
+
+def test_envsubst_available(host):
+    """sf-env-config-apply renders metadata templates with envsubst."""
+    out = host.run("printf 'x=${PROBE_VAL}' | PROBE_VAL=ok envsubst")
+    assert out.rc == 0
+    assert out.stdout.strip() == "x=ok"

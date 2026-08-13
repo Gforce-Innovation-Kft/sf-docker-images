@@ -26,6 +26,8 @@ RUN apt-get update \
     # Minimal utilities
     unzip \
     zip \
+    # envsubst — renders secret-bearing metadata templates at deploy time
+    gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
 # Catch pipe failures (e.g. curl | bash)
@@ -37,6 +39,23 @@ RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g @salesforce/cli@2.* \
     && npm cache clean --force
+
+# gitleaks — the secret-scan gate that stands between a build and an uploaded
+# artifact. Pinned: a scanner that silently changes its ruleset changes what
+# passes CI. No apt package exists, so fetch the release tarball.
+ARG GITLEAKS_VERSION=8.21.2
+RUN set -eux; \
+    case "$(dpkg --print-architecture)" in \
+      amd64) GL_ARCH=x64 ;; \
+      arm64) GL_ARCH=arm64 ;; \
+      *) echo "unsupported arch: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+    esac; \
+    curl -fsSL -o /tmp/gitleaks.tar.gz \
+      "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_${GL_ARCH}.tar.gz"; \
+    tar -xzf /tmp/gitleaks.tar.gz -C /usr/local/bin gitleaks; \
+    chmod 755 /usr/local/bin/gitleaks; \
+    rm -f /tmp/gitleaks.tar.gz; \
+    gitleaks version
 
 # Create ci user (non-root for security)
 RUN useradd -m -s /bin/bash -u 1000 ci
