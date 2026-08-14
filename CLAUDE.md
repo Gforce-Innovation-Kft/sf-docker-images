@@ -61,13 +61,13 @@ below) · `scripts/setup.sh` bootstrap. Details in the reference doc.
 Precedence: **industry → fleet → shared → local, last wins**
 (see [`gforce-ai-integration.md`](.claude/references/gforce-ai-integration.md)).
 
-- **Shared: `gforce-github-actions`** + agent `gha-workflow-author` — this repo has 5 workflows and
+- **Shared: `gforce-github-actions`** + agent `gforce-gha-workflow-author` — this repo has 5 workflows and
   publishes the images the SF pipelines run on.
 - **Industry: `platform-docs-get`** — from `forcedotcom/sf-skills`, ratified via
   `gforce-ai/upstream/catalog.json`; any GForce rule beats it.
 - **Local override** — [`.claude/references/local-standards.md`](.claude/references/local-standards.md):
   the workflow/release rules specific to this repo. Shared skills read it **last** and it **wins**.
-- Not a Salesforce metadata repo: no `salesforce-developer`, no `sf-code-reviewer`.
+- Not a Salesforce metadata repo: no `gforce-salesforce-developer`, no `gforce-sf-code-reviewer`.
 
 <!-- skills-tooling -->
 ## Skills & AI tooling
