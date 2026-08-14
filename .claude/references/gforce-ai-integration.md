@@ -12,7 +12,7 @@ and standards it points to — a restated rule is a rule that will drift.
 |---|---|---|
 | **industry** | `platform-docs-get` (Salesforce docs lookup) | `forcedotcom/sf-skills`, ratified pin in `gforce-ai/upstream/catalog.json` |
 | **fleet** | Standards every GForce repo obeys | `gforce-ai/standards/` (`doc-standard`, `skill-scope`, `upstream-policy`) |
-| **shared** | `gforce-github-actions` skill + `gha-workflow-author` agent (placed by the `.github/workflows/` marker); `docker-expert`, `multi-stage-dockerfile`, `devcontainer-setup` (placed by `Dockerfile*`) | `gforce-ai` and the vendored upstream repos, hash-pinned in `skills-lock.json` |
+| **shared** | `gforce-github-actions` skill + `gforce-gha-workflow-author` agent (placed by the `.github/workflows/` marker); `docker-expert`, `multi-stage-dockerfile`, `devcontainer-setup` (placed by `Dockerfile*`) | `gforce-ai` and the vendored upstream repos, hash-pinned in `skills-lock.json` |
 | **local** | This repo's own rules — E2E gate tiers, image-list duplication, release/publish and cosign constraints | `.claude/references/local-standards.md` — shared skills read it **last** and it **wins** on conflict |
 
 An industry skill is the floor, never the ceiling: any GForce layer beats it. Local skills
@@ -36,7 +36,7 @@ sit outside the precedence chain — they are repo-owned knowledge, not override
 
 1. `CLAUDE.md` loads — purpose, hard rules, pointer here.
 2. `.claude/skills/` are discoverable; each fires on its own trigger contract, not on
-   install. `.claude/agents/gha-workflow-author.md` becomes available.
+   install. `.claude/agents/gforce-gha-workflow-author.md` becomes available.
 3. Editing anything under `.github/workflows/` routes through `gha-workflow-author`,
    which reads the shared skill first and `local-standards.md` last (local wins).
 

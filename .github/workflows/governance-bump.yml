@@ -1,0 +1,23 @@
+---
+# Weekly convergence to the ratified GForce state (gforce-manifest.json +
+# gforce-ai-sourced skills). Industry skills are named explicitly only after
+# a gforce-ai ratification — ratify first, bump second. workflow_dispatch is
+# the urgent path.
+name: governance-bump
+
+on:
+  schedule:
+    # Wednesdays 06:00 UTC — the day after gforce-ai's upstream ratification poll.
+    - cron: '0 6 * * 3'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  bump:
+    uses: Gforce-Innovation-Kft/gforce-ai/.github/workflows/reusable-governance-bump.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
+    with:
+      skills: gforce-github-actions

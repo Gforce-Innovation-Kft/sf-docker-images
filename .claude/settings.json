@@ -12,5 +12,17 @@
       "Bash(gh release:*)",
       "Bash(gh api:*)"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/governance/session-report.mjs"
+          }
+        ]
+      }
+    ]
   }
 }
