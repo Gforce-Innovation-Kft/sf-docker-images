@@ -11,7 +11,7 @@
       "source": "sickn33/antigravity-awesome-skills",
       "sourceType": "github",
       "skillPath": "skills/docker-expert/SKILL.md",
-      "computedHash": "0974b5f64fcd284c1bd662810e2388f7beb9be6784c597de4d0ad4213ccbd6af"
+      "computedHash": "14840bcfb3fad72711975c3413416779ce5b9b14517fb5e326e248314e04f4d6"
     },
     "gforce-github-actions": {
       "source": "Gforce-Innovation-Kft/gforce-ai",
@@ -29,7 +29,7 @@
       "source": "forcedotcom/sf-skills",
       "sourceType": "github",
       "skillPath": "skills/platform-docs-get/SKILL.md",
-      "computedHash": "c62ccd9cd4bc0e860b1da36106cc176bb6b19488ed67bc84c3af7e636e3dc28f"
+      "computedHash": "1e7dfd5fde5e9fc5dfa21d0565a546ae160ccdcef684b49b9afc94adcbe233f3"
     }
   }
 }

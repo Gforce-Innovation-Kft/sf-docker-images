@@ -1,6 +1,7 @@
-# Local standards — GitHub Actions & release conventions (L3)
+# Local standards — GitHub Actions & release conventions (local layer)
 
-**This is the L3 override file for this repo.** The `gforce-github-actions` skill reads it
+**This is the local override file for this repo** (precedence: industry → fleet → shared →
+local, last wins). The `gforce-github-actions` skill reads it
 **last** and it **wins** over the fleet standard on any conflict. It is named
 `local-standards.md` (not `github-actions.md`) because that is the filename the skill's router
 looks for — rename it and the skill stops seeing these rules.
