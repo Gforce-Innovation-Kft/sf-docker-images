@@ -9,7 +9,7 @@ Builds and publishes three Salesforce-focused Docker images to Docker Hub under
 
 | Image | Base | Purpose | Hard rules |
 |---|---|---|---|
-| **sf-ci** | ubuntu:22.04 | CI/CD runner for SF pipelines | Stay minimal — no editors, no zsh (tests verify absence). Non-root `ci` UID 1000; consumers must run `--user 1000` or `/github/home` is unwritable |
+| **sf-ci** | ubuntu:22.04 | CI/CD runner for SF pipelines | Stay minimal — no editors, no zsh (tests verify absence). Defaults to **`runner` UID 1001, GID 0** since 3.1.0, so a container job needs no `options:` at all. Do **not** tell consumers `--user 1000` — that UID cannot write the runner file commands |
 | **sf-devcontainer** | ubuntu:24.04 | Full VS Code devcontainer | Feature-rich is fine. `vscode` UID 1000, zsh + Starship; prompt reads target org from `.sf/config.json` via `jq`, never `sf` (~500 ms) |
 | **sf-bulk** | node:24-alpine | Bulk org ops, no Java | Under 600MB uncompressed, no Java (tests verify). `ci` UID 1000 |
 

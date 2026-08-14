@@ -20,11 +20,11 @@ docker pull gforceinnovation/sf-devcontainer:latest
 ```
 
 ```dockerfile
-FROM gforceinnovation/sf-devcontainer:1.7.0
+FROM gforceinnovation/sf-devcontainer:3.1.0
 ```
 
 Multi-arch: `linux/amd64` + `linux/arm64`. Two tags per release
-(see [supported tags](../README.md#supported-tags)): the exact version (`1.7.0`, immutable —
+(see [supported tags](../README.md#supported-tags)): the exact version (`3.1.0`, immutable —
 pin this in production) and `latest` (moving).
 
 ### Verify the signature
