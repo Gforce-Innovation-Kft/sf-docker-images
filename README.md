@@ -219,8 +219,10 @@ committed context — a differentiator, not a shortcut. The loop is
 - **[`.claude/references/`](.claude/references/)** — rules to read before generating code:
   [docker-best-practices](.claude/references/docker-best-practices.md),
   [image-conventions](.claude/references/image-conventions.md) (per-image size budgets +
-  allowed/forbidden tools), [github-actions](.claude/references/github-actions.md),
-  [devops](.claude/references/devops.md).
+  allowed/forbidden tools), [devops](.claude/references/devops.md), and
+  [local-standards](.claude/references/local-standards.md) — the L3 override holding this
+  repo's GitHub Actions and release rules, which the shared `gforce-github-actions` skill
+  reads last and honours over the fleet default.
 - **[`.claude/skills/`](.claude/skills/)** — repo skills: `building-a-docker-image`,
   `testing-images`, `releasing`, and `working-in-the-devcontainer` (vendored, attributed).
 - **Tests** — [pytest-testinfra](tests/) suites gate every change and the CI pipeline.

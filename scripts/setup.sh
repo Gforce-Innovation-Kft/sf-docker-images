@@ -74,21 +74,17 @@ else
   warn "not a git working copy — skipping hook activation"
 fi
 
-# --- recommended external Claude skills (manual, opt-in) ---------------------
-info "Recommended external Claude skills (run these yourself to install):"
-cat <<'EOF'
-
-  # ci-cd — GitHub Actions pipeline design/caching/security
-  /plugin marketplace add https://github.com/ahmedasmar/devops-claude-skills
-  /plugin install ci-cd@devops-skills
-
-  # github-actions-manager — drive workflows via gh (watch runs, pull logs, rerun)
-  #   see https://mcpmarket.com/tools/skills/github-actions-manager
-
-  # forcedotcom/sf-skills — Salesforce dev skills for the devcontainer use case
-  npx skills add forcedotcom/sf-skills
-
-EOF
+# --- shared AI layer (lockfile-managed) --------------------------------------
+info "Syncing shared skills from skills-lock.json"
+if [ -f "$REPO_ROOT/skills-lock.json" ]; then
+  if npx --yes skills check >/dev/null 2>&1; then
+    ok "skills in sync with skills-lock.json"
+  else
+    warn "could not sync skills — run: npx skills check"
+  fi
+else
+  warn "no skills-lock.json — the shared AI layer is not installed in this repo"
+fi
 
 # --- summary -----------------------------------------------------------------
 if [ "$MISSING" -ne 0 ]; then
@@ -101,6 +97,8 @@ cat <<EOF
   1. Build the images:   docker build -t sf-ci:test ./sf-ci   (and sf-devcontainer, sf-bulk)
   2. Run the tests:      pytest tests/ -v
   3. Read the rules:     .claude/references/  and  .claude/skills/
+                         (.claude/references/local-standards.md is the L3 override —
+                          the gforce-github-actions skill reads it last and it wins)
   4. Open in VS Code:    "Reopen in Container" (uses .devcontainer/devcontainer.json)
 EOF
 ok "Setup complete"
