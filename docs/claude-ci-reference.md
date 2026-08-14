@@ -86,7 +86,7 @@ git push origin v1.2.0
 
 ## AI pair-development layer details
 
-- **`.claude/references/`** — read before generating code: `docker-best-practices.md`, `image-conventions.md` (per-image size budgets + allowed/forbidden tools), `devops.md`, and `local-standards.md` (the L3 override — GitHub Actions and release rules; the `gforce-github-actions` skill reads it last and it wins on conflict).
+- **`.claude/references/`** — read before generating code: `docker-best-practices.md`, `image-conventions.md` (per-image size budgets + allowed/forbidden tools), `devops.md`, and `local-standards.md` (the local-layer override — GitHub Actions and release rules; the `gforce-github-actions` skill reads it last and it wins on conflict).
 - **`.claude/skills/`** — repo skills: `building-a-docker-image`, `testing-images`, `releasing`, `working-in-the-devcontainer`.
 - **`.agents/skills/`** — ecosystem skills vendored via the skills CLI, symlinked into `.claude/skills/`, pinned in `skills-lock.json`.
 - **`.claude/settings.json`** — committed permission allow-list. `settings.local.json` is git-ignored.

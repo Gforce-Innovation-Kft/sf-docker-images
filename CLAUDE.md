@@ -58,11 +58,16 @@ container, verifies OS/user/runtimes/plugins/tools/env/dirs, and asserts the
 `.claude/references/` (read before generating code) · repo + vendored skills (see
 below) · `scripts/setup.sh` bootstrap. Details in the reference doc.
 
-- **L2 `gforce-github-actions`** + agent `gha-workflow-author` — this repo has 5 workflows and
+Precedence: **industry → fleet → shared → local, last wins**
+(see [`gforce-ai-integration.md`](.claude/references/gforce-ai-integration.md)).
+
+- **Shared: `gforce-github-actions`** + agent `gha-workflow-author` — this repo has 5 workflows and
   publishes the images the SF pipelines run on.
-- **L3 override** — [`.claude/references/local-standards.md`](.claude/references/local-standards.md):
-  the workflow/release rules specific to this repo. The skill reads it **last** and it **wins**.
-- Not a Salesforce repo: no `salesforce-developer`, no `sf-code-reviewer`.
+- **Industry: `platform-docs-get`** — from `forcedotcom/sf-skills`, ratified via
+  `gforce-ai/upstream/catalog.json`; any GForce rule beats it.
+- **Local override** — [`.claude/references/local-standards.md`](.claude/references/local-standards.md):
+  the workflow/release rules specific to this repo. Shared skills read it **last** and it **wins**.
+- Not a Salesforce metadata repo: no `salesforce-developer`, no `sf-code-reviewer`.
 
 <!-- skills-tooling -->
 ## Skills & AI tooling
@@ -70,9 +75,9 @@ below) · `scripts/setup.sh` bootstrap. Details in the reference doc.
 **External skills** (lockfile-managed — update with `npx skills check` / `npx skills update`):
 - `devcontainer-setup` — from trailofbits/skills
 - `docker-expert` — from sickn33/antigravity-awesome-skills
-- `gforce-github-actions` — from Gforce-Innovation-Kft/gforce-ai (L2, GForce GHA house standards)
+- `gforce-github-actions` — from Gforce-Innovation-Kft/gforce-ai (shared layer, GForce GHA house standards)
 - `multi-stage-dockerfile` — from github/awesome-copilot
-- `platform-docs-get` — from forcedotcom/sf-skills
+- `platform-docs-get` — from forcedotcom/sf-skills (industry layer, ratified in gforce-ai `upstream/catalog.json`)
 
 **Local skills** (hand-written, repo-specific):
 - `building-a-docker-image`
