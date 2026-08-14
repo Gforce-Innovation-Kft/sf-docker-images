@@ -6,7 +6,7 @@
 # rationale.
 #
 # image (build -> test)          reusable-docker-image-build.yml
-#   -> publish-candidate         throwaway GHCR tag, so it can be pulled
+#   -> publish-candidate         throwaway Docker Hub tag, so it can be pulled
 #     -> e2e-container           tier 1: a REAL container job on the candidate
 #       -> e2e-workflows         tier 2: real downstream pipelines against it
 #         -> cleanup             always, deletes the throwaway tag
@@ -53,32 +53,39 @@ jobs:
       dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
   # ---------------------------------------------------------------------------
-  # Publish the candidate to a throwaway GHCR tag.
+  # Publish the candidate to a throwaway Docker Hub tag.
   #
   # Everything below needs to *pull* the image: a container job takes a registry
   # reference, not a loaded docker image, and the downstream repo has no access
   # to this run's artifacts. Deleted again by the cleanup job.
+  #
+  # Docker Hub rather than GHCR, and the reason is not preference. A GHCR package
+  # is created PRIVATE, and the only way to publish it is
+  # `PATCH /orgs/{org}/packages/...` — an endpoint GitHub documents for classic
+  # PATs alone. GITHUB_TOKEN gets 404 there, and no GitHub App permission
+  # satisfies it either, so the downstream pull failed with `denied` every time.
+  # Worse, it could not be fixed by hand: cleanup deletes the only version, an
+  # empty GHCR package is removed outright, and the next run recreates it
+  # private. `gforceinnovation/sf-ci-e2e` on Docker Hub is public once, by hand,
+  # and stays that way — a Docker Hub repository survives having zero tags.
   # ---------------------------------------------------------------------------
   publish-candidate:
-    name: Publish candidate to GHCR
+    name: Publish candidate to Docker Hub
     needs: image
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
     outputs:
       ref: ${{ steps.ref.outputs.ref }}
       tag: ${{ steps.ref.outputs.tag }}
     steps:
-      # Registry references must be lowercase and the org name is not, and
-      # workflow expressions have no lowercase function.
-      - name: Resolve the GHCR reference
+      - name: Resolve the candidate reference
         id: ref
         run: |
           set -euo pipefail
           tag="pr-${{ github.event.pull_request.number || github.run_id }}"
           echo "tag=${tag}" >> "$GITHUB_OUTPUT"
-          echo "ref=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/sf-ci-e2e:${tag}" >> "$GITHUB_OUTPUT"
+          echo "ref=gforceinnovation/sf-ci-e2e:${tag}" >> "$GITHUB_OUTPUT"
 
       # No rebuild: this is the exact artifact the test job validated.
       # Rebuilding could produce different bits and prove the wrong image.
@@ -87,12 +94,11 @@ jobs:
         with:
           name: sf-ci-image
 
-      - name: Log in to GHCR
+      - name: Log in to Docker Hub
         uses: docker/login-action@v4
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: gforceinnovation
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Load, retag and push
         run: |
@@ -100,37 +106,6 @@ jobs:
           docker load < sf-ci.tar.gz
           docker tag sf-ci:test "${{ steps.ref.outputs.ref }}"
           docker push "${{ steps.ref.outputs.ref }}"
-
-      # Visibility is an ORG package endpoint, which GITHUB_TOKEN cannot reach —
-      # hence organization-packages rather than packages, which only covers
-      # pulling and pushing.
-      # continue-on-error, like the cleanup job's twin: the step this token
-      # feeds is itself best-effort with a GITHUB_TOKEN fallback, so a missing
-      # organization-packages grant must degrade rather than fail the gate.
-      # Without this the mint failing took the whole job down, which is exactly
-      # the outcome the fallback exists to prevent.
-      - name: Mint a token that can administer the org's packages
-        id: pkg-token
-        continue-on-error: true
-        uses: Gforce-Innovation-Kft/shared-github-actions/.github/actions/github-app-token@v2
-        with:
-          client-id: ${{ vars.GFORCE_CI_APP_ID }}
-          private-key: ${{ secrets.GFORCE_CI_APP_PRIVATE_KEY }}
-          repositories: sf-docker-images
-          permission-organization-packages: write
-
-      # The downstream repo pulls with its own token, so the package must be
-      # readable from outside this repo. Visibility can only be set once the
-      # package exists, which is why this follows the push.
-      - name: Make the candidate package public
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ steps.pkg-token.outputs.token || secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          gh api -X PATCH "orgs/${{ github.repository_owner }}/packages/container/sf-ci-e2e" \
-            -f visibility=public \
-            || echo "::warning::Could not set package visibility; the downstream pull may fail."
 
   # ---------------------------------------------------------------------------
   # Tier 1 — a real GitHub Actions container job on the candidate.
@@ -149,13 +124,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: read
     container:
+      # No `credentials:` — gforceinnovation/sf-ci-e2e is public on Docker Hub,
+      # which is the whole reason the candidate moved off GHCR. Pulling
+      # anonymously is also what a real consumer does, so tier 1 exercises the
+      # same path they will.
       image: ${{ needs.publish-candidate.outputs.ref }}
       options: --user 1001
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     defaults:
       run:
         shell: bash
@@ -339,8 +314,12 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   # ---------------------------------------------------------------------------
-  # The throwaway tag must not outlive the test, or GHCR fills with pr-N tags.
-  # Separate job so it runs whichever tier failed.
+  # The throwaway tag must not outlive the test, or sf-ci-e2e fills with pr-N
+  # tags. Separate job so it runs whichever tier failed.
+  #
+  # Deletes the TAG, never the repository: `gforceinnovation/sf-ci-e2e` has to
+  # survive at zero tags, because its public visibility is set by hand once and
+  # a recreated repository would come back private.
   # ---------------------------------------------------------------------------
   cleanup:
     name: Delete the candidate image
@@ -348,35 +327,37 @@ jobs:
     if: always() && needs.publish-candidate.result == 'success'
     runs-on: ubuntu-latest
     permissions:
-      packages: write
+      contents: read
     steps:
-      # Deleting a package version is an org endpoint, same as the visibility
-      # PATCH in publish-candidate — packages: write is not enough.
-      - name: Mint a token that can delete the package version
-        id: cleanup-token
-        continue-on-error: true
-        uses: Gforce-Innovation-Kft/shared-github-actions/.github/actions/github-app-token@v2
-        with:
-          client-id: ${{ vars.GFORCE_CI_APP_ID }}
-          private-key: ${{ secrets.GFORCE_CI_APP_PRIVATE_KEY }}
-          repositories: sf-docker-images
-          permission-organization-packages: write
-
-      - name: Delete the throwaway GHCR tag
+      - name: Delete the throwaway Docker Hub tag
         continue-on-error: true
         env:
-          GH_TOKEN: ${{ steps.cleanup-token.outputs.token || secrets.GITHUB_TOKEN }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
           TAG: ${{ needs.publish-candidate.outputs.tag }}
         run: |
           set -euo pipefail
-          version_id=$(gh api --paginate \
-            "orgs/${{ github.repository_owner }}/packages/container/sf-ci-e2e/versions" \
-            --jq "[.[] | select(.metadata.container.tags[]? == \"${TAG}\")][0].id // empty" \
-            2>/dev/null || true)
-          if [ -n "$version_id" ]; then
-            gh api -X DELETE \
-              "orgs/${{ github.repository_owner }}/packages/container/sf-ci-e2e/versions/${version_id}"
-            echo "::notice::Deleted the ${TAG} candidate image"
-          else
-            echo "::warning::Could not resolve ${TAG} for deletion; clean it up manually."
+
+          # Docker Hub's REST API takes its own JWT, not the registry token that
+          # `docker login` uses, so this exchanges the PAT for one first. The
+          # PAT needs delete scope — a push-scoped read/write token gets 403
+          # here while `docker push` keeps working, the same asymmetry that bit
+          # the README sync in v1.7.0.
+          jwt=$(curl -sS -X POST https://hub.docker.com/v2/auth/token \
+            -H 'Content-Type: application/json' \
+            -d "{\"identifier\":\"gforceinnovation\",\"secret\":\"${DOCKERHUB_TOKEN}\"}" \
+            | jq -r '.access_token // empty')
+
+          if [ -z "$jwt" ]; then
+            echo "::warning::Could not authenticate to the Docker Hub API; delete ${TAG} manually."
+            exit 0
           fi
+
+          code=$(curl -sS -o /dev/null -w '%{http_code}' -X DELETE \
+            -H "Authorization: Bearer ${jwt}" \
+            "https://hub.docker.com/v2/repositories/gforceinnovation/sf-ci-e2e/tags/${TAG}/")
+
+          case "$code" in
+            204|202) echo "::notice::Deleted the ${TAG} candidate image" ;;
+            404)     echo "::notice::${TAG} was already gone" ;;
+            *)       echo "::warning::Docker Hub returned ${code} deleting ${TAG}; clean it up manually." ;;
+          esac

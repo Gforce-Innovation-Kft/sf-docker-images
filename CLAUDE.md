@@ -38,20 +38,25 @@ One workflow per image + `release.yml`; the build→test→push pipeline lives i
 
 ## Credentials
 
-No personal access token is used anywhere in this repo. Anything that reaches
-outside this repository mints a scoped, one-hour GitHub App installation token via
+No personal access token is used anywhere in this repo. Exactly one thing reaches
+outside this repository — the tier-2 dispatch — and it mints a scoped, one-hour
+GitHub App installation token via
 [`github-app-token`](https://github.com/Gforce-Innovation-Kft/shared-github-actions/blob/main/.github/actions/github-app-token/action.yml)
-in `shared-github-actions`. Three places need one, for two different reasons:
+in `shared-github-actions`:
 
 | Where | Scope minted | Why `GITHUB_TOKEN` is not enough |
 |---|---|---|
 | `e2e-workflows` | `sf-develop-demo`, `actions: write` + `contents: read` | cannot dispatch into another repository at all |
-| `publish-candidate` | `sf-docker-images`, `organization-packages: write` | package *visibility* is an org endpoint |
-| `cleanup` | `sf-docker-images`, `organization-packages: write` | deleting a package version is an org endpoint |
 
-`packages` and `organization-packages` are different permissions — `packages` covers
-pulling and pushing only. Credentials are org-level: `vars.GFORCE_CI_APP_ID` and
-`secrets.GFORCE_CI_APP_PRIVATE_KEY`.
+Credentials are org-level: `vars.GFORCE_CI_APP_ID` + `secrets.GFORCE_CI_APP_PRIVATE_KEY`,
+App `gforce-ci-bot`.
+
+**Do not reach for an App token for registry work.** GitHub Packages runs a separate
+permission system that accepts classic PATs and largely not App tokens; publishing a
+GHCR package needs `PATCH /orgs/{org}/packages/...`, which no App permission satisfies.
+That is why the E2E candidate lives on Docker Hub (`gforceinnovation/sf-ci-e2e`, public,
+set by hand once) and both registry steps use `secrets.DOCKERHUB_TOKEN`. Full reasoning
+in [the reference doc](docs/claude-ci-reference.md).
 
 ## Testing
 
