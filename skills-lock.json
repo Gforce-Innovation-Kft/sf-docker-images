@@ -13,6 +13,12 @@
       "skillPath": "skills/docker-expert/SKILL.md",
       "computedHash": "0974b5f64fcd284c1bd662810e2388f7beb9be6784c597de4d0ad4213ccbd6af"
     },
+    "gforce-github-actions": {
+      "source": "Gforce-Innovation-Kft/gforce-ai",
+      "sourceType": "github",
+      "skillPath": "skills/gforce-github-actions/SKILL.md",
+      "computedHash": "ae7dfd1e8fcb6393c932b682b6d8dad9e392bbc364d70a8aaa39920fa09a94f5"
+    },
     "multi-stage-dockerfile": {
       "source": "github/awesome-copilot",
       "sourceType": "github",
