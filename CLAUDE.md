@@ -31,9 +31,27 @@ One workflow per image + `release.yml`; the build→test→push pipeline lives i
 - PRs never push; `release.yml` is the only publisher (Docker Hub only; GHCR is for
   throwaway E2E candidates).
 - Only sf-ci carries the two-tier **E2E gate** (real container job at `--user 1001`
-  → dispatched downstream pipelines). Needs `E2E_DISPATCH_TOKEN` (cross-repo
-  dispatch). Details + rationale in the reference doc — the container-job gap it
-  covers is where every shipped regression has lived.
+  → dispatched downstream pipelines). Cross-repo dispatch and the org-level package
+  calls authenticate as the **`gforce-ci-bot` GitHub App**, not a PAT — see below.
+  Details + rationale in the reference doc — the container-job gap it covers is
+  where every shipped regression has lived.
+
+## Credentials
+
+No personal access token is used anywhere in this repo. Anything that reaches
+outside this repository mints a scoped, one-hour GitHub App installation token via
+[`github-app-token`](https://github.com/Gforce-Innovation-Kft/shared-github-actions/blob/main/.github/actions/github-app-token/action.yml)
+in `shared-github-actions`. Three places need one, for two different reasons:
+
+| Where | Scope minted | Why `GITHUB_TOKEN` is not enough |
+|---|---|---|
+| `e2e-workflows` | `sf-develop-demo`, `actions: write` + `contents: read` | cannot dispatch into another repository at all |
+| `publish-candidate` | `sf-docker-images`, `organization-packages: write` | package *visibility* is an org endpoint |
+| `cleanup` | `sf-docker-images`, `organization-packages: write` | deleting a package version is an org endpoint |
+
+`packages` and `organization-packages` are different permissions — `packages` covers
+pulling and pushing only. Credentials are org-level: `vars.GFORCE_CI_APP_ID` and
+`secrets.GFORCE_CI_APP_PRIVATE_KEY`.
 
 ## Testing
 

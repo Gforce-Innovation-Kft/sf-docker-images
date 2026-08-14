@@ -56,6 +56,13 @@ Both live in this repo — the pipeline is self-contained, with no cross-repo de
   leave them alone unless you have checked the upstream tag list:
   - `sigstore/cosign-installer` — publishes only exact tags (`@v4.1.2`).
   - `aquasecurity/trivy-action` — still 0.x, so there is no `v0` tag (`@v0.36.0`).
+- **No personal access tokens.** Anything reaching outside this repository mints a scoped
+  GitHub App token with `Gforce-Innovation-Kft/shared-github-actions/.github/actions/github-app-token@v2`
+  (`vars.GFORCE_CI_APP_ID` + `secrets.GFORCE_CI_APP_PRIVATE_KEY`, both org-level). Always name
+  `repositories:` and the `permission-*` levels — the action refuses to mint otherwise, and that
+  refusal is the point: an unscoped installation token is a PAT with a shorter life. Note
+  `organization-packages` ≠ `packages`; the former is what package visibility and version
+  deletion need, the latter only covers pull/push.
 - Registry is **Docker Hub only** (`gforceinnovation/*`) via the `dockerhub-token` secret
   (`secrets.DOCKERHUB_TOKEN`). Do not add other registries without an explicit decision.
 - **Tag scheme:** `{{version}}` + `latest` only. Rolling `{{major}}.{{minor}}`/`{{major}}` tags

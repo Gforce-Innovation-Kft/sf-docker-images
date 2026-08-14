@@ -101,13 +101,25 @@ jobs:
           docker tag sf-ci:test "${{ steps.ref.outputs.ref }}"
           docker push "${{ steps.ref.outputs.ref }}"
 
+      # Visibility is an ORG package endpoint, which GITHUB_TOKEN cannot reach —
+      # hence organization-packages rather than packages, which only covers
+      # pulling and pushing.
+      - name: Mint a token that can administer the org's packages
+        id: pkg-token
+        uses: Gforce-Innovation-Kft/shared-github-actions/.github/actions/github-app-token@v2
+        with:
+          client-id: ${{ vars.GFORCE_CI_APP_ID }}
+          private-key: ${{ secrets.GFORCE_CI_APP_PRIVATE_KEY }}
+          repositories: sf-docker-images
+          permission-organization-packages: write
+
       # The downstream repo pulls with its own token, so the package must be
       # readable from outside this repo. Visibility can only be set once the
       # package exists, which is why this follows the push.
       - name: Make the candidate package public
         continue-on-error: true
         env:
-          GH_TOKEN: ${{ secrets.E2E_DISPATCH_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.pkg-token.outputs.token || secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           gh api -X PATCH "orgs/${{ github.repository_owner }}/packages/container/sf-ci-e2e" \
@@ -215,8 +227,11 @@ jobs:
       fail-fast: false
       matrix:
         target:
+          # `repo` is the BARE name, not owner/name: it is both half of the
+          # dispatch target and the repository scope handed to the App token,
+          # and the token action takes bare names.
           - name: sf-package-release
-            repo: Gforce-Innovation-Kft/sf-develop-demo
+            repo: sf-develop-demo
             workflow: weather2gp-release.yml
             # Pinned to the feature branch until weather2gp-release.yml is on
             # sf-develop-demo's default branch; drop the pin once it merges.
@@ -226,13 +241,27 @@ jobs:
               -f skip-validation=true
               -f create-github-release=false
     steps:
+      # GITHUB_TOKEN cannot dispatch a workflow in another repository, so this
+      # job needs a credential that can. It used to be a personal access token;
+      # it is now an App installation token, scoped to exactly this one
+      # repository and this one permission, and dead an hour after it is minted.
+      - name: Mint a token that can dispatch into ${{ matrix.target.repo }}
+        id: dispatch-token
+        uses: Gforce-Innovation-Kft/shared-github-actions/.github/actions/github-app-token@v2
+        with:
+          client-id: ${{ vars.GFORCE_CI_APP_ID }}
+          private-key: ${{ secrets.GFORCE_CI_APP_PRIVATE_KEY }}
+          repositories: ${{ matrix.target.repo }}
+          # write to start the run; contents:read so `gh run watch` can resolve it.
+          permission-actions: write
+          permission-contents: read
+
       - name: Dispatch ${{ matrix.target.workflow }} and wait
         id: dispatch
         env:
-          # GITHUB_TOKEN cannot dispatch workflows in another repository.
-          GH_TOKEN: ${{ secrets.E2E_DISPATCH_TOKEN }}
+          GH_TOKEN: ${{ steps.dispatch-token.outputs.token }}
           CANDIDATE: ${{ needs.publish-candidate.outputs.ref }}
-          TARGET_REPO: ${{ matrix.target.repo }}
+          TARGET_REPO: ${{ github.repository_owner }}/${{ matrix.target.repo }}
           TARGET_WORKFLOW: ${{ matrix.target.workflow }}
           TARGET_REF: ${{ matrix.target.ref }}
           TARGET_INPUTS: ${{ matrix.target.inputs }}
@@ -241,7 +270,9 @@ jobs:
           set -euo pipefail
 
           if [ -z "${GH_TOKEN:-}" ]; then
-            echo "::error::E2E_DISPATCH_TOKEN is not set. It needs actions:write on ${TARGET_REPO}."
+            echo "::error::No App token was minted. Check vars.GFORCE_CI_APP_ID and" \
+                 "secrets.GFORCE_CI_APP_PRIVATE_KEY are set at the org and shared with this" \
+                 "repo, and that the App is installed on ${TARGET_REPO}."
             exit 1
           fi
 
@@ -285,6 +316,9 @@ jobs:
         if: always()
         env:
           CANDIDATE: ${{ needs.publish-candidate.outputs.ref }}
+          TARGET_REPO: ${{ github.repository_owner }}/${{ matrix.target.repo }}
+          TARGET_WORKFLOW: ${{ matrix.target.workflow }}
+          APP_SLUG: ${{ steps.dispatch-token.outputs.app-slug }}
         run: |
           {
             echo "## E2E — ${{ matrix.target.name }}"
@@ -293,7 +327,8 @@ jobs:
             echo "|---|---|"
             echo "| Image under test | \`${CANDIDATE}\` |"
             echo "| Container user | \`1001\` (unprivileged) |"
-            echo "| Downstream | \`${{ matrix.target.workflow }}\` in \`${{ matrix.target.repo }}\` |"
+            echo "| Downstream | \`${TARGET_WORKFLOW}\` in \`${TARGET_REPO}\` |"
+            echo "| Dispatched as | \`${APP_SLUG:-unknown}\` (App installation token) |"
             echo "| Downstream run | ${{ steps.dispatch.outputs.run-url || 'not started' }} |"
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -309,10 +344,22 @@ jobs:
     permissions:
       packages: write
     steps:
+      # Deleting a package version is an org endpoint, same as the visibility
+      # PATCH in publish-candidate — packages: write is not enough.
+      - name: Mint a token that can delete the package version
+        id: cleanup-token
+        continue-on-error: true
+        uses: Gforce-Innovation-Kft/shared-github-actions/.github/actions/github-app-token@v2
+        with:
+          client-id: ${{ vars.GFORCE_CI_APP_ID }}
+          private-key: ${{ secrets.GFORCE_CI_APP_PRIVATE_KEY }}
+          repositories: sf-docker-images
+          permission-organization-packages: write
+
       - name: Delete the throwaway GHCR tag
         continue-on-error: true
         env:
-          GH_TOKEN: ${{ secrets.E2E_DISPATCH_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.cleanup-token.outputs.token || secrets.GITHUB_TOKEN }}
           TAG: ${{ needs.publish-candidate.outputs.tag }}
         run: |
           set -euo pipefail

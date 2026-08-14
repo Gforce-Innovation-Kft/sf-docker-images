@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **The E2E gate no longer uses a personal access token.** `E2E_DISPATCH_TOKEN` is removed.
+  Cross-repo dispatch and the two org-level package calls now mint a scoped GitHub App
+  installation token per job via `github-app-token` in `shared-github-actions`. The token is
+  named to one repository and one or two permissions, and expires in an hour, where the PAT
+  was a person's credential with account-wide scope and no expiry.
+  **Requires `vars.GFORCE_CI_APP_ID` and `secrets.GFORCE_CI_APP_PRIVATE_KEY` at the org, and
+  the `gforce-ci-bot` App installed on both `sf-docker-images` and `sf-develop-demo`.**
+- The `e2e-workflows` matrix `target.repo` is now the **bare** repository name
+  (`sf-develop-demo`, not `Gforce-Innovation-Kft/sf-develop-demo`) — it feeds the App token's
+  `repositories:` scope as well as the dispatch target, and the token action takes bare names.
+
 ## [3.0.0] - 2026-08-07
 
 ### Changed
