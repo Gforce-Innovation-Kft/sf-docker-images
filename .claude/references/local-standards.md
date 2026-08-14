@@ -57,6 +57,20 @@ Both live in this repo — the pipeline is self-contained, with no cross-repo de
   leave them alone unless you have checked the upstream tag list:
   - `sigstore/cosign-installer` — publishes only exact tags (`@v4.1.2`).
   - `aquasecurity/trivy-action` — still 0.x, so there is no `v0` tag (`@v0.36.0`).
+- **No personal access tokens.** The one thing reaching outside this repository — the tier-2
+  dispatch into `sf-develop-demo` — mints a scoped GitHub App token with
+  `Gforce-Innovation-Kft/shared-github-actions/.github/actions/github-app-token@v2`
+  (`vars.GFORCE_CI_APP_ID` + `secrets.GFORCE_CI_APP_PRIVATE_KEY`, both org-level). Always name
+  `repositories:` and the `permission-*` levels — the action refuses to mint otherwise, and that
+  refusal is the point: an unscoped installation token is a PAT with a shorter life.
+- **Never use an App token for registry or package work.** GitHub Packages has its own
+  permission system that accepts classic PATs and largely not App tokens — `PATCH
+  /orgs/{org}/packages/...` rejects both `GITHUB_TOKEN` (404) and every App permission, which
+  is why the E2E candidate is not on GHCR. Registry steps use `secrets.DOCKERHUB_TOKEN`.
+- **`gforceinnovation/sf-ci-e2e` on Docker Hub is public and must stay that way.** Its
+  visibility was set by hand and cannot be set from CI. `cleanup` therefore deletes the
+  **tag**, never the repository — a recreated repository comes back private and every
+  downstream pull fails `denied`.
 - Registry is **Docker Hub only** (`gforceinnovation/*`) via the `dockerhub-token` secret
   (`secrets.DOCKERHUB_TOKEN`). Do not add other registries without an explicit decision.
 - **Tag scheme:** `{{version}}` + `latest` only. Rolling `{{major}}.{{minor}}`/`{{major}}` tags

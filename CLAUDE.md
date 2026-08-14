@@ -9,7 +9,7 @@ Builds and publishes three Salesforce-focused Docker images to Docker Hub under
 
 | Image | Base | Purpose | Hard rules |
 |---|---|---|---|
-| **sf-ci** | ubuntu:22.04 | CI/CD runner for SF pipelines | Stay minimal — no editors, no zsh (tests verify absence). Non-root `ci` UID 1000; consumers must run `--user 1000` or `/github/home` is unwritable |
+| **sf-ci** | ubuntu:22.04 | CI/CD runner for SF pipelines | Stay minimal — no editors, no zsh (tests verify absence). Defaults to **`runner` UID 1001, GID 0** since 3.1.0, so a container job needs no `options:` at all. Do **not** tell consumers `--user 1000` — that UID cannot write the runner file commands |
 | **sf-devcontainer** | ubuntu:24.04 | Full VS Code devcontainer | Feature-rich is fine. `vscode` UID 1000, zsh + Starship; prompt reads target org from `.sf/config.json` via `jq`, never `sf` (~500 ms) |
 | **sf-bulk** | node:24-alpine | Bulk org ops, no Java | Under 600MB uncompressed, no Java (tests verify). `ci` UID 1000 |
 
@@ -31,9 +31,32 @@ One workflow per image + `release.yml`; the build→test→push pipeline lives i
 - PRs never push; `release.yml` is the only publisher (Docker Hub only; GHCR is for
   throwaway E2E candidates).
 - Only sf-ci carries the two-tier **E2E gate** (real container job at `--user 1001`
-  → dispatched downstream pipelines). Needs `E2E_DISPATCH_TOKEN` (cross-repo
-  dispatch). Details + rationale in the reference doc — the container-job gap it
-  covers is where every shipped regression has lived.
+  → dispatched downstream pipelines). Cross-repo dispatch and the org-level package
+  calls authenticate as the **`gforce-ci-bot` GitHub App**, not a PAT — see below.
+  Details + rationale in the reference doc — the container-job gap it covers is
+  where every shipped regression has lived.
+
+## Credentials
+
+No personal access token is used anywhere in this repo. Exactly one thing reaches
+outside this repository — the tier-2 dispatch — and it mints a scoped, one-hour
+GitHub App installation token via
+[`github-app-token`](https://github.com/Gforce-Innovation-Kft/shared-github-actions/blob/main/.github/actions/github-app-token/action.yml)
+in `shared-github-actions`:
+
+| Where | Scope minted | Why `GITHUB_TOKEN` is not enough |
+|---|---|---|
+| `e2e-workflows` | `sf-develop-demo`, `actions: write` + `contents: read` | cannot dispatch into another repository at all |
+
+Credentials are org-level: `vars.GFORCE_CI_APP_ID` + `secrets.GFORCE_CI_APP_PRIVATE_KEY`,
+App `gforce-ci-bot`.
+
+**Do not reach for an App token for registry work.** GitHub Packages runs a separate
+permission system that accepts classic PATs and largely not App tokens; publishing a
+GHCR package needs `PATCH /orgs/{org}/packages/...`, which no App permission satisfies.
+That is why the E2E candidate lives on Docker Hub (`gforceinnovation/sf-ci-e2e`, public,
+set by hand once) and both registry steps use `secrets.DOCKERHUB_TOKEN`. Full reasoning
+in [the reference doc](docs/claude-ci-reference.md).
 
 ## Testing
 

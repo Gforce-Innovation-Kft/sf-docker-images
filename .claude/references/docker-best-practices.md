@@ -35,13 +35,24 @@ Plugins are installed as the `ci`/`vscode` user so they land in
 the runtime UID. See [image-conventions.md](./image-conventions.md) for the per-image
 user/runtime rules.
 
-**All three images run non-root at runtime** (`ci`/`vscode`, UID 1000) and register a second
-account, **`runner` at UID 1001 with GID 0**. Do not "fix" a permission error by adding
-`USER root` — that regression is what 3.0.0 undid.
+**All three images run non-root at runtime** and register a second account, **`runner` at UID
+1001 with GID 0**. Do not "fix" a permission error by adding `USER root` — that regression is
+what 3.0.0 undid.
 
-The two UIDs exist because GitHub Actions bind-mounts `/github/home` and the runner
-file-command dir owned by the *runner's* UID (1001 on GitHub-hosted runners), so a container
-job must run as that UID to write them: `options: --user 1001`.
+Which account each image *defaults* to differs, and the difference is deliberate:
+
+| Image | Default runtime user | Why |
+|---|---|---|
+| `sf-ci` | **`runner` (1001)** since 3.1.0 | it runs GitHub Actions container jobs |
+| `sf-bulk` | `ci` (1000) | ad-hoc `docker run`, not a container job |
+| `sf-devcontainer` | `vscode` (1000) | a human in VS Code |
+
+The two UIDs exist because GitHub Actions bind-mounts `/github/home` **and** creates
+`$GITHUB_OUTPUT` / `$GITHUB_ENV` / `$GITHUB_STEP_SUMMARY` owned by the *runner's* UID (1001 on
+GitHub-hosted runners), so a container job must run as that UID to write them. `sf-ci` defaults
+to it precisely so consumers need no `options:` line — before 3.1.0 they did, and forgetting it
+failed as `Permission denied` on `/__w/_temp/_runner_file_commands/...` or
+`uv_os_get_passwd returned ENOENT`, neither of which names the real mistake.
 
 Running as an **arbitrary** UID is not supported and cannot be made to work from the
 Dockerfile: `sf` calls Node's `os.userInfo()`, which throws ENOENT when the running UID has no

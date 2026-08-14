@@ -9,9 +9,12 @@ pytest-testinfra test in `tests/test_sf_*.py` (see
 
 - **Base:** `ubuntu:22.04`. **Runtimes:** Node 24.x, OpenJDK 17 (JRE), SF CLI `@2.*`.
 - **Plugins:** `sfdx-git-delta` (keep minimal).
-- **User:** `ci` (UID 1000, `/bin/bash`) **plus `runner` (UID 1001, GID 0)**. **Runtime user:
-  `ci`, non-root** — consumers must run as 1000 or 1001; GitHub Actions container jobs use
-  `--user 1001`. Never revert this to `USER root`.
+- **User:** `ci` (UID 1000, `/bin/bash`) **plus `runner` (UID 1001, GID 0)**. **Runtime user
+  since 3.1.0: `runner` (1001), non-root** — so a consumer writes
+  `container: gforceinnovation/sf-ci:<tag>` with no `options:` at all. `--user 1001` is still
+  accepted and identical; `--user 1000` also works. Never revert this to `USER root`, and never
+  change the default back to 1000 — that is what forced every consumer to remember `--user 1001`
+  and made forgetting it fail as `Permission denied` on the runner file-command dir.
 - **Tools allowed:** git, jq, xmlstarlet, curl, unzip, zip.
 - **FORBIDDEN:** vim, nano, zsh, htop, tree, build-essential, any editor/interactive/UI tool.
   Tests assert these are absent — do not add them.
