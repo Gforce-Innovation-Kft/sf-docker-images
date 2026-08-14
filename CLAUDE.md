@@ -51,14 +51,12 @@ container, verifies OS/user/runtimes/plugins/tools/env/dirs, and asserts the
 - Ubuntu: clean apt caches in the same `RUN` layer.
 - Commits: conventional commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `refactor:`).
 - Pre-commit hook (via `scripts/setup.sh`, `core.hooksPath`): yamllint on staged YAML
-  (blocking), graphify refresh (non-blocking). `.yamllint`: 120 cols, 2-space indent.
+  (blocking). `.yamllint`: 120 cols, 2-space indent.
 
 ## AI layer
 
 `.claude/references/` (read before generating code) · repo + vendored skills (see
-below) · `scripts/setup.sh` bootstrap · graphify graph (`graphify query` for codebase
-questions, `graphify update .` after changes; `graphify-out/` is git-ignored).
-Details in the reference doc.
+below) · `scripts/setup.sh` bootstrap. Details in the reference doc.
 
 <!-- skills-tooling -->
 ## Skills & AI tooling
@@ -75,5 +73,5 @@ Details in the reference doc.
 - `testing-images`
 - `working-in-the-devcontainer`
 
-**Global tooling available in every session:** lean-ctx (prefer `ctx_*` MCP tools for reads/search/shell — token-compressed), superpowers process skills, and graphify (knowledge graph present — use `graphify query`).
+**Global tooling available in every session:** rtk (Bash output compression — automatic via hook), lean-ctx (prefer `ctx_*` MCP tools for reads/search — token-compressed), and superpowers process skills.
 <!-- /skills-tooling -->
