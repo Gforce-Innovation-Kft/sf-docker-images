@@ -104,8 +104,14 @@ jobs:
       # Visibility is an ORG package endpoint, which GITHUB_TOKEN cannot reach —
       # hence organization-packages rather than packages, which only covers
       # pulling and pushing.
+      # continue-on-error, like the cleanup job's twin: the step this token
+      # feeds is itself best-effort with a GITHUB_TOKEN fallback, so a missing
+      # organization-packages grant must degrade rather than fail the gate.
+      # Without this the mint failing took the whole job down, which is exactly
+      # the outcome the fallback exists to prevent.
       - name: Mint a token that can administer the org's packages
         id: pkg-token
+        continue-on-error: true
         uses: Gforce-Innovation-Kft/shared-github-actions/.github/actions/github-app-token@v2
         with:
           client-id: ${{ vars.GFORCE_CI_APP_ID }}
