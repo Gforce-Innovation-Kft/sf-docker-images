@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   was a person's credential with account-wide scope and no expiry.
   **Requires `vars.GFORCE_CI_APP_ID` and `secrets.GFORCE_CI_APP_PRIVATE_KEY` at the org, and
   the `gforce-ci-bot` App installed on both `sf-docker-images` and `sf-develop-demo`.**
+- **The E2E candidate image moved from GHCR to Docker Hub** (`gforceinnovation/sf-ci-e2e`).
+  A GHCR package is created private and can only be published via
+  `PATCH /orgs/{org}/packages/...`, an endpoint GitHub documents for classic PATs alone —
+  `GITHUB_TOKEN` gets 404 and no App permission satisfies it, so the downstream pull failed
+  `denied` on every run. It was not fixable by hand either: cleanup deletes the only version,
+  GitHub removes a package with zero versions, and the next run recreates it private.
+  A Docker Hub repository survives at zero tags, so `sf-ci-e2e` is public once and stays so.
+  **Requires that repository to exist and be public**; `cleanup` deletes the tag, never it.
 - The `e2e-workflows` matrix `target.repo` is now the **bare** repository name
   (`sf-develop-demo`, not `Gforce-Innovation-Kft/sf-develop-demo`) — it feeds the App token's
   `repositories:` scope as well as the dispatch target, and the token action takes bare names.
