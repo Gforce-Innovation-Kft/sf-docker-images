@@ -60,7 +60,9 @@ below) · `scripts/setup.sh` bootstrap. Details in the reference doc.
 
 - **L2 `gforce-github-actions`** + agent `gha-workflow-author` — this repo has 5 workflows and
   publishes the images the SF pipelines run on.
-- Not a Salesforce repo: no `salesforce-developer`, no `sf-code-reviewer`, no `local-standards.md`.
+- **L3 override** — [`.claude/references/local-standards.md`](.claude/references/local-standards.md):
+  the workflow/release rules specific to this repo. The skill reads it **last** and it **wins**.
+- Not a Salesforce repo: no `salesforce-developer`, no `sf-code-reviewer`.
 
 <!-- skills-tooling -->
 ## Skills & AI tooling
