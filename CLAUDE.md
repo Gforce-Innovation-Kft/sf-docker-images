@@ -58,12 +58,17 @@ container, verifies OS/user/runtimes/plugins/tools/env/dirs, and asserts the
 `.claude/references/` (read before generating code) · repo + vendored skills (see
 below) · `scripts/setup.sh` bootstrap. Details in the reference doc.
 
+- **L2 `gforce-github-actions`** + agent `gha-workflow-author` — this repo has 5 workflows and
+  publishes the images the SF pipelines run on.
+- Not a Salesforce repo: no `salesforce-developer`, no `sf-code-reviewer`, no `local-standards.md`.
+
 <!-- skills-tooling -->
 ## Skills & AI tooling
 
 **External skills** (lockfile-managed — update with `npx skills check` / `npx skills update`):
 - `devcontainer-setup` — from trailofbits/skills
 - `docker-expert` — from sickn33/antigravity-awesome-skills
+- `gforce-github-actions` — from Gforce-Innovation-Kft/gforce-ai (L2, GForce GHA house standards)
 - `multi-stage-dockerfile` — from github/awesome-copilot
 - `platform-docs-get` — from forcedotcom/sf-skills
 
