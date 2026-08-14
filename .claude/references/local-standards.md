@@ -1,4 +1,9 @@
-# GitHub Actions & release conventions (repo rules)
+# Local standards — GitHub Actions & release conventions (L3)
+
+**This is the L3 override file for this repo.** The `gforce-github-actions` skill reads it
+**last** and it **wins** over the fleet standard on any conflict. It is named
+`local-standards.md` (not `github-actions.md`) because that is the filename the skill's router
+looks for — rename it and the skill stops seeing these rules.
 
 Short repo-specific rules. Full rationale:
 [`.github/instructions/github-actions-ci-cd-best-practices.instructions.md`](../../.github/instructions/github-actions-ci-cd-best-practices.instructions.md).
