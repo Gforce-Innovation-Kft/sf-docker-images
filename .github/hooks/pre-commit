@@ -1,8 +1,6 @@
 #!/bin/bash
 # Pre-commit hook:
 #   1. Lint staged YAML files with yamllint (blocking).
-#   2. Refresh the graphify knowledge graph locally (graphify-out/ is git-ignored) so it
-#      sync with the code (non-blocking, AST-only, no API cost).
 
 # --- 1. YAML lint ------------------------------------------------------------
 echo "Running YAML linter..."
@@ -47,20 +45,6 @@ else
         exit 1
     fi
     echo "✓ All YAML files passed linting"
-fi
-
-# --- 2. Refresh graphify graph (never blocks the commit) ---------------------
-if command -v graphify &> /dev/null; then
-    echo "Refreshing graphify graph..."
-    if graphify update . > /dev/null 2>&1; then
-        # graphify-out/ is git-ignored (a local build artifact) — nothing to stage.
-        echo "✓ graphify-out refreshed (local, git-ignored)"
-    else
-        echo "⚠️  graphify update failed — committing without a graph refresh"
-        echo "   (run 'graphify update .' manually to resync graphify-out/)"
-    fi
-else
-    echo "ℹ️  graphify not installed — skipping graph refresh"
 fi
 
 exit 0
