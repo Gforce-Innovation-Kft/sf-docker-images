@@ -1,8 +1,8 @@
 {
-  "gforce_ai_commit": "01b640a168264f9f37580d22c55dca04d8541346",
-  "gforce_ai_release": "v2.0.0",
+  "gforce_ai_commit": "1ab1f755d328ee4327622b14e089ab401cdf9a15",
+  "gforce_ai_release": null,
   "agents": {
     "gforce-gha-workflow-author": "sha256:eb97a690704fd763932d2eb853a0494f94c18ccf54f2b327520ee74ad37f7b80"
   },
-  "generated_at": "2026-08-14"
+  "generated_at": "2026-08-19"
 }
