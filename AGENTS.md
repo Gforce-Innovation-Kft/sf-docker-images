@@ -37,8 +37,11 @@ This file gives concise, high-signal guidance for AI coding assistants working i
   - Add/adjust tests in `tests/test_sf_*.py`.
   - Update root `README.md` if user-facing features changed.
 - `sf-bulk` must stay under 600MB with no Java.
-- Keep the `vscode`/`ci` users (UID 1000) and existing env vars; all images run **non-root** at
-  runtime. Do not add `USER root` to fix a permission error — align the runner UID to 1000.
+- Keep the `vscode`/`ci` (1000) and `runner` (1001, GID 0) accounts and existing env vars; all
+  images run **non-root** at runtime. Defaults differ on purpose: `sf-ci` ends on `runner` so
+  GitHub Actions container jobs need no `options:`; `sf-bulk` and `sf-devcontainer` stay on
+  1000. Do not add `USER root` to fix a permission error, and do not move sf-ci's default back
+  to 1000.
 - Clean apt caches for small images (see `sf-ci/Dockerfile` pattern).
 
 ## Copilot Guidance (How to be "killer")

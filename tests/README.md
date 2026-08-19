@@ -87,7 +87,12 @@ Tests for the lightweight CI/CD container:
 - ✅ Java 17 (OpenJDK)
 - ✅ Salesforce CLI with sfdx-git-delta plugin
 - ✅ CI utilities (git, jq, xmlstarlet)
-- ✅ User configuration (ci user, non-root at runtime, writable `/workspace`)
+- ✅ User configuration: `ci` (1000) and `runner` (1001, GID 0) both exist, non-root at
+  runtime, writable `/workspace`
+- ✅ **Defaults to `runner` (1001)** — and that the default user can append to a 1001-owned
+  file, which is the property that UID exists for. Every regression this image has shipped
+  lived in that gap, so these two assert it by name rather than letting it surface as an
+  unrelated permission error in a consumer's pipeline
 - ✅ CI environment variables
 - ✅ Minimal footprint (no interactive tools)
 
