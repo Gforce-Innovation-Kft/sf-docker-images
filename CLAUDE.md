@@ -58,6 +58,17 @@ That is why the E2E candidate lives on Docker Hub (`gforceinnovation/sf-ci-e2e`,
 set by hand once) and both registry steps use `secrets.DOCKERHUB_TOKEN`. Full reasoning
 in [the reference doc](docs/claude-ci-reference.md).
 
+## GCP-backed secrets — not used here yet, but know where they'd come from
+
+None of this repo's current credentials (`GFORCE_CI_APP_ID`/`GFORCE_CI_APP_PRIVATE_KEY`,
+`DOCKERHUB_TOKEN`) are GCP-sourced — they're plain org-level GitHub secrets, unrelated to the
+Salesforce JWT system below. If this repo ever needs a Google-Cloud-backed secret,
+[`gforce-google-infra`](https://github.com/Gforce-Innovation-Kft/gforce-google-infra) is where it
+gets defined (Terraform-managed Secret Manager containers, never this repo) and, if a consumer
+still needs it as a GitHub secret rather than reading GCP directly via WIF, mirrored out by its
+`modules/gh-secret-sync`. Don't hand-add a Google-related secret here without checking that repo
+first.
+
 ## Testing
 
 **pytest-testinfra** in `tests/` — each `test_sf_*.py` builds the image, starts a
