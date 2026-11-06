@@ -40,6 +40,11 @@ Thumbs.db
 
 # Jira assistant scratch space (local ticket drafts + cached project schema)
 .jira/
+.jira-ai/
+
+# Salesforce CLI local state. This repo holds no sfdx project, but running any
+# `sf` command here (verifying an image by hand, most often) creates it.
+.sfdx/
 
 # Test artifacts
 *.test

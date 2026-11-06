@@ -7,6 +7,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **The E2E gate no longer uses a personal access token.** `E2E_DISPATCH_TOKEN` is removed.
+  Cross-repo dispatch and the two org-level package calls now mint a scoped GitHub App
+  installation token per job via `github-app-token` in `shared-github-actions`. The token is
+  named to one repository and one or two permissions, and expires in an hour, where the PAT
+  was a person's credential with account-wide scope and no expiry.
+  **Requires `vars.GFORCE_CI_APP_ID` and `secrets.GFORCE_CI_APP_PRIVATE_KEY` at the org, and
+  the `gforce-ci-bot` App installed on both `sf-docker-images` and `sf-develop-demo`.**
+- **The E2E candidate image moved from GHCR to Docker Hub** (`gforceinnovation/sf-ci-e2e`).
+  A GHCR package is created private and can only be published via
+  `PATCH /orgs/{org}/packages/...`, an endpoint GitHub documents for classic PATs alone —
+  `GITHUB_TOKEN` gets 404 and no App permission satisfies it, so the downstream pull failed
+  `denied` on every run. It was not fixable by hand either: cleanup deletes the only version,
+  GitHub removes a package with zero versions, and the next run recreates it private.
+  A Docker Hub repository survives at zero tags, so `sf-ci-e2e` is public once and stays so.
+  **Requires that repository to exist and be public**; `cleanup` deletes the tag, never it.
+- The `e2e-workflows` matrix `target.repo` is now the **bare** repository name
+  (`sf-develop-demo`, not `Gforce-Innovation-Kft/sf-develop-demo`) — it feeds the App token's
+  `repositories:` scope as well as the dispatch target, and the token action takes bare names.
+
+## [3.1.0] - 2026-08-13
+
+> Recorded on 2026-08-14. This section was missing when the tag was pushed, so the
+> v3.1.0 GitHub Release carries `release.yml`'s fallback line ("see the auto-generated
+> notes below") instead of a summary — including for the breaking change below.
+
+### Changed
+- **BREAKING (sf-ci only): the default runtime user is now `runner` (1001), not `ci` (1000).**
+  v3.0.0 dropped root but still defaulted to 1000, so every GitHub Actions container job had
+  to remember `options: --user 1001`. Forgetting it failed in one of two ways, neither naming
+  the real mistake: `Permission denied` on `/__w/_temp/_runner_file_commands/...`, or
+  `uv_os_get_passwd returned ENOENT` from deep inside oclif. The runner owns `/github/home`
+  **and** creates `$GITHUB_OUTPUT`, `$GITHUB_ENV` and `$GITHUB_STEP_SUMMARY` as
+  `-rw-r--r-- 1001:1001`, so defaulting to 1001 means a consumer writes
+  `container: gforceinnovation/sf-ci:<tag>` and nothing else.
+
+  **sf-bulk and sf-devcontainer are unchanged** — they register the `runner` account (3.0.0)
+  but still default to `ci` (1000) and `vscode` respectively. Only `sf-ci` runs container jobs.
+
+  Migration: drop `options: --user 1001` from container jobs using sf-ci. Leaving it in place
+  is harmless — both routes were verified to produce an identical environment.
+
+### Added
+- `docs/using-in-github-actions.md` — the container-job rules for consumers, including the two
+  failure signatures above and how to repair a pre-3.1.0 mount.
+- `tests/test_sf_ci.py` asserts the default UID is 1001, GID 0, and that the default user can
+  append to a 1001-owned file-command file — the property the UID exists for, so a regression
+  fails by name instead of surfacing as an unrelated permission error in a consumer's pipeline.
+
 ## [3.0.0] - 2026-08-07
 
 ### Changed
