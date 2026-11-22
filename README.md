@@ -1,5 +1,7 @@
 # Salesforce Docker Images
 
+> **GForce catalog:** Platform · status: `production` — **Owns:** CI, devcontainer and bulk images published to Docker Hub. **Not:** pipeline logic (→ shared-github-actions).
+
 > Lean, tested, multi-arch Docker images for Salesforce CI/CD and development.
 
 [![sf-ci](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/image-sf-ci.yml/badge.svg)](https://github.com/Gforce-Innovation-Kft/sf-docker-images/actions/workflows/image-sf-ci.yml)
