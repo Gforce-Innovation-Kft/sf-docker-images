@@ -24,5 +24,17 @@
         ]
       }
     ]
+  },
+  "extraKnownMarketplaces": {
+    "gforce-ai": {
+      "source": {
+        "source": "github",
+        "repo": "Gforce-Innovation-Kft/gforce-ai",
+        "ref": "v0.1.0"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "gforce-guardrails gforce-core gforce-github gforce-gcp@gforce-ai": true
   }
 }
